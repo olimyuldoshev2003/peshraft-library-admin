@@ -281,9 +281,9 @@ const Layout = () => {
                 <FaPhoneAlt size={19} className="text-white" />
                 <Link
                   className="outline-none text-white text-[15px] font-500"
-                  to={"tel: (+992)44 610 1144"}
+                  to={"tel: (+992) 44 610 1144"}
                 >
-                  (+992)44 610 1144
+                  (+992) 44 610 1144
                 </Link>
               </div>
               <div className="email_block flex items-center gap-3">
