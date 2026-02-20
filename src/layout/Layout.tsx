@@ -22,15 +22,15 @@ const Layout = () => {
 
   return (
     <>
-      <div className="layout_component flex relative min-h-screen">
+      <div className="layout_component flex sm:flex-col md:flex-row relative h-screen">
         {/* Desktop Header */}
-        <header className="header bg-[#2262C6] hidden md:flex flex-col justify-between h-screen py-5 sticky top-0">
+        <header className="header bg-[#2262C6] hidden md:flex flex-col justify-between h-screen py-5 sticky top-0 max-w-70">
           <div className="logo_and_nav_block">
             <div className="logo_block flex items-center p-5">
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
                 to={"/"}
-                className="text-[#FFFFFF] text-[28px] font-400 outline-none"
+                className="text-[#FFFFFF] text-[24px] font-400 outline-none"
               >
                 Peshraft Library
               </Link>
@@ -130,18 +130,18 @@ const Layout = () => {
             </h1>
             <div className="contact_info_block p-5 flex flex-col gap-2">
               <div className="number_phone_block flex items-center gap-3">
-                <FaPhoneAlt className="text-white text-[22px]" />
+                <FaPhoneAlt size={19} className="text-white" />
                 <Link
-                  className="outline-none text-white text-[20px] font-500"
-                  to={"tel: (+992)44 610 1144"}
+                  className="outline-none text-white text-[15px] font-500"
+                  to={"tel: (+992) 44 610 1144"}
                 >
-                  (+992)44 610 1144
+                  (+992) 44 610 1144
                 </Link>
               </div>
               <div className="email_block flex items-center gap-3">
-                <MdOutlineEmail className="text-white text-[22px]" />
+                <MdOutlineEmail size={22} className="text-white " />
                 <Link
-                  className="outline-none text-white text-[20px] font-500"
+                  className="outline-none text-white text-[15px] font-500"
                   to={"mailto: peshraftlibrary@gmail.com"}
                 >
                   peshraftlibrary@gmail.com
@@ -151,26 +151,36 @@ const Layout = () => {
           </div>
         </header>
 
-        {/* Mobile Menu Button - Fixed positioning */}
-        <button
-          className="md:hidden fixed top-4 left-4 z-50 bg-[#2262C6] text-white p-2 rounded-lg shadow-lg hover:bg-[#1a4d9e] transition-colors"
-          onClick={() => setMenuMobileSize(true)}
-          aria-label="Open menu"
-        >
-          <IoMenu size={32} />
-        </button>
+        <div className="block_mobile_size_btn_and_name_of_admin_side md:hidden p-1 flex justify-between items-center gap-5 bg-[#020261]">
+          <div className="logo_block flex items-center">
+            <img className="w-14 h-14" src={logo} alt="" />
+            <Link
+              to={"/"}
+              className="text-[#FFFFFF] text-[20px] font-400 outline-none"
+            >
+              Peshraft Library
+            </Link>
+          </div>
+          <button
+            className="text-white p-2 rounded-lg shadow-lg transition-colors outline-none hover:cursor-pointer"
+            onClick={() => setMenuMobileSize(true)}
+            aria-label="Open menu"
+          >
+            <IoMenu size={44} />
+          </button>
+        </div>
 
         {/* Overlay */}
-        {menuMobileSize && (
-          <div
-            className="md:hidden fixed inset-0 bg-black opacity-50 z-40 transition-opacity"
-            onClick={() => setMenuMobileSize(false)}
-          />
-        )}
+        {/* {menuMobileSize && ( */}
+        <div
+          className={`md:hidden fixed inset-0 opacity-50 z-40 transition-all ${menuMobileSize ? "pointer-events-auto bg-black " : "pointer-events-none bg-none"}`}
+          onClick={() => setMenuMobileSize(false)}
+        />
+        {/* )} */}
 
         {/* Mobile Header */}
         <header
-          className={`fixed md:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 w-80 top-0 left-0 z-50 transform transition-transform duration-300 ease-in-out ${
+          className={`fixed md:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out ${
             menuMobileSize ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -179,7 +189,7 @@ const Layout = () => {
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
                 to={"/"}
-                className="text-[#FFFFFF] text-[28px] font-400 outline-none"
+                className="text-[#FFFFFF] text-[24px] font-400 outline-none"
                 onClick={() => setMenuMobileSize(false)}
               >
                 Peshraft Library
@@ -268,18 +278,18 @@ const Layout = () => {
             </h1>
             <div className="contact_info_block p-5 flex flex-col gap-2">
               <div className="number_phone_block flex items-center gap-3">
-                <FaPhoneAlt className="text-white text-[22px]" />
+                <FaPhoneAlt size={19} className="text-white" />
                 <Link
-                  className="outline-none text-white text-[20px] font-500"
+                  className="outline-none text-white text-[15px] font-500"
                   to={"tel: (+992)44 610 1144"}
                 >
                   (+992)44 610 1144
                 </Link>
               </div>
               <div className="email_block flex items-center gap-3">
-                <MdOutlineEmail className="text-white text-[22px]" />
+                <MdOutlineEmail size={22} className="text-white " />
                 <Link
-                  className="outline-none text-white text-[20px] font-500"
+                  className="outline-none text-white text-[15px] font-500"
                   to={"mailto: peshraftlibrary@gmail.com"}
                 >
                   peshraftlibrary@gmail.com
