@@ -26,7 +26,7 @@ const Layout = () => {
         {/* Desktop Header */}
         <header className="header bg-[#2262C6] hidden md:flex flex-col justify-between h-screen py-5 sticky top-0 max-w-70">
           <div className="logo_and_nav_block">
-            <div className="logo_block flex items-center p-5">
+            <div className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
                 to={"/"}
@@ -35,7 +35,7 @@ const Layout = () => {
                 Peshraft Library
               </Link>
             </div>
-            <nav className="nav">
+            <nav className="nav mt-5">
               <ul className="nav_list flex flex-col gap-2">
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/" && "border-b-3"}`}
@@ -151,7 +151,7 @@ const Layout = () => {
           </div>
         </header>
 
-        <div className="block_mobile_size_btn_and_name_of_admin_side md:hidden p-1 flex justify-between items-center gap-5 bg-[#020261]">
+        <div className="block_mobile_size_btn_and_name_of_admin_side md:hidden p-1 flex justify-between items-center gap-5 bg-[#2262C6]">
           <div className="logo_block flex items-center">
             <img className="w-14 h-14" src={logo} alt="" />
             <Link
@@ -162,7 +162,7 @@ const Layout = () => {
             </Link>
           </div>
           <button
-            className="text-white p-2 rounded-lg shadow-lg transition-colors outline-none hover:cursor-pointer"
+            className="text-white p-2 transition-colors outline-none hover:cursor-pointer"
             onClick={() => setMenuMobileSize(true)}
             aria-label="Open menu"
           >
@@ -185,7 +185,7 @@ const Layout = () => {
           }`}
         >
           <div className="logo_and_nav_block overflow-y-auto">
-            <div className="logo_block flex items-center p-5">
+            <div className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
                 to={"/"}
@@ -195,7 +195,7 @@ const Layout = () => {
                 Peshraft Library
               </Link>
             </div>
-            <nav className="nav">
+            <nav className="nav mt-5">
               <ul className="nav_list flex flex-col gap-2">
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/" && "border-b-3"}`}
