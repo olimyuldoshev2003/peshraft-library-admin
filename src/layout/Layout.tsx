@@ -20,13 +20,23 @@ const Layout = () => {
   const location = useLocation();
   const [menuMobileSize, setMenuMobileSize] = useState<boolean>(false);
 
+  function removeScrollbar() {
+    document.body.classList.add("scroll_hidden");
+    document.body.classList.remove("scroll_visible");
+  }
+
+  function showScrollbar() {
+    document.body.classList.add("scroll_visible");
+    document.body.classList.remove("scroll_hidden");
+  }
+
   return (
     <>
-      <div className="layout_component flex sm:flex-col md:flex-row relative h-screen">
+      <div className="layout_component flex sm:flex-col lg:flex-row relative min-h-screen">
         {/* Desktop Header */}
-        <header className="header bg-[#2262C6] hidden md:flex flex-col justify-between h-screen py-5 sticky top-0 max-w-70">
+        <header className="header bg-[#2262C6] hidden lg:flex flex-col justify-between h-screen py-5 sticky top-0 max-w-70">
           <div className="logo_and_nav_block">
-            <div className="logo_block flex items-center">
+            <Link to={"/"} className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
                 to={"/"}
@@ -34,7 +44,7 @@ const Layout = () => {
               >
                 Peshraft Library
               </Link>
-            </div>
+            </Link>
             <nav className="nav mt-5">
               <ul className="nav_list flex flex-col gap-2">
                 <Link
@@ -133,7 +143,7 @@ const Layout = () => {
                 <FaPhoneAlt size={19} className="text-white" />
                 <Link
                   className="outline-none text-white text-[15px] font-500"
-                  to={"tel: (+992) 44 610 1144"}
+                  to={"tel:+992446101144"}
                 >
                   (+992) 44 610 1144
                 </Link>
@@ -142,7 +152,7 @@ const Layout = () => {
                 <MdOutlineEmail size={22} className="text-white " />
                 <Link
                   className="outline-none text-white text-[15px] font-500"
-                  to={"mailto: peshraftlibrary@gmail.com"}
+                  to={"mailto:peshraftlibrary@gmail.com"}
                 >
                   peshraftlibrary@gmail.com
                 </Link>
@@ -151,8 +161,10 @@ const Layout = () => {
           </div>
         </header>
 
-        <div className="block_mobile_size_btn_and_name_of_admin_side md:hidden p-1 flex justify-between items-center gap-5 bg-[#2262C6]">
-          <div className="logo_block flex items-center">
+        <div
+          className={`block_mobile_size_btn_and_name_of_admin_side lg:hidden p-1 flex justify-between items-center gap-5 bg-[#2262C6] sticky top-0 z-10`}
+        >
+          <Link to={"/"} className="logo_block flex items-center">
             <img className="w-14 h-14" src={logo} alt="" />
             <Link
               to={"/"}
@@ -160,10 +172,13 @@ const Layout = () => {
             >
               Peshraft Library
             </Link>
-          </div>
+          </Link>
           <button
             className="text-white p-2 transition-colors outline-none hover:cursor-pointer"
-            onClick={() => setMenuMobileSize(true)}
+            onClick={() => {
+              setMenuMobileSize(true);
+              removeScrollbar();
+            }}
             aria-label="Open menu"
           >
             <IoMenu size={44} />
@@ -173,33 +188,38 @@ const Layout = () => {
         {/* Overlay */}
         {/* {menuMobileSize && ( */}
         <div
-          className={`md:hidden fixed inset-0 opacity-50 z-40 transition-all ${menuMobileSize ? "pointer-events-auto bg-black " : "pointer-events-none bg-none"}`}
-          onClick={() => setMenuMobileSize(false)}
+          className={`lg:hidden fixed inset-0 opacity-50 z-40 transition-all ${menuMobileSize ? "pointer-events-auto bg-black " : "pointer-events-none bg-none"}`}
+          onClick={() => {
+            setMenuMobileSize(false);
+            showScrollbar();
+          }}
         />
         {/* )} */}
 
         {/* Mobile Header */}
         <header
-          className={`fixed md:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out ${
-            menuMobileSize ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`fixed lg:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out 
+            ${menuMobileSize ? "translate-x-0" : "-translate-x-full"}
+          `}
         >
           <div className="logo_and_nav_block overflow-y-auto">
-            <div className="logo_block flex items-center">
+            <Link to={"/"} className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
                 to={"/"}
                 className="text-[#FFFFFF] text-[24px] font-400 outline-none"
-                onClick={() => setMenuMobileSize(false)}
               >
                 Peshraft Library
               </Link>
-            </div>
+            </Link>
             <nav className="nav mt-5">
               <ul className="nav_list flex flex-col gap-2">
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/" && "border-b-3"}`}
-                  onClick={() => setMenuMobileSize(false)}
+                  onClick={() => {
+                    setMenuMobileSize(false);
+                    showScrollbar();
+                  }}
                   to={"/"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -211,7 +231,10 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/books" && "border-b-3"}`}
-                  onClick={() => setMenuMobileSize(false)}
+                  onClick={() => {
+                    setMenuMobileSize(false);
+                    showScrollbar();
+                  }}
                   to={"/books"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -223,7 +246,10 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/members" && "border-b-3"}`}
-                  onClick={() => setMenuMobileSize(false)}
+                  onClick={() => {
+                    setMenuMobileSize(false);
+                    showScrollbar();
+                  }}
                   to={"/members"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -235,7 +261,10 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/borrowed-books" && "border-b-3"}`}
-                  onClick={() => setMenuMobileSize(false)}
+                  onClick={() => {
+                    setMenuMobileSize(false);
+                    showScrollbar();
+                  }}
                   to={"/borrowed-books"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -247,7 +276,10 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/notifications" && "border-b-3"}`}
-                  onClick={() => setMenuMobileSize(false)}
+                  onClick={() => {
+                    setMenuMobileSize(false);
+                    showScrollbar();
+                  }}
                   to={"/notifications"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -259,7 +291,10 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/profile" && "border-b-3"}`}
-                  onClick={() => setMenuMobileSize(false)}
+                  onClick={() => {
+                    setMenuMobileSize(false);
+                    showScrollbar();
+                  }}
                   to={"/profile"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -281,7 +316,7 @@ const Layout = () => {
                 <FaPhoneAlt size={19} className="text-white" />
                 <Link
                   className="outline-none text-white text-[15px] font-500"
-                  to={"tel: (+992) 44 610 1144"}
+                  to={"tel:+992446101144"}
                 >
                   (+992) 44 610 1144
                 </Link>
@@ -290,7 +325,7 @@ const Layout = () => {
                 <MdOutlineEmail size={22} className="text-white " />
                 <Link
                   className="outline-none text-white text-[15px] font-500"
-                  to={"mailto: peshraftlibrary@gmail.com"}
+                  to={"mailto:peshraftlibrary@gmail.com"}
                 >
                   peshraftlibrary@gmail.com
                 </Link>

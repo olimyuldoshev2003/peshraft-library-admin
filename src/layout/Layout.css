@@ -1,1 +1,13 @@
+.scroll_hidden {
+  overflow: hidden;
+}
 
+.scroll_visible {
+  overflow: unset;
+}
+
+@media only screen and (min-width: 768px) {
+  .scroll_hidden {
+    overflow: unset;
+  }
+}
