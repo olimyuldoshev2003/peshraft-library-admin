@@ -198,11 +198,11 @@ const Layout = () => {
 
         {/* Mobile Header */}
         <header
-          className={`fixed lg:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out overflow-y-auto 
+          className={`fixed lg:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out 
             ${menuMobileSize ? "translate-x-0" : "-translate-x-full"}
           `}
         >
-          <div className="logo_and_nav_block">
+          <div className="logo_and_nav_block overflow-y-auto">
             <Link to={"/"} className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
