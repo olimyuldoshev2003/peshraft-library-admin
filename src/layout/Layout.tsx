@@ -339,7 +339,7 @@ const Layout = () => {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 bg-gray-50">
+        <main className="flex-1 bg-gray-50 min-w-0 overflow-x-auto">
           <Outlet />
         </main>
       </div>
