@@ -198,7 +198,7 @@ const Layout = () => {
 
         {/* Mobile Header */}
         <header
-          className={`fixed lg:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out 
+          className={`fixed lg:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out pb-21 
             ${menuMobileSize ? "translate-x-0" : "-translate-x-full"}
           `}
         >
