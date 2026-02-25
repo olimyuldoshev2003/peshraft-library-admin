@@ -218,7 +218,7 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="volunteers_graph_block w-full lg:w-1/3">
-              <h1 className="title_volunteers text-[25px] font-600 mb-4">
+              <h1 className="title_volunteers text-[25px] font-600 mb-4 sm:text-start md:text-center">
                 Volunteers
               </h1>
               <div className="flex justify-center">
@@ -237,7 +237,7 @@ const Dashboard = () => {
                   slotProps={{
                     legend: {
                       direction: "horizontal",
-                      position: { vertical: "top", horizontal: "start" },
+                      position: { vertical: "bottom", horizontal: "center" },
                     },
                   }}
                 />

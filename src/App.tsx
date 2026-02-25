@@ -6,11 +6,16 @@ import Members from "./pages/members/Members";
 import BorrowedBooks from "./pages/borrowedBooks/BorrowedBooks";
 import Notifications from "./pages/notifications/Notifications";
 import Profile from "./pages/profile/Profile";
+import SignIn from "./pages/signIn/SignIn";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
+      element: <SignIn />,
+    },
+    {
+      path: "/dashboard",
       element: <Layout />,
       children: [
         {
