@@ -206,6 +206,10 @@ const Layout = () => {
             <Link to={"/"} className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
+                onClick={() => {
+                  setMenuMobileSize(false);
+                  showScrollbar();
+                }}
                 to={"/"}
                 className="text-[#FFFFFF] text-[24px] font-400 outline-none"
               >
