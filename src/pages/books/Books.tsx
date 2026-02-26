@@ -37,7 +37,7 @@ const Books = () => {
   const [orderBy, setOrderBy] = useState<keyof Data>("bookTitle");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-  const [dense, setDense] = useState(false);
+  // const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Table
@@ -279,7 +279,7 @@ const Books = () => {
   }
 
   const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
+    _: React.MouseEvent<unknown>,
     property: keyof Data,
   ) => {
     const isAsc = orderBy === property && order === "asc";
@@ -296,7 +296,7 @@ const Books = () => {
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+  const handleClick = (_: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly number[] = [];
 
@@ -315,7 +315,7 @@ const Books = () => {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
   };
 
@@ -326,9 +326,9 @@ const Books = () => {
     setPage(0);
   };
 
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-  };
+  // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setDense(event.target.checked);
+  // };
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -430,7 +430,7 @@ const Books = () => {
               <Table
                 sx={{ minWidth: 750 }}
                 aria-labelledby="tableTitle"
-                size={dense ? "small" : "medium"}
+                // size={dense ? "small" : "medium"}
               >
                 <EnhancedTableHead
                   numSelected={selected.length}
@@ -490,7 +490,7 @@ const Books = () => {
                   {emptyRows > 0 && (
                     <TableRow
                       style={{
-                        height: (dense ? 33 : 53) * emptyRows,
+                        // height: (dense ? 33 : 53) * emptyRows,
                       }}
                     >
                       <TableCell colSpan={6} />
