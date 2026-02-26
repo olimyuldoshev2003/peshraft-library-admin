@@ -48,7 +48,7 @@ const Layout = () => {
             <nav className="nav mt-5">
               <ul className="nav_list flex flex-col gap-2">
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard" && "border-b-3"}`}
                   to={"/dashboard"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -62,7 +62,7 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/books" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/books" && "border-b-3"}`}
                   to={"/dashboard/books"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -76,7 +76,7 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/members" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/members" && "border-b-3"}`}
                   to={"/dashboard/members"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -90,7 +90,7 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/borrowed-books" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/borrowed-books" && "border-b-3"}`}
                   to={"/dashboard/borrowed-books"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -104,7 +104,7 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/notifications" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/notifications" && "border-b-3"}`}
                   to={"/dashboard/notifications"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -118,7 +118,7 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/profile" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/profile" && "border-b-3"}`}
                   to={"/dashboard/profile"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
@@ -219,7 +219,7 @@ const Layout = () => {
             <nav className="nav mt-5">
               <ul className="nav_list flex flex-col gap-2">
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/dashboard" && "border-b-3"}`}
                   onClick={() => {
                     setMenuMobileSize(false);
                     showScrollbar();
@@ -234,7 +234,7 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/books" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/books" && "border-b-3"}`}
                   onClick={() => {
                     setMenuMobileSize(false);
                     showScrollbar();
@@ -249,7 +249,7 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/members" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/members" && "border-b-3"}`}
                   onClick={() => {
                     setMenuMobileSize(false);
                     showScrollbar();
@@ -264,7 +264,7 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/borrowed-books" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/borrowed-books" && "border-b-3"}`}
                   onClick={() => {
                     setMenuMobileSize(false);
                     showScrollbar();
@@ -279,7 +279,7 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/notifications" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/notifications" && "border-b-3"}`}
                   onClick={() => {
                     setMenuMobileSize(false);
                     showScrollbar();
@@ -294,7 +294,7 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/profile" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/profile" && "border-b-3"}`}
                   onClick={() => {
                     setMenuMobileSize(false);
                     showScrollbar();
