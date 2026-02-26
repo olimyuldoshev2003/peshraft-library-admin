@@ -30,6 +30,7 @@ import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import Button from "@mui/material/Button";
 
 const Books = () => {
   const [limitPerPage, setLimitPerPage] = useState<number>(17);
@@ -107,14 +108,7 @@ const Books = () => {
       : (a, b) => -descendingComparator(a, b, orderBy);
   }
 
-  interface HeadCell {
-    disablePadding: boolean;
-    id: keyof Data;
-    label: string;
-    numeric: boolean;
-  }
-
-  const headCells: readonly HeadCell[] = [
+  const headCells: any = [
     {
       id: "img",
       numeric: false,
@@ -150,6 +144,12 @@ const Books = () => {
       numeric: false,
       disablePadding: false,
       label: "Status",
+    },
+    {
+      id: "action",
+      numeric: false,
+      disablePadding: false,
+      label: "Action",
     },
   ];
 
@@ -193,7 +193,7 @@ const Books = () => {
               }}
             />
           </TableCell>
-          {headCells.map((headCell) => (
+          {headCells.map((headCell: any) => (
             <TableCell
               key={headCell.id}
               // align={headCell.numeric ? "right" : "left"}
@@ -258,7 +258,7 @@ const Books = () => {
             id="tableTitle"
             component="div"
           >
-            Nutrition
+            Books
           </Typography>
         )}
         {numSelected > 0 ? (
@@ -448,12 +448,11 @@ const Books = () => {
                     return (
                       <TableRow
                         hover
-                        onClick={(event) => handleClick(event, row.id)}
                         role="checkbox"
-                        aria-checked={isItemSelected}
+                        // aria-checked={isItemSelected}
                         tabIndex={-1}
                         key={row.id}
-                        selected={isItemSelected}
+                        // selected={isItemSelected}
                         sx={{ cursor: "pointer" }}
                       >
                         <TableCell padding="checkbox">
@@ -463,6 +462,7 @@ const Books = () => {
                             inputProps={{
                               "aria-labelledby": labelId,
                             }}
+                            onClick={(event) => handleClick(event, row.id)}
                           />
                         </TableCell>
                         <TableCell>
@@ -484,14 +484,21 @@ const Books = () => {
                         <TableCell>{row.category}</TableCell>
                         <TableCell>{row.bookPage}</TableCell>
                         <TableCell>{row.status}</TableCell>
+                        <TableCell>
+                          <Button variant="outlined" size="small">
+                            Edit
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     );
                   })}
                   {emptyRows > 0 && (
                     <TableRow
-                      style={{
-                        // height: (dense ? 33 : 53) * emptyRows,
-                      }}
+                      style={
+                        {
+                          // height: (dense ? 33 : 53) * emptyRows,
+                        }
+                      }
                     >
                       <TableCell colSpan={6} />
                     </TableRow>
