@@ -32,14 +32,14 @@ const Layout = () => {
 
   return (
     <>
-      <div className="layout_component flex sm:flex-col lg:flex-row relative min-h-screen">
+      <div className="layout_component flex sm:flex-col md:flex-row relative min-h-screen">
         {/* Desktop Header */}
-        <header className="header bg-[#2262C6] hidden lg:flex flex-col justify-between h-screen py-5 sticky top-0 max-w-70">
+        <header className="header bg-[#2262C6] hidden md:flex flex-col justify-between h-screen py-5 sticky top-0 max-w-70">
           <div className="logo_and_nav_block">
-            <Link to={"/"} className="logo_block flex items-center">
+            <Link to={"/dashboard"} className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
-                to={"/"}
+                to={"/dashboard"}
                 className="text-[#FFFFFF] text-[24px] font-400 outline-none"
               >
                 Peshraft Library
@@ -49,13 +49,13 @@ const Layout = () => {
               <ul className="nav_list flex flex-col gap-2">
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/" && "border-b-3"}`}
-                  to={"/"}
+                  to={"/dashboard"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <GoHome className="text-white text-[22px]" />
                     <Link
                       className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/"}
+                      to={"/dashboard"}
                     >
                       Dashboard
                     </Link>
@@ -63,13 +63,13 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/books" && "border-b-3"}`}
-                  to={"/books"}
+                  to={"/dashboard/books"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <PiBookOpen className="text-white text-[22px]" />
                     <Link
                       className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/books"}
+                      to={"/dashboard/books"}
                     >
                       Books
                     </Link>
@@ -77,13 +77,13 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/members" && "border-b-3"}`}
-                  to={"/members"}
+                  to={"/dashboard/members"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <PiUsersThree className="text-white text-[22px]" />
                     <Link
                       className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/members"}
+                      to={"/dashboard/members"}
                     >
                       Members
                     </Link>
@@ -91,13 +91,13 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/borrowed-books" && "border-b-3"}`}
-                  to={"/borrowed-books"}
+                  to={"/dashboard/borrowed-books"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <SecurityUpdateGoodOutlinedIcon className="text-white text-[22px]" />
                     <Link
                       className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/borrowed-books"}
+                      to={"/dashboard/borrowed-books"}
                     >
                       Borrowed Books
                     </Link>
@@ -105,13 +105,13 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/notifications" && "border-b-3"}`}
-                  to={"/notifications"}
+                  to={"/dashboard/notifications"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <GrNotification className="text-white text-[22px]" />
                     <Link
                       className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/notifications"}
+                      to={"/dashboard/notifications"}
                     >
                       Notification
                     </Link>
@@ -119,13 +119,13 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/profile" && "border-b-3"}`}
-                  to={"/profile"}
+                  to={"/dashboard/profile"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <CgProfile className="text-white text-[22px]" />
                     <Link
                       className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/profile"}
+                      to={"/dashboard/profile"}
                     >
                       Profile
                     </Link>
@@ -162,12 +162,12 @@ const Layout = () => {
         </header>
 
         <div
-          className={`block_mobile_size_btn_and_name_of_admin_side lg:hidden p-1 flex justify-between items-center gap-5 bg-[#2262C6] sticky top-0 z-10`}
+          className={`block_mobile_size_btn_and_name_of_admin_side md:hidden p-1 flex justify-between items-center gap-5 bg-[#2262C6] sticky top-0 z-10`}
         >
-          <Link to={"/"} className="logo_block flex items-center">
+          <Link to={"/dashboard"} className="logo_block flex items-center">
             <img className="w-14 h-14" src={logo} alt="" />
             <Link
-              to={"/"}
+              to={"/dashboard"}
               className="text-[#FFFFFF] text-[20px] font-400 outline-none"
             >
               Peshraft Library
@@ -188,7 +188,7 @@ const Layout = () => {
         {/* Overlay */}
         {/* {menuMobileSize && ( */}
         <div
-          className={`lg:hidden fixed inset-0 opacity-50 z-40 transition-all ${menuMobileSize ? "pointer-events-auto bg-black " : "pointer-events-none bg-none"}`}
+          className={`md:hidden fixed inset-0 opacity-50 z-40 transition-all ${menuMobileSize ? "pointer-events-auto bg-black " : "pointer-events-none bg-none"}`}
           onClick={() => {
             setMenuMobileSize(false);
             showScrollbar();
@@ -198,19 +198,19 @@ const Layout = () => {
 
         {/* Mobile Header */}
         <header
-          className={`fixed lg:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out pb-21 
+          className={`fixed md:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out pb-21 
             ${menuMobileSize ? "translate-x-0" : "-translate-x-full"}
           `}
         >
           <div className="logo_and_nav_block overflow-y-auto">
-            <Link to={"/"} className="logo_block flex items-center">
+            <Link to={"/dashboard"} className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
                 onClick={() => {
                   setMenuMobileSize(false);
                   showScrollbar();
                 }}
-                to={"/"}
+                to={"/dashboard"}
                 className="text-[#FFFFFF] text-[24px] font-400 outline-none"
               >
                 Peshraft Library
@@ -224,7 +224,7 @@ const Layout = () => {
                     setMenuMobileSize(false);
                     showScrollbar();
                   }}
-                  to={"/"}
+                  to={"/dashboard"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <GoHome className="text-white text-[22px]" />
@@ -239,7 +239,7 @@ const Layout = () => {
                     setMenuMobileSize(false);
                     showScrollbar();
                   }}
-                  to={"/books"}
+                  to={"/dashboard/books"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <PiBookOpen className="text-white text-[22px]" />
@@ -254,7 +254,7 @@ const Layout = () => {
                     setMenuMobileSize(false);
                     showScrollbar();
                   }}
-                  to={"/members"}
+                  to={"/dashboard/members"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <PiUsersThree className="text-white text-[22px]" />
@@ -269,7 +269,7 @@ const Layout = () => {
                     setMenuMobileSize(false);
                     showScrollbar();
                   }}
-                  to={"/borrowed-books"}
+                  to={"/dashboard/borrowed-books"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <SecurityUpdateGoodOutlinedIcon className="text-white text-[22px]" />
@@ -284,7 +284,7 @@ const Layout = () => {
                     setMenuMobileSize(false);
                     showScrollbar();
                   }}
-                  to={"/notifications"}
+                  to={"/dashboard/notifications"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <GrNotification className="text-white text-[22px]" />
@@ -299,7 +299,7 @@ const Layout = () => {
                     setMenuMobileSize(false);
                     showScrollbar();
                   }}
-                  to={"/profile"}
+                  to={"/dashboard/profile"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <CgProfile className="text-white text-[22px]" />
