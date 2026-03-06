@@ -4,10 +4,10 @@ import userImg from "../../assets/user-img.svg";
 // Icons
 import TuneIcon from "@mui/icons-material/Tune";
 import { LuPlus } from "react-icons/lu";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+// import FormControl from "@mui/material/FormControl";
+// import InputLabel from "@mui/material/InputLabel";
+// import Select from "@mui/material/Select";
+// import MenuItem from "@mui/material/MenuItem";
 import { useMemo, useState } from "react";
 
 //Material UI
@@ -31,15 +31,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import Button from "@mui/material/Button";
+import { IoClose } from "react-icons/io5";
 
 const Books = () => {
-  const [limitPerPage, setLimitPerPage] = useState<number>(17);
+  // const [limitPerPage, setLimitPerPage] = useState<number>(17);
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof Data>("bookTitle");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   // const [dense, setDense] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(17);
+  const [modalFilter, setModalFilter] = useState<boolean>(false);
+  // const [modalShowAllFilters, setModalShowAllFilters] = useState(false);
+  // const [modalFilterOptions, setModalFilterOptions] = useState(false);
 
   // Table
   interface Data {
@@ -71,6 +75,60 @@ const Books = () => {
       status,
     };
   }
+
+  const filtersByCategory = [
+    {
+      id: "fantasy",
+      filterName: "Fantasy",
+    },
+    {
+      id: "best-book",
+      filterName: "Best Book",
+    },
+    {
+      id: "classics",
+      filterName: "Classics",
+    },
+    {
+      id: "romance",
+      filterName: "Romance",
+    },
+    {
+      id: "science-fiction",
+      filterName: "Science Fiction",
+    },
+    {
+      id: "mystery",
+      filterName: "Mystery",
+    },
+    {
+      id: "historycal-fiction",
+      filterName: "Historical Fiction",
+    },
+  ];
+
+  // const filtersByStatus = [
+  //   {
+  //     id: "1",
+  //     filterName: "New",
+  //   },
+  //   {
+  //     id: "2",
+  //     filterName: "Excellent",
+  //   },
+  //   {
+  //     id: "3",
+  //     filterName: "Good",
+  //   },
+  //   {
+  //     id: "4",
+  //     filterName: "Danger",
+  //   },
+  //   {
+  //     id: "5",
+  //     filterName: "Needs Repair",
+  //   },
+  // ];
 
   const rows = [
     createData(
@@ -342,8 +400,22 @@ const Books = () => {
     [order, orderBy, page, rowsPerPage],
   );
 
+  function removeScrollbar() {
+    document.body.classList.add("scroll_hidden_modal_filter_without_overlay");
+    document.body.classList.remove(
+      "scroll_visible_modal_filter_without_overlay",
+    );
+  }
+
+  function showScrollbar() {
+    document.body.classList.add("scroll_visible_modal_filter_without_overlay");
+    document.body.classList.remove(
+      "scroll_hidden_modal_filter_without_overlay",
+    );
+  }
+
   return (
-    <div className="books_component p-4">
+    <div className="books_component p-4 h-[120vh]">
       <div className="header_books flex justify-between items-center gap-6">
         <div className="search_logo_and_search_input relative flex items-center flex-1 gap-4">
           <HiOutlineSearch size={24} className="absolute top-4 left-4" />
@@ -352,13 +424,123 @@ const Books = () => {
             className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-3 rounded-[30px] text-[20px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
             placeholder="Search enter..."
           />
-          <button className="icons_filter_block shadow-[0_0_6px_gray] flex justify-center items-center p-2 rounded-[10px]">
-            <TuneIcon
-              sx={{
-                fontSize: "36px",
+
+          <div className="btn_filter_and_modal_filter_overlay_transparent_block md:relative flex flex-col">
+            <button
+              className="icons_filter_block shadow-[0_0_6px_gray] flex justify-center items-center p-2 rounded-[10px] cursor-pointer"
+              onClick={() => {
+                setModalFilter(true);
+                removeScrollbar();
               }}
-            />
-          </button>
+            >
+              <TuneIcon
+                sx={{
+                  fontSize: "36px",
+                }}
+              />
+            </button>
+
+            {/* Modal filter */}
+            <div
+              className={`modal_filter_transparent_overlay_main_block absolute sm:left-0 sm:w-full sm:top-16 md:top-15 md:-left-30.5 p-3 z-50 rounded-2xl duration-300
+                md:w-77.5
+                bg-white shadow-2xl
+                ${modalFilter ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}
+                `}
+            >
+              <div className="header_modal_filter flex justify-between items-center">
+                <h1 className="title_filter_modal text-[20px] font-500">
+                  Filter Book
+                </h1>
+                <IoClose
+                  size={31}
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setModalFilter(false);
+                    showScrollbar();
+                  }}
+                />
+              </div>
+              <div className="section_modal_filter">
+                <div className="filter_by_category_block">
+                  <h1 className="title_filter_by_category text-[#A1A1A1] text-[16px] font-400">
+                    Category
+                  </h1>
+                  <div className="filter_by_category mt-1 grid grid-cols-2 gap-2">
+                    {filtersByCategory?.map((item) => {
+                      return (
+                        <div key={item.id} className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name=""
+                            id={item.id}
+                            className="outline-none cursor-pointer"
+                          />
+                          <label
+                            className="text-[#6C757D] text-[13px] font-400 cursor-pointer"
+                            htmlFor={item.id}
+                          >
+                            {item.filterName}
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div className="btns_show_filters_and_filter_options flex justify-between mt-1 px-5">
+                  <button
+                    className="show_filters cursor-pointer outline-none text-[14px] font-400 text-[gray] hover:text-green-500"
+                    onClick={() => {
+                      // setModalShowAllFilters(true)
+                    }}
+                  >
+                    Show All Filters
+                  </button>
+                  <button
+                    className="filter_options cursor-pointer outline-none text-[14px] font-400 text-[gray] hover:text-green-500"
+                    onClick={() => {
+                      // setModalFilterOptions(true)
+                    }}
+                  >
+                    Filter Options
+                  </button>
+                </div>
+                {/* <div className="filter_by_status_block mt-2">
+                  <h1 className="title_filter_by_status text-[#A1A1A1] text-[16px] font-400">
+                    Status
+                  </h1>
+                  <div className="filter_by status mt-1 grid grid-cols-2 gap-2">
+                    {filtersByStatus?.map((item) => {
+                      return (
+                        <div key={item.id} className="flex items-center gap-2">
+                          <input
+                            type="checkbox"
+                            name=""
+                            id={item.id}
+                            className="outline-none"
+                          />
+                          <label
+                            className="text-[#6C757D] text-[13px] font-400"
+                            htmlFor={item.id}
+                          >
+                            {item.filterName}
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div> */}
+
+                <div className="btn_submit_block flex justify-end mt-2">
+                  <button className="btn_submit_filter cursor-pointer px-5 py-1 text-[#FFFFFF] text-[18px] font-500 bg-[#20ACFF] rounded-[10px]">
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div className="fullname_img_of_admin_and_admin_title sm:hidden md:flex items-center gap-3">
           <div className="fullname_of_user_and_admin_title">
@@ -376,51 +558,11 @@ const Books = () => {
             Manage Books
           </h1>
           <div className="filter_and_btn_add_block flex justify-between items-center gap-6">
-            <div className="filter_block md:flex items-center gap-4 sm:hidden">
-              <h3 className="filter_title text-[20px] font-600">Showing</h3>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Limit</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={limitPerPage}
-                  label="Limit"
-                  onChange={(event: any) => {
-                    setLimitPerPage(event.target.value);
-                  }}
-                >
-                  <MenuItem value={17}>17</MenuItem>
-                  <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={8}>8</MenuItem>
-                  <MenuItem value={5}>5</MenuItem>
-                </Select>
-              </FormControl>{" "}
-            </div>
             <button className="flex items-center gap-2 bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer">
               <LuPlus />
               Add new book
             </button>
           </div>
-        </div>
-        <div className="filter_mobile_size sm:flex flex-col gap-1 md:hidden mt-3">
-          <h3 className="filter_title text-[20px] font-600">Showing</h3>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Limit</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={limitPerPage}
-              label="Limit"
-              onChange={(event: any) => {
-                setLimitPerPage(event.target.value);
-              }}
-            >
-              <MenuItem value={17}>17</MenuItem>
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={8}>8</MenuItem>
-              <MenuItem value={5}>5</MenuItem>
-            </Select>
-          </FormControl>{" "}
         </div>
 
         <div className="table_books mt-6">
@@ -453,7 +595,7 @@ const Books = () => {
                         tabIndex={-1}
                         key={row.id}
                         // selected={isItemSelected}
-                        sx={{ cursor: "pointer" }}
+                        // sx={{ cursor: "pointer" }}
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
@@ -493,13 +635,7 @@ const Books = () => {
                     );
                   })}
                   {emptyRows > 0 && (
-                    <TableRow
-                      style={
-                        {
-                          // height: (dense ? 33 : 53) * emptyRows,
-                        }
-                      }
-                    >
+                    <TableRow>
                       <TableCell colSpan={6} />
                     </TableRow>
                   )}
@@ -507,7 +643,7 @@ const Books = () => {
               </Table>
             </TableContainer>
             <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
+              rowsPerPageOptions={[17, 10, 8, 5]}
               component="div"
               count={rows.length}
               rowsPerPage={rowsPerPage}
@@ -518,6 +654,13 @@ const Books = () => {
           </Paper>
         </div>
       </div>
+      <div
+        className={`transpartent_overlay_modal_filter absolute inset-0 ${modalFilter ? "pointer-events-auto" : "pointer-events-none"}`}
+        onClick={() => {
+          setModalFilter(false);
+          showScrollbar();
+        }}
+      ></div>
     </div>
   );
 };

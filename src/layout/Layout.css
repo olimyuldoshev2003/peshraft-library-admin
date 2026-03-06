@@ -11,3 +11,11 @@
     overflow: unset;
   }
 }
+
+.scroll_hidden_modal_filter_without_overlay {
+  overflow: hidden;
+}
+
+.scroll_visible_modal_filter_without_overlay {
+  overflow: unset;
+}
