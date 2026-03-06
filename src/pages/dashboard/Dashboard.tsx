@@ -253,9 +253,9 @@ const Dashboard = () => {
               <Table aria-label="customized table">
                 <TableHead>
                   <TableRow>
-                    <StyledTableCell sx={{ width: 50 }}>
+                    {/* <StyledTableCell sx={{ width: 50 }}>
                       <input type="checkbox" className="outline-none w-5 h-5" />
-                    </StyledTableCell>
+                    </StyledTableCell> */}
                     <StyledTableCell sx={{ minWidth: 150 }}>
                       Full Name
                     </StyledTableCell>
@@ -284,9 +284,9 @@ const Dashboard = () => {
                 </TableHead>
                 <TableBody>
                   <StyledTableRow>
-                    <StyledTableCell>
+                    {/* <StyledTableCell>
                       <input type="checkbox" className="outline-none w-5 h-5" />
-                    </StyledTableCell>
+                    </StyledTableCell> */}
                     <StyledTableCell>Olim Yuldoshev</StyledTableCell>
                     <StyledTableCell>+992919697875</StyledTableCell>
                     <StyledTableCell>Volunteer</StyledTableCell>
@@ -302,9 +302,9 @@ const Dashboard = () => {
                     </StyledTableCell>
                   </StyledTableRow>
                   <StyledTableRow>
-                    <StyledTableCell>
+                    {/* <StyledTableCell>
                       <input type="checkbox" className="outline-none w-5 h-5" />
-                    </StyledTableCell>
+                    </StyledTableCell> */}
                     <StyledTableCell>Olim Yuldoshev</StyledTableCell>
                     <StyledTableCell>+992919697875</StyledTableCell>
                     <StyledTableCell>Volunteer</StyledTableCell>
@@ -320,9 +320,9 @@ const Dashboard = () => {
                     </StyledTableCell>
                   </StyledTableRow>
                   <StyledTableRow>
-                    <StyledTableCell>
+                    {/* <StyledTableCell>
                       <input type="checkbox" className="outline-none w-5 h-5" />
-                    </StyledTableCell>
+                    </StyledTableCell> */}
                     <StyledTableCell>John Doe</StyledTableCell>
                     <StyledTableCell>+992919697876</StyledTableCell>
                     <StyledTableCell>Student</StyledTableCell>

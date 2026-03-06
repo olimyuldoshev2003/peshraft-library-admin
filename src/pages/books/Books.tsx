@@ -24,14 +24,14 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
+// import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-import Button from "@mui/material/Button";
 import { IoClose } from "react-icons/io5";
+import { AiFillEdit } from "react-icons/ai";
 
 const Books = () => {
   // const [limitPerPage, setLimitPerPage] = useState<number>(17);
@@ -225,11 +225,11 @@ const Books = () => {
 
   function EnhancedTableHead(props: EnhancedTableProps) {
     const {
-      onSelectAllClick,
+      // onSelectAllClick,
       order,
       orderBy,
-      numSelected,
-      rowCount,
+      // numSelected,
+      // rowCount,
       onRequestSort,
     } = props;
     const createSortHandler =
@@ -240,7 +240,7 @@ const Books = () => {
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
+          {/* <TableCell padding="checkbox">
             <Checkbox
               color="primary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -250,7 +250,7 @@ const Books = () => {
                 "aria-label": "select all desserts",
               }}
             />
-          </TableCell>
+          </TableCell> */}
           {headCells.map((headCell: any) => (
             <TableCell
               key={headCell.id}
@@ -354,24 +354,24 @@ const Books = () => {
     setSelected([]);
   };
 
-  const handleClick = (_: React.MouseEvent<unknown>, id: number) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly number[] = [];
+  // const handleClick = (_: React.MouseEvent<unknown>, id: number) => {
+  //   const selectedIndex = selected.indexOf(id);
+  //   let newSelected: readonly number[] = [];
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
-  };
+  //   if (selectedIndex === -1) {
+  //     newSelected = newSelected.concat(selected, id);
+  //   } else if (selectedIndex === 0) {
+  //     newSelected = newSelected.concat(selected.slice(1));
+  //   } else if (selectedIndex === selected.length - 1) {
+  //     newSelected = newSelected.concat(selected.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelected = newSelected.concat(
+  //       selected.slice(0, selectedIndex),
+  //       selected.slice(selectedIndex + 1),
+  //     );
+  //   }
+  //   setSelected(newSelected);
+  // };
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -566,7 +566,14 @@ const Books = () => {
         </div>
 
         <div className="table_books mt-6">
-          <Paper sx={{ width: "100%", mb: 2 }}>
+          <Paper
+            sx={{
+              width: "100%",
+              // mb: 2,
+              paddingLeft: 3,
+              paddingRight: 3,
+            }}
+          >
             <EnhancedTableToolbar numSelected={selected.length} />
             <TableContainer>
               <Table
@@ -584,7 +591,7 @@ const Books = () => {
                 />
                 <TableBody>
                   {visibleRows.map((row, index) => {
-                    const isItemSelected = selected.includes(row.id);
+                    // const isItemSelected = selected.includes(row.id);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
@@ -597,7 +604,7 @@ const Books = () => {
                         // selected={isItemSelected}
                         // sx={{ cursor: "pointer" }}
                       >
-                        <TableCell padding="checkbox">
+                        {/* <TableCell padding="checkbox">
                           <Checkbox
                             color="primary"
                             checked={isItemSelected}
@@ -606,7 +613,7 @@ const Books = () => {
                             }}
                             onClick={(event) => handleClick(event, row.id)}
                           />
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell>
                           <img
                             src={row.img}
@@ -627,9 +634,10 @@ const Books = () => {
                         <TableCell>{row.bookPage}</TableCell>
                         <TableCell>{row.status}</TableCell>
                         <TableCell>
-                          <Button variant="outlined" size="small">
-                            Edit
-                          </Button>
+                          <AiFillEdit
+                            size={27}
+                            className="cursor-pointer text-blue-600 hover:text-blue-800"
+                          />
                         </TableCell>
                       </TableRow>
                     );
