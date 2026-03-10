@@ -188,7 +188,7 @@ const Layout = () => {
         {/* Overlay */}
         {/* {menuMobileSize && ( */}
         <div
-          className={`md:hidden fixed inset-0 opacity-50 z-40 transition-all ${menuMobileSize ? "pointer-events-auto bg-black " : "pointer-events-none bg-none"}`}
+          className={`md:hidden fixed inset-0 opacity-50 z-45 transition-all ${menuMobileSize ? "pointer-events-auto bg-black " : "pointer-events-none bg-none"}`}
           onClick={() => {
             setMenuMobileSize(false);
             showScrollbar();

@@ -480,7 +480,7 @@ const Books = () => {
 
               {/* Modal filter */}
               <div
-                className={`modal_filter_transparent_overlay_main_block absolute sm:left-0 sm:w-full sm:top-16 md:top-15 md:-left-30.5 p-3 z-50 rounded-2xl duration-300
+                className={`modal_filter_transparent_overlay_main_block absolute sm:left-0 sm:w-full sm:top-16 md:top-15 md:-left-30.5 p-3 z-40 rounded-2xl duration-300
                 md:w-77.5
                 bg-white shadow-2xl
                 ${modalFilter ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}
