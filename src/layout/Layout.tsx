@@ -219,7 +219,7 @@ const Layout = () => {
             <nav className="nav mt-5">
               <ul className="nav_list flex flex-col gap-2">
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/dashboard" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard" && "border-b-3"}`}
                   onClick={() => {
                     setMenuMobileSize(false);
                     showScrollbar();
