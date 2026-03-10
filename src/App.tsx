@@ -7,6 +7,8 @@ import BorrowedBooks from "./pages/borrowedBooks/BorrowedBooks";
 import Notifications from "./pages/notifications/Notifications";
 import Profile from "./pages/profile/Profile";
 import SignIn from "./pages/signIn/SignIn";
+import AddBook from "./pages/addBook/AddBook";
+import NotFound from "./pages/notFound/NotFound";
 
 function App() {
   const router = createBrowserRouter([
@@ -18,6 +20,7 @@ function App() {
       path: "/dashboard",
       element: <Layout />,
       children: [
+        // main pages
         {
           index: true,
           element: <Dashboard />,
@@ -42,8 +45,18 @@ function App() {
           path: "profile",
           element: <Profile />,
         },
+
+        // pages for functionalities
+        {
+          path: "add-book",
+          element: <AddBook />,
+        },
       ],
     },
+    {
+      path: "*",
+      element: <NotFound/>
+    }
   ]);
 
   return (

@@ -13,12 +13,13 @@ import { useMemo, useState } from "react";
 //Material UI
 import {
   alpha,
+  styled,
   // useTheme
 } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
@@ -32,9 +33,9 @@ import { IoClose } from "react-icons/io5";
 import { AiFillEdit } from "react-icons/ai";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
+import { MdDelete } from "react-icons/md";
+import { Link } from "react-router-dom";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Books = () => {
@@ -47,10 +48,17 @@ const Books = () => {
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   // const [dense, setDense] = useState(false);
-  const [rowsPerPage, setRowsPerPage] = useState(17);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(17);
+
   const [modalFilter, setModalFilter] = useState<boolean>(false);
-  const [modalShowAllFilters, setModalShowAllFilters] = useState(false);
-  const [modalFilterOptions, setModalFilterOptions] = useState(false);
+  const [
+    modalBookInfoAndEdit,
+    setModalBookInfoAndEdit] =
+    useState<boolean>(false);
+
+  const [modalShowAllFilters, setModalShowAllFilters] =
+    useState<boolean>(false);
+  const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
 
   // Table
   interface Data {
@@ -421,6 +429,28 @@ const Books = () => {
     );
   }
 
+  //For Table
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+      whiteSpace: "nowrap",
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+      whiteSpace: "nowrap",
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+
   return (
     <>
       <div className="books_component p-4">
@@ -528,6 +558,7 @@ const Books = () => {
                   </div>
                 </div>
               </div>
+
               {/* Modal Show All Filters */}
               <Dialog
                 open={modalShowAllFilters}
@@ -541,9 +572,13 @@ const Books = () => {
                 sx={{}}
               >
                 <div className="modal_show_all_filters_block px-4 py-4">
-                  <h1 className="title_filter_by_category text-[#A1A1A1] text-[16px] font-400">
-                    Category
-                  </h1>
+                  {/* <h1 className="title_filter_by_category text-[#A1A1A1] text-[16px] font-400">
+                    Filter by Category
+                  </h1> */}
+
+                  <DialogTitle id="alert-dialog-title">
+                    {"Filter by Category"}
+                  </DialogTitle>
                   <div className="filter_by_category mt-1 grid sm:grid-cols-2 md:grid-cols-5 gap-2">
                     {allFiltersByCategory?.map((item) => {
                       return (
@@ -587,16 +622,95 @@ const Books = () => {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
               >
-                <DialogTitle id="alert-dialog-title">
-                  {"Use Google's location service?"}
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
-                    Let Google help apps determine location. This means sending
-                    anonymous location data to Google, even when no apps are
-                    running.
-                  </DialogContentText>
-                </DialogContent>
+                <div className="modal_filter_options_block px-4 py-4">
+                  <div className="header_modal_filter_options_block flex justify-between items-center">
+                    <DialogTitle id="alert-dialog-title">
+                      {"Filter Options"}
+                    </DialogTitle>
+                    <button className="add_filter_btn flex items-center gap-1 bg-[#20ACFF] px-2.5 py-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer">
+                      <LuPlus />
+                    </button>
+                  </div>
+
+                  <div className="filter_functionalities_or_options">
+                    <TableContainer>
+                      <Table
+                        aria-label="customized table"
+                        sx={{
+                          width: 500,
+                        }}
+                      >
+                        <TableHead>
+                          <TableRow>
+                            <StyledTableCell>Filter name</StyledTableCell>
+                            <StyledTableCell align="right">
+                              Action
+                            </StyledTableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          <StyledTableRow>
+                            <StyledTableCell>Finance</StyledTableCell>
+                            <StyledTableCell
+                              sx={{
+                                width: "",
+                              }}
+                            >
+                              <div className="btn_func_block flex items-center gap-1.5">
+                                <AiFillEdit
+                                  size={27}
+                                  className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                                />
+                                <MdDelete
+                                  size={27}
+                                  className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                                />
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                          <StyledTableRow>
+                            <StyledTableCell>Fantasy</StyledTableCell>
+                            <StyledTableCell
+                              sx={{
+                                width: "",
+                              }}
+                            >
+                              <div className="btn_func_block flex items-center gap-1.5">
+                                <AiFillEdit
+                                  size={27}
+                                  className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                                />
+                                <MdDelete
+                                  size={27}
+                                  className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                                />
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                          <StyledTableRow>
+                            <StyledTableCell>Drama</StyledTableCell>
+                            <StyledTableCell
+                              sx={{
+                                width: "",
+                              }}
+                            >
+                              <div className="btn_func_block flex items-center gap-1.5">
+                                <AiFillEdit
+                                  size={27}
+                                  className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                                />
+                                <MdDelete
+                                  size={27}
+                                  className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                                />
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </div>
+                </div>
               </Dialog>
             </div>
           </div>
@@ -616,10 +730,12 @@ const Books = () => {
               Manage Books
             </h1>
             <div className="filter_and_btn_add_block flex justify-between items-center gap-6">
-              <button className="flex items-center gap-2 bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer">
-                <LuPlus />
-                Add new book
-              </button>
+              <Link to={"/dashboard/add-book"}>
+                <button className="flex items-center gap-2 bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer">
+                  <LuPlus />
+                  Add new book
+                </button>
+              </Link>
             </div>
           </div>
 
@@ -656,22 +772,9 @@ const Books = () => {
                         <TableRow
                           hover
                           role="checkbox"
-                          // aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.id}
-                          // selected={isItemSelected}
-                          // sx={{ cursor: "pointer" }}
                         >
-                          {/* <TableCell padding="checkbox">
-                          <Checkbox
-                          color="primary"
-                            checked={isItemSelected}
-                            inputProps={{
-                              "aria-labelledby": labelId,
-                              }}
-                            onClick={(event) => handleClick(event, row.id)}
-                          />
-                        </TableCell> */}
                           <TableCell>
                             <img
                               src={row.img}
@@ -692,10 +795,20 @@ const Books = () => {
                           <TableCell>{row.bookPage}</TableCell>
                           <TableCell>{row.status}</TableCell>
                           <TableCell>
-                            <AiFillEdit
-                              size={27}
-                              className="cursor-pointer text-blue-600 hover:text-blue-800"
-                            />
+                            <div className="btn_func_block flex items-center gap-1.5">
+                              <AiFillEdit
+                                size={27}
+                                className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                                // onClick={() => {
+                                //   setModalBookInfoAndEdit(true);
+                                //   removeScrollbar()
+                                // }}
+                              />
+                              <MdDelete
+                                size={27}
+                                className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                              />
+                            </div>
                           </TableCell>
                         </TableRow>
                       );
@@ -718,12 +831,33 @@ const Books = () => {
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
             </Paper>
+            {/* <div
+              className={`modal_transparent_book_info_and_edit fixed top-0 right-0 bg-[#DFDFDF] w-125 h-screen duration-300
+                  ${
+                    modalBookInfoAndEdit
+                      ? "pointer-events-auto opacity-100"
+                      : "pointer-events-none opacity-0"
+                  }
+
+                  
+              `}
+            >
+
+            </div> */}
           </div>
         </div>
         <div
           className={`transpartent_overlay_modal_filter absolute inset-0 ${modalFilter ? "pointer-events-auto" : "pointer-events-none"}`}
           onClick={() => {
             setModalFilter(false);
+            showScrollbar();
+          }}
+        ></div>
+
+        <div
+          className={`transpartent_overlay_modal_book_info_and_edit absolute inset-0 ${modalBookInfoAndEdit ? "pointer-events-auto" : "pointer-events-none"}`}
+          onClick={() => {
+            setModalBookInfoAndEdit(false);
             showScrollbar();
           }}
         ></div>
