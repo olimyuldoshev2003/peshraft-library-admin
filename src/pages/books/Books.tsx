@@ -44,16 +44,14 @@ const Books = () => {
 
   // const [limitPerPage, setLimitPerPage] = useState<number>(17);
   const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<keyof Data>("bookTitle");
+  const [orderBy, setOrderBy] = useState<any>("bookTitle");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   // const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState<number>(17);
 
   const [modalFilter, setModalFilter] = useState<boolean>(false);
-  const [
-    modalBookInfoAndEdit,
-    setModalBookInfoAndEdit] =
+  const [modalBookInfoAndEdit, setModalBookInfoAndEdit] =
     useState<boolean>(false);
 
   const [modalShowAllFilters, setModalShowAllFilters] =
@@ -61,37 +59,37 @@ const Books = () => {
   const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
 
   // Table
-  interface Data {
-    id: number;
-    img: string;
-    bookTitle: string;
-    author: string;
-    category: string;
-    bookPage: number;
-    status: string;
-  }
+  // interface Data {
+  //   id: number;
+  //   img: string;
+  //   bookTitle: string;
+  //   author: string;
+  //   category: string;
+  //   bookPage: number;
+  //   status: string;
+  // }
 
-  function createData(
-    id: number,
-    img: string,
-    bookTitle: string,
-    author: string,
-    category: string,
-    bookPage: number,
-    status: string,
-  ): Data {
-    return {
-      id,
-      img,
-      bookTitle,
-      author,
-      category,
-      bookPage,
-      status,
-    };
-  }
+  // function createData(
+  //   id: number,
+  //   img: string,
+  //   bookTitle: string,
+  //   author: string,
+  //   category: string,
+  //   bookPage: number,
+  //   status: string,
+  // ): Data {
+  //   return {
+  //     id,
+  //     img,
+  //     bookTitle,
+  //     author,
+  //     category,
+  //     bookPage,
+  //     status,
+  //   };
+  // }
 
-  const allFiltersByCategory = [
+  const allFiltersByCategory:any = [
     {
       id: "fantasy",
       filterName: "Fantasy",
@@ -126,7 +124,7 @@ const Books = () => {
     },
   ];
 
-  const filtersByCategory = [
+  const filtersByCategory:any = [
     {
       id: "fantasy",
       filterName: "Fantasy",
@@ -180,17 +178,18 @@ const Books = () => {
   //   },
   // ];
 
-  const rows = [
-    createData(
-      1,
-      "/src/assets/signIn/logo-pehraft-sign-in.svg",
-      "Cashflow Quadrant",
-      "Robert Kiyosaki",
-      "Finance",
-      256,
-      "Available",
-    ),
+  const rows:any = [
+    {
+      id: 1,
+      img: "/src/assets/signIn/logo-pehraft-sign-in.svg",
+      bookTitle: "Cashflow Quadrant",
+      author: "Robert Kiyosaki",
+      category: "Finance",
+      bookPage: 256,
+      status: "Available",
+    },
   ];
+
 
   function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -265,7 +264,7 @@ const Books = () => {
     numSelected: number;
     onRequestSort: (
       event: React.MouseEvent<unknown>,
-      property: keyof Data,
+      property: any,
     ) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
@@ -283,7 +282,7 @@ const Books = () => {
       onRequestSort,
     } = props;
     const createSortHandler =
-      (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+      (property: any) => (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
       };
 
@@ -353,7 +352,7 @@ const Books = () => {
 
   const handleRequestSort = (
     _: React.MouseEvent<unknown>,
-    property: keyof Data,
+    property: any,
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -362,7 +361,7 @@ const Books = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = rows.map((n:any) => n.id);
       setSelected(newSelected);
       return;
     }
@@ -507,7 +506,7 @@ const Books = () => {
                       Category
                     </h1>
                     <div className="filter_by_category mt-1 grid grid-cols-2 gap-2">
-                      {filtersByCategory?.map((item) => {
+                      {filtersByCategory?.map((item:any) => {
                         return (
                           <div
                             key={item.id}
@@ -580,7 +579,7 @@ const Books = () => {
                     {"Filter by Category"}
                   </DialogTitle>
                   <div className="filter_by_category mt-1 grid sm:grid-cols-2 md:grid-cols-5 gap-2">
-                    {allFiltersByCategory?.map((item) => {
+                    {allFiltersByCategory?.map((item:any) => {
                       return (
                         <div key={item.id} className="flex items-center gap-2">
                           <input

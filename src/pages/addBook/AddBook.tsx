@@ -147,6 +147,14 @@ const AddBook = () => {
                       setCategoryValue(event.target.value);
                     }}
                   >
+                    <MenuItem
+                      value={""}
+                      sx={{
+                        color: "gray",
+                      }}
+                    >
+                      None
+                    </MenuItem>
                     <MenuItem value={"fantasy"}>Fantasy</MenuItem>
                     <MenuItem value={"finance"}>Finance</MenuItem>
                     <MenuItem value={"drama"}>Drama</MenuItem>
@@ -220,7 +228,7 @@ const AddBook = () => {
           </div>
           <div className="block_btn_submit">
             <Link to={"/dashboard/books"}>
-              <button className="btn_submit bg-[#20ACFF] px-5 py-2 rounded-[15px] cursor-pointer text-[#FFFFFF] text-[19px] font-500">
+              <button className="btn_submit bg-[#20ACFF] px-5 py-2 rounded-[15px] cursor-pointer text-[#FFFFFF] text-[19px] font-500 sm:w-full">
                 Submit
               </button>
             </Link>
