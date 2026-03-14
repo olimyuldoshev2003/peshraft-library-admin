@@ -9,6 +9,7 @@ import Profile from "./pages/profile/Profile";
 import SignIn from "./pages/signIn/SignIn";
 import AddBook from "./pages/addBook/AddBook";
 import NotFound from "./pages/notFound/NotFound";
+import Member from "./pages/member/Member";
 
 function App() {
   const router = createBrowserRouter([
@@ -50,6 +51,10 @@ function App() {
         {
           path: "add-book",
           element: <AddBook />,
+        },
+        {
+          path: "member",
+          element: <Member />,
         },
       ],
     },

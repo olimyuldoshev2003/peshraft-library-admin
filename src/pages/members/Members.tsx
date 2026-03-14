@@ -18,11 +18,10 @@ import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
 // import { IoClose } from "react-icons/io5";
-import { AiFillEdit } from "react-icons/ai";
 // import Dialog from "@mui/material/Dialog";
 // import DialogTitle from "@mui/material/DialogTitle";
 // import DialogActions from "@mui/material/DialogActions";
-import { MdDelete } from "react-icons/md";
+import { BsThreeDots } from "react-icons/bs";
 // import { Link } from "react-router-dom";
 import { alpha } from "@mui/material/styles";
 import { useMemo, useState } from "react";
@@ -351,22 +350,31 @@ const Members = () => {
                               alt="Book cover"
                             />
                           </TableCell>
+                          {/* <Link to={"/dashboard/member"} className="block h-full">
+                          </Link> */}
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
+                            sx={{
+                              cursor: "pointer",
+                              ":hover": {
+                                backgroundColor: "#e7e7e7",
+                              },
+                              transition: "all 0.5s ease",
+                            }}
                           >
                             {row.fullname}
                           </TableCell>
-                          <TableCell>{row.fullname}</TableCell>
                           <TableCell>{row.birthDate}</TableCell>
                           <TableCell>{row.jobPosition}</TableCell>
                           <TableCell>{row.phoneNumber}</TableCell>
+                          <TableCell>{row.email}</TableCell>
                           <TableCell>{row.status}</TableCell>
                           <TableCell>
                             <div className="btn_func_block flex items-center gap-1.5">
-                              <AiFillEdit
+                              {/* <AiFillEdit
                                 size={27}
                                 className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
                                 // onClick={() => {
@@ -377,6 +385,10 @@ const Members = () => {
                               <MdDelete
                                 size={27}
                                 className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                              /> */}
+                              <BsThreeDots
+                                size={27}
+                                className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
                               />
                             </div>
                           </TableCell>
