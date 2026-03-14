@@ -203,7 +203,7 @@ const Members = () => {
           id="tableTitle"
           component="div"
         >
-          Books
+          Members
         </Typography>
       </Toolbar>
     );
@@ -307,7 +307,7 @@ const Members = () => {
               <img className="w-14 h-14" src={userImg} alt="" />
             </div>
           </div>
-          <div className="section_member_component">
+          <div className="section_member_component mt-6">
             <Paper
               sx={{
                 width: "100%",
