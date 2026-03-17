@@ -51,13 +51,13 @@ const Books = () => {
   const [rowsPerPage, setRowsPerPage] = useState<number>(17);
 
   const [modalFilter, setModalFilter] = useState<boolean>(false);
+  
+  const [modalShowAllFilters, setModalShowAllFilters] =
+  useState<boolean>(false);
+  const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
+  
   const [modalBookInfoAndEdit, setModalBookInfoAndEdit] =
     useState<boolean>(false);
-
-  const [modalShowAllFilters, setModalShowAllFilters] =
-    useState<boolean>(false);
-  const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
-
   // Table
   // interface Data {
   //   id: number;

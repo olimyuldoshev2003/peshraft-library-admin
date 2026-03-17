@@ -8,7 +8,7 @@ import { LuUsers } from "react-icons/lu";
 import { PiBookOpen } from "react-icons/pi";
 import SecurityUpdateGoodOutlinedIcon from "@mui/icons-material/SecurityUpdateGoodOutlined";
 import { MdOutlineSecurityUpdateWarning } from "react-icons/md";
-import { AiFillEdit } from "react-icons/ai";
+// import { AiFillEdit } from "react-icons/ai";
 
 import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
@@ -248,7 +248,7 @@ const Dashboard = () => {
             <h1 className="title_priority_overdue_borrewers text-[25px] font-600 mb-4">
               Priority Overdue Borrowers
             </h1>
-            
+
             <TableContainer>
               <Table aria-label="customized table">
                 <TableHead>
@@ -277,9 +277,6 @@ const Dashboard = () => {
                     <StyledTableCell sx={{ minWidth: 120 }}>
                       Days Overdue
                     </StyledTableCell>
-                    <StyledTableCell sx={{ minWidth: 100 }}>
-                      Action
-                    </StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -294,12 +291,6 @@ const Dashboard = () => {
                     <StyledTableCell>2026-02-24</StyledTableCell>
                     <StyledTableCell>2024-03-24</StyledTableCell>
                     <StyledTableCell>30 days left</StyledTableCell>
-                    <StyledTableCell>
-                      <AiFillEdit
-                        size={27}
-                        className="cursor-pointer text-blue-600 hover:text-blue-800"
-                      />
-                    </StyledTableCell>
                   </StyledTableRow>
                   <StyledTableRow>
                     {/* <StyledTableCell>
@@ -312,12 +303,6 @@ const Dashboard = () => {
                     <StyledTableCell>2026-02-24</StyledTableCell>
                     <StyledTableCell>2024-03-24</StyledTableCell>
                     <StyledTableCell>30 days left</StyledTableCell>
-                    <StyledTableCell>
-                      <AiFillEdit
-                        size={27}
-                        className="cursor-pointer text-blue-600 hover:text-blue-800"
-                      />
-                    </StyledTableCell>
                   </StyledTableRow>
                   <StyledTableRow>
                     {/* <StyledTableCell>
@@ -330,12 +315,6 @@ const Dashboard = () => {
                     <StyledTableCell>2026-02-20</StyledTableCell>
                     <StyledTableCell>2024-03-20</StyledTableCell>
                     <StyledTableCell>25 days left</StyledTableCell>
-                    <StyledTableCell>
-                      <AiFillEdit
-                        size={27}
-                        className="cursor-pointer text-blue-600 hover:text-blue-800"
-                      />
-                    </StyledTableCell>
                   </StyledTableRow>
                 </TableBody>
               </Table>
