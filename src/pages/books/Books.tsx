@@ -89,7 +89,7 @@ const Books = () => {
   //   };
   // }
 
-  const allFiltersByCategory:any = [
+  const allFiltersByCategory: any = [
     {
       id: "fantasy",
       filterName: "Fantasy",
@@ -124,7 +124,7 @@ const Books = () => {
     },
   ];
 
-  const filtersByCategory:any = [
+  const filtersByCategory: any = [
     {
       id: "fantasy",
       filterName: "Fantasy",
@@ -178,7 +178,7 @@ const Books = () => {
   //   },
   // ];
 
-  const rows:any = [
+  const rows: any = [
     {
       id: 1,
       img: "/src/assets/signIn/logo-pehraft-sign-in.svg",
@@ -189,7 +189,6 @@ const Books = () => {
       status: "Available",
     },
   ];
-
 
   function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -262,10 +261,7 @@ const Books = () => {
 
   interface EnhancedTableProps {
     numSelected: number;
-    onRequestSort: (
-      event: React.MouseEvent<unknown>,
-      property: any,
-    ) => void;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: any) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
@@ -350,10 +346,7 @@ const Books = () => {
     );
   }
 
-  const handleRequestSort = (
-    _: React.MouseEvent<unknown>,
-    property: any,
-  ) => {
+  const handleRequestSort = (_: React.MouseEvent<unknown>, property: any) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
@@ -361,7 +354,7 @@ const Books = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n:any) => n.id);
+      const newSelected = rows.map((n: any) => n.id);
       setSelected(newSelected);
       return;
     }
@@ -506,7 +499,7 @@ const Books = () => {
                       Category
                     </h1>
                     <div className="filter_by_category mt-1 grid grid-cols-2 gap-2">
-                      {filtersByCategory?.map((item:any) => {
+                      {filtersByCategory?.map((item: any) => {
                         return (
                           <div
                             key={item.id}
@@ -579,7 +572,7 @@ const Books = () => {
                     {"Filter by Category"}
                   </DialogTitle>
                   <div className="filter_by_category mt-1 grid sm:grid-cols-2 md:grid-cols-5 gap-2">
-                    {allFiltersByCategory?.map((item:any) => {
+                    {allFiltersByCategory?.map((item: any) => {
                       return (
                         <div key={item.id} className="flex items-center gap-2">
                           <input
@@ -795,14 +788,16 @@ const Books = () => {
                           <TableCell>{row.status}</TableCell>
                           <TableCell>
                             <div className="btn_func_block flex items-center gap-1.5">
-                              <AiFillEdit
-                                size={27}
-                                className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                                // onClick={() => {
-                                //   setModalBookInfoAndEdit(true);
-                                //   removeScrollbar()
-                                // }}
-                              />
+                              <Link to={"/dashboard/edit-book"}>
+                                <AiFillEdit
+                                  size={27}
+                                  className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                                  // onClick={() => {
+                                  //   setModalBookInfoAndEdit(true);
+                                  //   removeScrollbar()
+                                  // }}
+                                />
+                              </Link>
                               <MdDelete
                                 size={27}
                                 className="cursor-pointer text-red-500 hover:text-red-600 duration-100"

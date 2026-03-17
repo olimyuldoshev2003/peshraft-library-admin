@@ -2,6 +2,8 @@ import { HiOutlineSearch } from "react-icons/hi";
 
 // Images
 import userImg from "../../assets/user-img.svg";
+import memberImg from "../../assets/profile-img.jpg";
+import bookImg from "../../assets/tojikon.jpg";
 
 // Table
 import Box from "@mui/material/Box";
@@ -25,6 +27,9 @@ import { BsThreeDots } from "react-icons/bs";
 // import { Link } from "react-router-dom";
 import { alpha } from "@mui/material/styles";
 import { useMemo, useState } from "react";
+import Dialog from "@mui/material/Dialog";
+import { IoArrowBackCircleOutline } from "react-icons/io5";
+import { LuOctagonAlert } from "react-icons/lu";
 
 const Members = () => {
   const [order, setOrder] = useState<Order>("asc");
@@ -32,6 +37,9 @@ const Members = () => {
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState<number>(17);
+
+  const [modalInfoAboutMember, setModalInfoAboutMember] =
+    useState<boolean>(false);
 
   const rows: any = [
     {
@@ -350,20 +358,11 @@ const Members = () => {
                               alt="Book cover"
                             />
                           </TableCell>
-                          {/* <Link to={"/dashboard/member"} className="block h-full">
-                          </Link> */}
                           <TableCell
                             component="th"
                             id={labelId}
                             scope="row"
                             padding="none"
-                            sx={{
-                              cursor: "pointer",
-                              ":hover": {
-                                backgroundColor: "#e7e7e7",
-                              },
-                              transition: "all 0.5s ease",
-                            }}
                           >
                             {row.fullname}
                           </TableCell>
@@ -373,24 +372,13 @@ const Members = () => {
                           <TableCell>{row.email}</TableCell>
                           <TableCell>{row.status}</TableCell>
                           <TableCell>
-                            <div className="btn_func_block flex items-center gap-1.5">
-                              {/* <AiFillEdit
-                                size={27}
-                                className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                                // onClick={() => {
-                                //   setModalBookInfoAndEdit(true);
-                                //   removeScrollbar()
-                                // }}
-                              />
-                              <MdDelete
-                                size={27}
-                                className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
-                              /> */}
-                              <BsThreeDots
-                                size={27}
-                                className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                              />
-                            </div>
+                            <BsThreeDots
+                              size={27}
+                              className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                              onClick={() => {
+                                setModalInfoAboutMember(true);
+                              }}
+                            />
                           </TableCell>
                         </TableRow>
                       );
@@ -413,6 +401,127 @@ const Members = () => {
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
             </Paper>
+
+            {/* Modal about member info */}
+            <Dialog
+              open={modalInfoAboutMember}
+              onClose={() => {
+                setModalInfoAboutMember(false);
+              }}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              maxWidth="md"
+              fullWidth
+            >
+              <div className="modal_info_about_member_block sm:p-4 md:p-2.5 flex items-center gap-5 min-w-0 flex-wrap">
+                <div className="info_about_member shrink-0 flex flex-col sm:justify-center md:justify-start sm:w-full md:w-[45%]">
+                  <div className="btn_close_block">
+                    <IoArrowBackCircleOutline
+                      size={25}
+                      className="cursor-pointer"
+                      onClick={() => {
+                        setModalInfoAboutMember(false);
+                      }}
+                    />
+                  </div>
+                  <div className="info_about_member flex flex-col sm:justify-center md:justify-start sm:items-center md:items-start">
+                    <img
+                      src={memberImg}
+                      className="w-58.5 h-68.5 rounded-xl object-contain"
+                      alt=""
+                    />
+                    <div className="info_text_block">
+                      <h1 className="info_text_title text-[22px] font-500">
+                        Bio Info
+                      </h1>
+                      <h1 className="text-[#6E6E6E] text-[17px] font-500">
+                        Full Name:{" "}
+                        <span className="text-black font-400">
+                          Olim Yuldoshev
+                        </span>
+                      </h1>
+                      <h1 className="text-[#6E6E6E] text-[17px] font-500">
+                        Birth Date:{" "}
+                        <span className="text-black font-400">19.11.2003</span>
+                      </h1>
+                      <h1 className="text-[#6E6E6E] text-[17px] font-500">
+                        Job Title:{" "}
+                        <span className="text-black font-400">Volunteer</span>
+                      </h1>
+                      <h1 className="text-[#6E6E6E] text-[17px] font-500">
+                        Phone:{" "}
+                        <span className="text-black font-400">919697875</span>
+                      </h1>
+                      <h1 className="text-[#6E6E6E] text-[17px] font-500">
+                        Email:{" "}
+                        <span className="text-black font-400">
+                          oyuldoshev39@gmail.com
+                        </span>
+                      </h1>
+                    </div>
+                  </div>
+                </div>
+                <div className="info_bookshelf_and_history_book_block flex flex-col gap-3 flex-1 min-w-0">
+                  <div className="info_about_bookshelf_of_member">
+                    <h1 className="bookshelf_title text-[25px] font-500 border-b-3">
+                      Bookshelf
+                    </h1>
+                    <div className="bookshelf_block p-3 h-47 overflow-auto flex flex-col gap-3 border-b-2 border-b-[#D9D9D9] w-full">
+                      {/* Bookshelf 1 */}
+                      <div className="boolshelf_container flex justify-between items-center gap-3 sm:w-80 md:w-auto">
+                        <div className="img_book_name_and_author_name_block flex items-center gap-3">
+                          <div className="block_img bg-[#F5EABD] p-2 rounded-[5px]">
+                            <img
+                              src={bookImg}
+                              alt=""
+                              className="w-10.75 h-15"
+                            />
+                          </div>
+                          <div className="name_and_author_of_book">
+                            <h1 className="name_of_book text-[20px] font-500">
+                              TOJIKON
+                            </h1>
+                            <p className="author_of_book text-[#515151] text-[14px] font-400">
+                              Bobojon Gafurov
+                            </p>
+                          </div>
+                        </div>
+                        <div className="icon_and_days_left">
+                          <h1 className="flex items-center text-[#FF383C] gap-1.5">
+                            <LuOctagonAlert size={18} />
+                            <span className="text-[12px] font-600">
+                              6 days left
+                            </span>
+                          </h1>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="info_about_history_book_of_member">
+                    <h1 className="history_book_title text-[25px] font-500 border-b-3">
+                      History Book
+                    </h1>
+                    <div className="history_book_block p-3 h-47 overflow-auto flex flex-col gap-3 border-b-2 border-b-[#D9D9D9] ">
+                      {/* History Book 1 */}
+                      <div className="hisory_book_container flex items-center gap-3 sm:w-50 md:w-auto">
+                        <div className="block_img bg-[#F5EABD] p-2 rounded-[5px]">
+                          <img src={bookImg} alt="" className="w-10.75 h-15" />
+                        </div>
+                        <div className="name_and_author_of_book">
+                          <h1 className="name_of_book text-[20px] font-500">
+                            TOJIKON
+                          </h1>
+                          <p className="author_of_book text-[#515151] text-[14px] font-400">
+                            Bobojon Gafurov
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Dialog>
           </div>
         </div>
       </div>

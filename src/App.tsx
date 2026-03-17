@@ -10,6 +10,7 @@ import SignIn from "./pages/signIn/SignIn";
 import AddBook from "./pages/addBook/AddBook";
 import NotFound from "./pages/notFound/NotFound";
 import Member from "./pages/member/Member";
+import EditBook from "./pages/editBook/EditBook";
 
 function App() {
   const router = createBrowserRouter([
@@ -51,6 +52,10 @@ function App() {
         {
           path: "add-book",
           element: <AddBook />,
+        },
+        {
+          path: "edit-book",
+          element: <EditBook />,
         },
         {
           path: "member",
