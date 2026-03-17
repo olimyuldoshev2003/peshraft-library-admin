@@ -1,6 +1,11 @@
-
 const Notifications = () => {
-  return <div>Notifications</div>;
-}
+  return (
+    <>
+      <div className="notifications_component">
+        <div className="notifications_component_block"></div>
+      </div>
+    </>
+  );
+};
 
-export default Notifications
+export default Notifications;

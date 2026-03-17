@@ -48,7 +48,7 @@ const Members = () => {
       fullname: "Olim Yuldoshev",
       birthDate: "2003-19-11",
       jobPosition: "Volunteer",
-      phoneNumber: "+992919697875",
+      phoneNumber: "919697875",
       email: "oyuldoshev39@gmail.com",
       status: "Active",
     },

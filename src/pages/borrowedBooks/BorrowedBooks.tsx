@@ -8,37 +8,33 @@ import { LuPlus } from "react-icons/lu";
 // import InputLabel from "@mui/material/InputLabel";
 // import Select from "@mui/material/Select";
 // import MenuItem from "@mui/material/MenuItem";
-import {
-  // useMemo,
-  useState
-} from "react";
+import { useMemo, useState } from "react";
 
 //Material UI
 import {
-  // alpha,
+  alpha,
   styled,
   // useTheme
 } from "@mui/material/styles";
-// import Box from "@mui/material/Box";
+import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-// import TablePagination from "@mui/material/TablePagination";
+import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
-// import TableSortLabel from "@mui/material/TableSortLabel";
-// import Toolbar from "@mui/material/Toolbar";
-// import Typography from "@mui/material/Typography";
-// import Paper from "@mui/material/Paper";
-// import { visuallyHidden } from "@mui/utils";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Paper from "@mui/material/Paper";
+import { visuallyHidden } from "@mui/utils";
 import { IoClose } from "react-icons/io5";
 import { AiFillEdit } from "react-icons/ai";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import { MdDelete } from "react-icons/md";
-// import { Link } from "react-router-dom";
 
 const BorrowedBooks = () => {
   const allFiltersByCategory: any = [
@@ -107,22 +103,16 @@ const BorrowedBooks = () => {
     },
   ];
 
-
-  // const [order, setOrder] = useState<Order>("asc");
-  // const [orderBy, setOrderBy] = useState<any>("bookTitle");
-  // const [selected, setSelected] = useState<readonly number[]>([]);
-  // const [page, setPage] = useState(0);
+  const [order, setOrder] = useState<Order>("asc");
+  const [orderBy, setOrderBy] = useState<any>("bookTitle");
+  const [selected, setSelected] = useState<readonly number[]>([]);
+  const [page, setPage] = useState(0);
   // const [dense, setDense] = useState(false);
-  // const [rowsPerPage, setRowsPerPage] = useState<number>(17);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(17);
   const [modalFilter, setModalFilter] = useState<boolean>(false);
   const [modalShowAllFilters, setModalShowAllFilters] =
     useState<boolean>(false);
   const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
-
-
-
-
-
 
   function removeScrollbar() {
     document.body.classList.add("scroll_hidden_modal_filter_without_overlay");
@@ -160,235 +150,241 @@ const BorrowedBooks = () => {
     },
   }));
 
-  // // Table Section
-  // const rows: any = [
-  //   {
-  //     id: 1,
-  //     img: "/src/assets/signIn/logo-pehraft-sign-in.svg",
-  //     bookTitle: "Cashflow Quadrant",
-  //     author: "Robert Kiyosaki",
-  //     category: "Finance",
-  //     bookPage: 256,
-  //     status: "Available",
-  //   },
-  // ];
+  // Table Section
+  const rows: any = [
+    {
+      id: 1,
+      img: "/src/assets/signIn/logo-pehraft-sign-in.svg",
+      bookTitle: "Cashflow Quadrant",
+      borrowerName: "Olim Yuldoshev",
+      dateBorrowed: "2025-11-19",
+      dueDate: "2026-11-11",
+      phoneNumber: "919697875",
+    },
+  ];
 
-  // function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  //   if (b[orderBy] < a[orderBy]) {
-  //     return -1;
+  function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
+    if (b[orderBy] < a[orderBy]) {
+      return -1;
+    }
+    if (b[orderBy] > a[orderBy]) {
+      return 1;
+    }
+    return 0;
+  }
+
+  type Order = "asc" | "desc";
+
+  function getComparator<Key extends keyof any>(
+    order: Order,
+    orderBy: Key,
+  ): (
+    a: { [key in Key]: number | string },
+    b: { [key in Key]: number | string },
+  ) => number {
+    return order === "desc"
+      ? (a, b) => descendingComparator(a, b, orderBy)
+      : (a, b) => -descendingComparator(a, b, orderBy);
+  }
+
+  const headCells: any = [
+    {
+      id: "img",
+      numeric: false,
+      disablePadding: true,
+      label: "Image",
+    },
+    {
+      id: "book-title",
+      numeric: false,
+      disablePadding: true,
+      label: "Book Title",
+    },
+    {
+      id: "borrower-name",
+      numeric: false,
+      disablePadding: false,
+      label: "Borrower Name",
+    },
+    {
+      id: "date-borrowed",
+      numeric: false,
+      disablePadding: false,
+      label: "Date Borrowed",
+    },
+    {
+      id: "due-date",
+      numeric: false,
+      disablePadding: false,
+      label: "Due Date",
+    },
+    {
+      id: "phone-number",
+      numeric: false,
+      disablePadding: false,
+      label: "Phone number",
+    },
+    {
+      id: "action",
+      numeric: false,
+      disablePadding: false,
+      label: "Action",
+    },
+  ];
+
+  interface EnhancedTableProps {
+    numSelected: number;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: any) => void;
+    onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    order: Order;
+    orderBy: string;
+    rowCount: number;
+  }
+
+  function EnhancedTableHead(props: EnhancedTableProps) {
+    const {
+      // onSelectAllClick,
+      order,
+      orderBy,
+      // numSelected,
+      // rowCount,
+      onRequestSort,
+    } = props;
+    const createSortHandler =
+      (property: any) => (event: React.MouseEvent<unknown>) => {
+        onRequestSort(event, property);
+      };
+
+    return (
+      <TableHead>
+        <TableRow>
+          {headCells.map((headCell: any) => (
+            <TableCell
+              key={headCell.id}
+              // align={headCell.numeric ? "right" : "left"}
+              padding={headCell.disablePadding ? "none" : "normal"}
+              sortDirection={orderBy === headCell.id ? order : false}
+            >
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : "asc"}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {order === "desc"
+                      ? "sorted descending"
+                      : "sorted ascending"}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+    );
+  }
+
+  interface EnhancedTableToolbarProps {
+    numSelected: number;
+  }
+
+  function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+    const { numSelected } = props;
+
+    return (
+      <Toolbar
+        sx={{
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+          ...(numSelected > 0 && {
+            bgcolor: (theme) =>
+              alpha(
+                theme.palette.primary.main,
+                theme.palette.action.activatedOpacity,
+              ),
+          }),
+        }}
+      >
+        <Typography
+          sx={{ flex: "1 1 100%" }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        >
+          Books
+        </Typography>
+      </Toolbar>
+    );
+  }
+
+  const handleRequestSort = (_: React.MouseEvent<unknown>, property: any) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      const newSelected = rows.map((n: any) => n.id);
+      setSelected(newSelected);
+      return;
+    }
+    setSelected([]);
+  };
+
+  // const handleClick = (_: React.MouseEvent<unknown>, id: number) => {
+  //   const selectedIndex = selected.indexOf(id);
+  //   let newSelected: readonly number[] = [];
+
+  //   if (selectedIndex === -1) {
+  //     newSelected = newSelected.concat(selected, id);
+  //   } else if (selectedIndex === 0) {
+  //     newSelected = newSelected.concat(selected.slice(1));
+  //   } else if (selectedIndex === selected.length - 1) {
+  //     newSelected = newSelected.concat(selected.slice(0, -1));
+  //   } else if (selectedIndex > 0) {
+  //     newSelected = newSelected.concat(
+  //       selected.slice(0, selectedIndex),
+  //       selected.slice(selectedIndex + 1),
+  //     );
   //   }
-  //   if (b[orderBy] > a[orderBy]) {
-  //     return 1;
-  //   }
-  //   return 0;
-  // }
-
-  // type Order = "asc" | "desc";
-
-  // function getComparator<Key extends keyof any>(
-  //   order: Order,
-  //   orderBy: Key,
-  // ): (
-  //   a: { [key in Key]: number | string },
-  //   b: { [key in Key]: number | string },
-  // ) => number {
-  //   return order === "desc"
-  //     ? (a, b) => descendingComparator(a, b, orderBy)
-  //     : (a, b) => -descendingComparator(a, b, orderBy);
-  // }
-
-  // const headCells: any = [
-  //   {
-  //     id: "img",
-  //     numeric: false,
-  //     disablePadding: true,
-  //     label: "Image",
-  //   },
-  //   {
-  //     id: "bookTitle",
-  //     numeric: false,
-  //     disablePadding: true,
-  //     label: "Book Title",
-  //   },
-  //   {
-  //     id: "borrower-name",
-  //     numeric: false,
-  //     disablePadding: false,
-  //     label: "Borrower Name",
-  //   },
-  //   {
-  //     id: "date-borrowed",
-  //     numeric: false,
-  //     disablePadding: false,
-  //     label: "Date Borrowed",
-  //   },
-  //   {
-  //     id: "due-date",
-  //     numeric: false,
-  //     disablePadding: false,
-  //     label: "Due",
-  //   },
-  //   {
-  //     id: "phone-number",
-  //     numeric: false,
-  //     disablePadding: false,
-  //     label: "Phone number",
-  //   },
-  // ];
-
-  // interface EnhancedTableProps {
-  //   numSelected: number;
-  //   onRequestSort: (event: React.MouseEvent<unknown>, property: any) => void;
-  //   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  //   order: Order;
-  //   orderBy: string;
-  //   rowCount: number;
-  // }
-
-  // function EnhancedTableHead(props: EnhancedTableProps) {
-  //   const {
-  //     // onSelectAllClick,
-  //     order,
-  //     orderBy,
-  //     // numSelected,
-  //     // rowCount,
-  //     onRequestSort,
-  //   } = props;
-  //   const createSortHandler =
-  //     (property: any) => (event: React.MouseEvent<unknown>) => {
-  //       onRequestSort(event, property);
-  //     };
-
-  //   return (
-  //     <TableHead>
-  //       <TableRow>
-  //         {headCells.map((headCell: any) => (
-  //           <TableCell
-  //             key={headCell.id}
-  //             // align={headCell.numeric ? "right" : "left"}
-  //             padding={headCell.disablePadding ? "none" : "normal"}
-  //             sortDirection={orderBy === headCell.id ? order : false}
-  //           >
-  //             <TableSortLabel
-  //               active={orderBy === headCell.id}
-  //               direction={orderBy === headCell.id ? order : "asc"}
-  //               onClick={createSortHandler(headCell.id)}
-  //             >
-  //               {headCell.label}
-  //               {orderBy === headCell.id ? (
-  //                 <Box component="span" sx={visuallyHidden}>
-  //                   {order === "desc"
-  //                     ? "sorted descending"
-  //                     : "sorted ascending"}
-  //                 </Box>
-  //               ) : null}
-  //             </TableSortLabel>
-  //           </TableCell>
-  //         ))}
-  //       </TableRow>
-  //     </TableHead>
-  //   );
-  // }
-
-  // interface EnhancedTableToolbarProps {
-  //   numSelected: number;
-  // }
-
-  // function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  //   const { numSelected } = props;
-
-  //   return (
-  //     <Toolbar
-  //       sx={{
-  //         pl: { sm: 2 },
-  //         pr: { xs: 1, sm: 1 },
-  //         ...(numSelected > 0 && {
-  //           bgcolor: (theme) =>
-  //             alpha(
-  //               theme.palette.primary.main,
-  //               theme.palette.action.activatedOpacity,
-  //             ),
-  //         }),
-  //       }}
-  //     >
-  //       <Typography
-  //         sx={{ flex: "1 1 100%" }}
-  //         variant="h6"
-  //         id="tableTitle"
-  //         component="div"
-  //       >
-  //         Books
-  //       </Typography>
-  //     </Toolbar>
-  //   );
-  // }
-
-  // const handleRequestSort = (_: React.MouseEvent<unknown>, property: any) => {
-  //   const isAsc = orderBy === property && order === "asc";
-  //   setOrder(isAsc ? "desc" : "asc");
-  //   setOrderBy(property);
+  //   setSelected(newSelected);
   // };
 
-  // const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (event.target.checked) {
-  //     const newSelected = rows.map((n: any) => n.id);
-  //     setSelected(newSelected);
-  //     return;
-  //   }
-  //   setSelected([]);
+  const handleChangePage = (_: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setDense(event.target.checked);
   // };
 
-  // // const handleClick = (_: React.MouseEvent<unknown>, id: number) => {
-  // //   const selectedIndex = selected.indexOf(id);
-  // //   let newSelected: readonly number[] = [];
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  // //   if (selectedIndex === -1) {
-  // //     newSelected = newSelected.concat(selected, id);
-  // //   } else if (selectedIndex === 0) {
-  // //     newSelected = newSelected.concat(selected.slice(1));
-  // //   } else if (selectedIndex === selected.length - 1) {
-  // //     newSelected = newSelected.concat(selected.slice(0, -1));
-  // //   } else if (selectedIndex > 0) {
-  // //     newSelected = newSelected.concat(
-  // //       selected.slice(0, selectedIndex),
-  // //       selected.slice(selectedIndex + 1),
-  // //     );
-  // //   }
-  // //   setSelected(newSelected);
-  // // };
-
-  // const handleChangePage = (_: unknown, newPage: number) => {
-  //   setPage(newPage);
-  // };
-
-  // const handleChangeRowsPerPage = (
-  //   event: React.ChangeEvent<HTMLInputElement>,
-  // ) => {
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
-
-  // // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-  // //   setDense(event.target.checked);
-  // // };
-
-  // // Avoid a layout jump when reaching the last page with empty rows.
-  // const emptyRows =
-  //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  // const visibleRows = useMemo(
-  //   () =>
-  //     [...rows]
-  //       .sort(getComparator(order, orderBy))
-  //       .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-  //   [order, orderBy, page, rowsPerPage],
-  // );
+  const visibleRows = useMemo(
+    () =>
+      [...rows]
+        .sort(getComparator(order, orderBy))
+        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [order, orderBy, page, rowsPerPage],
+  );
 
   return (
     <>
       <div className="borrowed_books_component">
         <div className="borrowed_books_component_block p-4">
-          <div className="header_books flex justify-between items-center gap-6">
+          <div className="header_borrowed_books flex justify-between items-center gap-6">
             <div className="search_logo_and_search_input relative flex items-center flex-1 gap-4">
               <HiOutlineSearch size={24} className="absolute top-4 left-4" />
               <input
@@ -651,7 +647,7 @@ const BorrowedBooks = () => {
                 </Dialog>
               </div>
             </div>
-            <div className="  fullname_img_of_admin_and_admin_title sm:hidden md:flex items-center gap-3">
+            <div className="fullname_img_of_admin_and_admin_title sm:hidden md:flex items-center gap-3">
               <div className="fullname_of_user_and_admin_title">
                 <h1 className="text-[22px] font-500">Suhrob H.</h1>
                 <h1 className="text-[#808080] text-[15px] font-400 text-right">
@@ -661,6 +657,99 @@ const BorrowedBooks = () => {
               <img className="w-14 h-14" src={userImg} alt="" />
             </div>
           </div>
+
+          {/* Section */}
+          <div className="section_borrowed_books">
+            <div className="table_books mt-6">
+              <Paper
+                sx={{
+                  width: "100%",
+                  // mb: 2,
+                  paddingLeft: 3,
+                  paddingRight: 3,
+                }}
+              >
+                <EnhancedTableToolbar numSelected={selected.length} />
+                <TableContainer>
+                  <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+                    <EnhancedTableHead
+                      numSelected={selected.length}
+                      order={order}
+                      orderBy={orderBy}
+                      onSelectAllClick={handleSelectAllClick}
+                      onRequestSort={handleRequestSort}
+                      rowCount={rows.length}
+                    />
+                    <TableBody>
+                      {visibleRows.map((row, index) => {
+                        // const isItemSelected = selected.includes(row.id);
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={row.id}
+                          >
+                            <TableCell>
+                              <img
+                                src={row.img}
+                                className="w-10 h-10 rounded-full"
+                                alt="Book cover"
+                              />
+                            </TableCell>
+                            <TableCell
+                              component="th"
+                              id={labelId}
+                              scope="row"
+                              padding="none"
+                            >
+                              {row.bookTitle}
+                            </TableCell>
+                            <TableCell>{row.borrowerName}</TableCell>
+                            <TableCell>{row.dateBorrowed}</TableCell>
+                            <TableCell>{row.dueDate}</TableCell>
+                            <TableCell>{row.phoneNumber}</TableCell>
+                            <TableCell>
+                              <div className="btn_func_block flex items-center gap-1.5">
+                                <MdDelete
+                                  size={27}
+                                  className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                                />
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                      {emptyRows > 0 && (
+                        <TableRow>
+                          <TableCell colSpan={6} />
+                        </TableRow>
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[17, 10, 8, 5]}
+                  component="div"
+                  count={rows.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </Paper>
+            </div>
+          </div>
+
+          <div
+            className={`transpartent_overlay_modal_filter absolute inset-0 ${modalFilter ? "pointer-events-auto" : "pointer-events-none"}`}
+            onClick={() => {
+              setModalFilter(false);
+              showScrollbar();
+            }}
+          ></div>
         </div>
       </div>
     </>
