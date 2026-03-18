@@ -620,13 +620,15 @@ const Notifications = () => {
                     </div>
                     <div className="btn_submit_block mt-2">
                       <button className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full">
-                        Submit
+                        Update
                       </button>
                     </div>
                   </form>
                 </div>
               </div>
             </Dialog>
+
+            {/* Modal Delete */}
             <Dialog
               open={modalDeleteNotification}
               onClose={() => {
