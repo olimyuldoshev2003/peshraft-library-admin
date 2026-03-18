@@ -666,6 +666,9 @@ const Books = () => {
                                 <AiFillEdit
                                   size={27}
                                   className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                                onClick={() => {
+                                  setModalFilterEdit(true)
+                                }}
                                 />
                                 <MdDelete
                                   size={27}
@@ -688,6 +691,9 @@ const Books = () => {
                                 <AiFillEdit
                                   size={27}
                                   className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                                onClick={() => {
+                                  setModalFilterEdit(true)
+                                }}
                                 />
                                 <MdDelete
                                   size={27}
@@ -710,6 +716,9 @@ const Books = () => {
                                 <AiFillEdit
                                   size={27}
                                   className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                                onClick={() => {
+                                  setModalFilterEdit(true)
+                                }}
                                 />
                                 <MdDelete
                                   size={27}
@@ -974,20 +983,20 @@ const Books = () => {
         <Dialog
           open={modalFilterEdit}
           onClose={() => {
-            setModalFilterAdd(false);
+            setModalFilterEdit(false);
           }}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
           sx={{}}
           fullWidth
         >
-          <div className="modal_add_filter_block px-4 py-4">
-            <div className="header_modal_add_filter flex items-center gap-6 justify-between">
-              <h1 className="text-[26px] font-600">Add Filter</h1>
+          <div className="modal_edit_filter_block px-4 py-4">
+            <div className="header_modal_edit_filter flex items-center gap-6 justify-between">
+              <h1 className="text-[26px] font-600">Edit Filter</h1>
               <button
                 className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
                 onClick={() => {
-                  setModalFilterAdd(false);
+                  setModalFilterEdit(false);
                 }}
               >
                 <MdOutlineClose size={27} className="" />
@@ -1007,7 +1016,7 @@ const Books = () => {
                   variant="outlined"
                 />
               </div>
-              <div className="btn_submit_block mt-2">
+              <div className="btn_edit_block mt-2">
                 <button className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full">
                   Update
                 </button>
