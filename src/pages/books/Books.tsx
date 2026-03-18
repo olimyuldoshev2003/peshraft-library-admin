@@ -34,8 +34,9 @@ import { AiFillEdit } from "react-icons/ai";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdOutlineClose } from "react-icons/md";
 import { Link } from "react-router-dom";
+import TextField from "@mui/material/TextField";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Books = () => {
@@ -51,13 +52,21 @@ const Books = () => {
   const [rowsPerPage, setRowsPerPage] = useState<number>(17);
 
   const [modalFilter, setModalFilter] = useState<boolean>(false);
-  
+
   const [modalShowAllFilters, setModalShowAllFilters] =
-  useState<boolean>(false);
+    useState<boolean>(false);
   const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
-  
+
   const [modalBookInfoAndEdit, setModalBookInfoAndEdit] =
     useState<boolean>(false);
+
+  const [modalDeleteBook, setModalDeleteBook] = useState<boolean>(false);
+
+  // Filter functionalities states
+  const [modalFilterAdd, setModalFilterAdd] = useState<boolean>(false);
+  const [modalFilterEdit, setModalFilterEdit] = useState<boolean>(false);
+  const [modalFilterDelete, setModalFilterDelete] = useState<boolean>(false);
+
   // Table
   // interface Data {
   //   id: number;
@@ -619,7 +628,12 @@ const Books = () => {
                     <DialogTitle id="alert-dialog-title">
                       {"Filter Options"}
                     </DialogTitle>
-                    <button className="add_filter_btn flex items-center gap-1 bg-[#20ACFF] px-2.5 py-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer">
+                    <button
+                      className="add_filter_btn flex items-center gap-1 bg-[#20ACFF] px-2.5 py-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer"
+                      onClick={() => {
+                        setModalFilterAdd(true);
+                      }}
+                    >
                       <LuPlus />
                     </button>
                   </div>
@@ -656,6 +670,9 @@ const Books = () => {
                                 <MdDelete
                                   size={27}
                                   className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                                  onClick={() => {
+                                    setModalFilterDelete(true);
+                                  }}
                                 />
                               </div>
                             </StyledTableCell>
@@ -675,6 +692,9 @@ const Books = () => {
                                 <MdDelete
                                   size={27}
                                   className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                                  onClick={() => {
+                                    setModalFilterDelete(true);
+                                  }}
                                 />
                               </div>
                             </StyledTableCell>
@@ -694,6 +714,9 @@ const Books = () => {
                                 <MdDelete
                                   size={27}
                                   className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                                  onClick={() => {
+                                    setModalFilterDelete(true);
+                                  }}
                                 />
                               </div>
                             </StyledTableCell>
@@ -718,14 +741,14 @@ const Books = () => {
         </div>
         <div className="section_books mt-7">
           <div className="title_filter_btn_add__book_block flex justify-between items-center gap-2">
-            <h1 className="title_filter sm:text-[18px] md:text-2xl font-600">
+            <h1 className="title_filter text-[24px] font-medium">
               Manage Books
             </h1>
             <div className="filter_and_btn_add_block flex justify-between items-center gap-6">
               <Link to={"/dashboard/add-book"}>
                 <button className="flex items-center gap-2 bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer">
                   <LuPlus />
-                  Add new book
+                  <span className="sm:hidden md:block">Add new book</span>
                 </button>
               </Link>
             </div>
@@ -801,6 +824,9 @@ const Books = () => {
                               <MdDelete
                                 size={27}
                                 className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                                onClick={() => {
+                                  setModalDeleteBook(true);
+                                }}
                               />
                             </div>
                           </TableCell>
@@ -855,6 +881,184 @@ const Books = () => {
             showScrollbar();
           }}
         ></div>
+
+        <Dialog
+          open={modalDeleteBook}
+          onClose={() => {
+            setModalDeleteBook(false);
+          }}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          sx={{}}
+          fullWidth
+        >
+          <div className="modal_delete_book_block px-4 py-4">
+            <div className="header_delete_book_block flex items-center gap-6 justify-between">
+              <h1 className="text-[26px] font-600">Delete Book</h1>
+              <button
+                className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
+                onClick={() => {
+                  setModalDeleteBook(false);
+                }}
+              >
+                <MdOutlineClose size={27} className="" />
+              </button>
+            </div>
+            <DialogTitle>
+              {"Are you sure to delete this book? This action can't be undone"}
+            </DialogTitle>
+            <div className="block_btns flex gap-5 justify-between">
+              <button
+                className="hover:bg-[#20ACFF] p-2.5 rounded-[10px] text-[#20ACFF] hover:text-white text-[18px] font-500 cursor-pointer w-full duration-300"
+                onClick={() => {
+                  setModalDeleteBook(false);
+                }}
+              >
+                No
+              </button>
+              <button className="hover:bg-[red] text-[red] p-2.5 rounded-[10px] hover:text-white text-[18px] font-500 cursor-pointer w-full duration-300">
+                Yes
+              </button>
+            </div>
+          </div>
+        </Dialog>
+
+        {/* Filter Modals */}
+        {/* Modal Add Filter */}
+        <Dialog
+          open={modalFilterAdd}
+          onClose={() => {
+            setModalFilterAdd(false);
+          }}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          sx={{}}
+          fullWidth
+        >
+          <div className="modal_add_filter_block px-4 py-4">
+            <div className="header_modal_add_filter flex items-center gap-6 justify-between">
+              <h1 className="text-[26px] font-600">Add Filter</h1>
+              <button
+                className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
+                onClick={() => {
+                  setModalFilterAdd(false);
+                }}
+              >
+                <MdOutlineClose size={27} className="" />
+              </button>
+            </div>
+            <form action="" className="form flex flex-col gap-2">
+              <div className="label_inp_filter flex flex-col gap-2">
+                <label
+                  htmlFor="book_name"
+                  className="cursor-pointer text-[15px] font-500"
+                >
+                  Filter Name
+                </label>
+                <TextField
+                  id="book_name"
+                  label="Name of Filter"
+                  variant="outlined"
+                />
+              </div>
+              <div className="btn_submit_block mt-2">
+                <button className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </Dialog>
+
+        {/* Modal Edit Filter */}
+        <Dialog
+          open={modalFilterEdit}
+          onClose={() => {
+            setModalFilterAdd(false);
+          }}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          sx={{}}
+          fullWidth
+        >
+          <div className="modal_add_filter_block px-4 py-4">
+            <div className="header_modal_add_filter flex items-center gap-6 justify-between">
+              <h1 className="text-[26px] font-600">Add Filter</h1>
+              <button
+                className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
+                onClick={() => {
+                  setModalFilterAdd(false);
+                }}
+              >
+                <MdOutlineClose size={27} className="" />
+              </button>
+            </div>
+            <form action="" className="form flex flex-col gap-2">
+              <div className="label_inp_filter flex flex-col gap-2">
+                <label
+                  htmlFor="book_name"
+                  className="cursor-pointer text-[15px] font-500"
+                >
+                  Filter Name
+                </label>
+                <TextField
+                  id="book_name"
+                  label="Name of Filter"
+                  variant="outlined"
+                />
+              </div>
+              <div className="btn_submit_block mt-2">
+                <button className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full">
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </Dialog>
+
+        {/* Modal Delete Filter */}
+        <Dialog
+          open={modalFilterDelete}
+          onClose={() => {
+            setModalFilterDelete(false);
+          }}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          sx={{}}
+          fullWidth
+        >
+          <div className="modal_delete_filter_block px-4 py-4">
+            <div className="header_delete_filter_block flex items-center gap-6 justify-between">
+              <h1 className="text-[26px] font-600">Delete Filter</h1>
+              <button
+                className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
+                onClick={() => {
+                  setModalFilterDelete(false);
+                }}
+              >
+                <MdOutlineClose size={27} className="" />
+              </button>
+            </div>
+            <DialogTitle>
+              {
+                "Are you sure to delete this filter? This action can't be undone"
+              }
+            </DialogTitle>
+            <div className="block_btns flex gap-5 justify-between">
+              <button
+                className="hover:bg-[#20ACFF] p-2.5 rounded-[10px] text-[#20ACFF] hover:text-white text-[18px] font-500 cursor-pointer w-full duration-300"
+                onClick={() => {
+                  setModalFilterDelete(false);
+                }}
+              >
+                No
+              </button>
+              <button className="hover:bg-[red] text-[red] p-2.5 rounded-[10px] hover:text-white text-[18px] font-500 cursor-pointer w-full duration-300">
+                Yes
+              </button>
+            </div>
+          </div>
+        </Dialog>
       </div>
     </>
   );

@@ -34,7 +34,7 @@ import { AiFillEdit } from "react-icons/ai";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdOutlineClose } from "react-icons/md";
 
 const BorrowedBooks = () => {
   const allFiltersByCategory: any = [
@@ -113,6 +113,7 @@ const BorrowedBooks = () => {
   const [modalShowAllFilters, setModalShowAllFilters] =
     useState<boolean>(false);
   const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
+  const [modalDeleteReceivedUser, setModalDeleteReceivedUser] = useState(false);
 
   function removeScrollbar() {
     document.body.classList.add("scroll_hidden_modal_filter_without_overlay");
@@ -313,7 +314,7 @@ const BorrowedBooks = () => {
           id="tableTitle"
           component="div"
         >
-          Books
+          Received Book Users
         </Typography>
       </Toolbar>
     );
@@ -715,6 +716,9 @@ const BorrowedBooks = () => {
                               <div className="btn_func_block flex items-center gap-1.5">
                                 <MdDelete
                                   size={27}
+                                  onClick={() => {
+                                    setModalDeleteReceivedUser(true);
+                                  }}
                                   className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
                                 />
                               </div>
@@ -750,6 +754,51 @@ const BorrowedBooks = () => {
               showScrollbar();
             }}
           ></div>
+
+          <Dialog
+            open={modalDeleteReceivedUser}
+            onClose={() => {
+              setModalDeleteReceivedUser(false);
+            }}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            sx={{}}
+            fullWidth
+          >
+            <div className="modal_delete_received_book_user_block px-4 py-4">
+              <div className="header_delete_received_book_user_block flex items-center gap-6 justify-between">
+                <h1 className="text-[26px] font-600">
+                  Delete Received Book User
+                </h1>
+                <button
+                  className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
+                  onClick={() => {
+                    setModalDeleteReceivedUser(false);
+                  }}
+                >
+                  <MdOutlineClose size={27} className="" />
+                </button>
+              </div>
+              <DialogTitle>
+                {
+                  "Are you sure to delete this received book user? This action can't be undone"
+                }
+              </DialogTitle>
+              <div className="block_btns flex gap-5 justify-between">
+                <button
+                  className="hover:bg-[#20ACFF] p-2.5 rounded-[10px] text-[#20ACFF] hover:text-white text-[18px] font-500 cursor-pointer w-full duration-300"
+                  onClick={() => {
+                    setModalDeleteReceivedUser(false);
+                  }}
+                >
+                  No
+                </button>
+                <button className="hover:bg-[red] text-[red] p-2.5 rounded-[10px] hover:text-white text-[18px] font-500 cursor-pointer w-full duration-300">
+                  Yes
+                </button>
+              </div>
+            </div>
+          </Dialog>
         </div>
       </div>
     </>

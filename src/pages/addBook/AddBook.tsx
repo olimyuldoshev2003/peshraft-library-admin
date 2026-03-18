@@ -122,7 +122,7 @@ const AddBook = () => {
                 </label>
                 <TextField
                   id="book_name"
-                  label="Name of book"
+                  label="Name of Book"
                   variant="outlined"
                 />
               </div>
