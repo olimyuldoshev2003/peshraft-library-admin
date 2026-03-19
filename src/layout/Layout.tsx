@@ -3,7 +3,6 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 import "./Layout.css";
 
-
 // Images
 import logo from "../assets/Logo.svg";
 
@@ -311,30 +310,37 @@ const Layout = () => {
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/receive-book-requests" && "border-b-3"}`}
+                  onClick={() => {
+                    setMenuMobileSize(false);
+                    showScrollbar();
+                  }}
                   to={"/dashboard/receive-book-requests"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <CallReceivedIcon className="text-white text-[22px]" />
-                    <Link
+                    <span
                       className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard/receive-book-requests"}
+                      
                     >
                       Receive Book Requests
-                    </Link>
+                    </span>
                   </li>
                 </Link>
                 <Link
                   className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/return-book-requests" && "border-b-3"}`}
+                  onClick={() => {
+                    setMenuMobileSize(false);
+                    showScrollbar();
+                  }}
                   to={"/dashboard/return-book-requests"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <PiKeyReturnFill className="text-white text-[22px]" />
-                    <Link
+                    <span
                       className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard/return-book-requests"}
                     >
                       Return Book Requests
-                    </Link>
+                    </span>
                   </li>
                 </Link>
                 <Link
