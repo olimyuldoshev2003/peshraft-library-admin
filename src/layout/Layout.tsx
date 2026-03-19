@@ -3,11 +3,12 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 import "./Layout.css";
 
+
 // Images
 import logo from "../assets/Logo.svg";
 
 import { GoHome } from "react-icons/go";
-import { PiBookOpen, PiUsersThree } from "react-icons/pi";
+import { PiBookOpen, PiKeyReturnFill, PiUsersThree } from "react-icons/pi";
 import { GrNotification } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
 import { FaPhoneAlt } from "react-icons/fa";
@@ -15,6 +16,8 @@ import { MdOutlineEmail } from "react-icons/md";
 
 import SecurityUpdateGoodOutlinedIcon from "@mui/icons-material/SecurityUpdateGoodOutlined";
 import { IoMenu } from "react-icons/io5";
+
+import CallReceivedIcon from "@mui/icons-material/CallReceived";
 
 const Layout = () => {
   const location = useLocation();
@@ -90,16 +93,44 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/borrowed-books" && "border-b-3"}`}
-                  to={"/dashboard/borrowed-books"}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/received-members" && "border-b-3"}`}
+                  to={"/dashboard/received-members"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <SecurityUpdateGoodOutlinedIcon className="text-white text-[22px]" />
                     <Link
                       className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard/borrowed-books"}
+                      to={"/dashboard/received-members"}
                     >
-                      Borrowed Books
+                      Received Members
+                    </Link>
+                  </li>
+                </Link>
+                <Link
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/receive-book-requests" && "border-b-3"}`}
+                  to={"/dashboard/receive-book-requests"}
+                >
+                  <li className="navigations_list_item flex items-center gap-2.5">
+                    <CallReceivedIcon className="text-white text-[22px]" />
+                    <Link
+                      className="navigations_name text-white text-[22px] font-500 outline-none"
+                      to={"/dashboard/receive-book-requests"}
+                    >
+                      Receive Book Requests
+                    </Link>
+                  </li>
+                </Link>
+                <Link
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/return-book-requests" && "border-b-3"}`}
+                  to={"/dashboard/return-book-requests"}
+                >
+                  <li className="navigations_list_item flex items-center gap-2.5">
+                    <PiKeyReturnFill className="text-white text-[22px]" />
+                    <Link
+                      className="navigations_name text-white text-[22px] font-500 outline-none"
+                      to={"/dashboard/return-book-requests"}
+                    >
+                      Return Book Requests
                     </Link>
                   </li>
                 </Link>
@@ -264,18 +295,46 @@ const Layout = () => {
                   </li>
                 </Link>
                 <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/borrowed-books" && "border-b-3"}`}
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/received-members" && "border-b-3"}`}
                   onClick={() => {
                     setMenuMobileSize(false);
                     showScrollbar();
                   }}
-                  to={"/dashboard/borrowed-books"}
+                  to={"/dashboard/received-members"}
                 >
                   <li className="navigations_list_item flex items-center gap-2.5">
                     <SecurityUpdateGoodOutlinedIcon className="text-white text-[22px]" />
                     <span className="navigations_name text-white text-[22px] font-500 outline-none">
-                      Borrowed Books
+                      Received Members
                     </span>
+                  </li>
+                </Link>
+                <Link
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/receive-book-requests" && "border-b-3"}`}
+                  to={"/dashboard/receive-book-requests"}
+                >
+                  <li className="navigations_list_item flex items-center gap-2.5">
+                    <CallReceivedIcon className="text-white text-[22px]" />
+                    <Link
+                      className="navigations_name text-white text-[22px] font-500 outline-none"
+                      to={"/dashboard/receive-book-requests"}
+                    >
+                      Receive Book Requests
+                    </Link>
+                  </li>
+                </Link>
+                <Link
+                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/return-book-requests" && "border-b-3"}`}
+                  to={"/dashboard/return-book-requests"}
+                >
+                  <li className="navigations_list_item flex items-center gap-2.5">
+                    <PiKeyReturnFill className="text-white text-[22px]" />
+                    <Link
+                      className="navigations_name text-white text-[22px] font-500 outline-none"
+                      to={"/dashboard/return-book-requests"}
+                    >
+                      Return Book Requests
+                    </Link>
                   </li>
                 </Link>
                 <Link

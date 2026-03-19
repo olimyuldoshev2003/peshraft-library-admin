@@ -36,7 +36,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import { MdDelete, MdOutlineClose } from "react-icons/md";
 
-const BorrowedBooks = () => {
+const ReceivedMembers = () => {
   const allFiltersByCategory: any = [
     {
       id: "fantasy",
@@ -156,11 +156,12 @@ const BorrowedBooks = () => {
     {
       id: 1,
       img: "/src/assets/signIn/logo-pehraft-sign-in.svg",
-      bookTitle: "Cashflow Quadrant",
       borrowerName: "Olim Yuldoshev",
       dateBorrowed: "2025-11-19",
       dueDate: "2026-11-11",
       phoneNumber: "919697875",
+      bookTitle: "Cashflow Quadrant",
+      author: "Robert T. Kiyosaki",
     },
   ];
 
@@ -196,12 +197,6 @@ const BorrowedBooks = () => {
       label: "Image",
     },
     {
-      id: "book-title",
-      numeric: false,
-      disablePadding: true,
-      label: "Book Title",
-    },
-    {
       id: "borrower-name",
       numeric: false,
       disablePadding: false,
@@ -224,6 +219,18 @@ const BorrowedBooks = () => {
       numeric: false,
       disablePadding: false,
       label: "Phone number",
+    },
+    {
+      id: "book-title",
+      numeric: false,
+      disablePadding: true,
+      label: "Book Title",
+    },
+    {
+      id: "author",
+      numeric: false,
+      disablePadding: true,
+      label: "Author",
     },
     {
       id: "action",
@@ -314,7 +321,7 @@ const BorrowedBooks = () => {
           id="tableTitle"
           component="div"
         >
-          Received Book Users
+          Received Members
         </Typography>
       </Toolbar>
     );
@@ -700,6 +707,10 @@ const BorrowedBooks = () => {
                                 alt="Book cover"
                               />
                             </TableCell>
+                            <TableCell>{row.borrowerName}</TableCell>
+                            <TableCell>{row.dateBorrowed}</TableCell>
+                            <TableCell>{row.dueDate}</TableCell>
+                            <TableCell>{row.phoneNumber}</TableCell>
                             <TableCell
                               component="th"
                               id={labelId}
@@ -708,10 +719,7 @@ const BorrowedBooks = () => {
                             >
                               {row.bookTitle}
                             </TableCell>
-                            <TableCell>{row.borrowerName}</TableCell>
-                            <TableCell>{row.dateBorrowed}</TableCell>
-                            <TableCell>{row.dueDate}</TableCell>
-                            <TableCell>{row.phoneNumber}</TableCell>
+                            <TableCell>{row.author}</TableCell>
                             <TableCell>
                               <div className="btn_func_block flex items-center gap-1.5">
                                 <MdDelete
@@ -767,9 +775,7 @@ const BorrowedBooks = () => {
           >
             <div className="modal_delete_received_book_user_block px-4 py-4">
               <div className="header_delete_received_book_user_block flex items-center gap-6 justify-between">
-                <h1 className="text-[26px] font-600">
-                  Delete Received Book User
-                </h1>
+                <h1 className="text-[26px] font-600">Delete Received Member</h1>
                 <button
                   className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
                   onClick={() => {
@@ -781,7 +787,7 @@ const BorrowedBooks = () => {
               </div>
               <DialogTitle>
                 {
-                  "Are you sure to delete this received book user? This action can't be undone"
+                  "Are you sure to delete this received member? This action can't be undone"
                 }
               </DialogTitle>
               <div className="block_btns flex gap-5 justify-between">
@@ -805,4 +811,4 @@ const BorrowedBooks = () => {
   );
 };
 
-export default BorrowedBooks;
+export default ReceivedMembers;
