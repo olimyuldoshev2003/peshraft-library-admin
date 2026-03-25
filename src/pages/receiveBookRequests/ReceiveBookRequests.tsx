@@ -29,6 +29,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
+import Dialog from "@mui/material/Dialog";
+import { MdOutlineClose } from "react-icons/md";
+import DialogTitle from "@mui/material/DialogTitle";
 // import { IoClose } from "react-icons/io5";
 // import Dialog from "@mui/material/Dialog";
 // import DialogTitle from "@mui/material/DialogTitle";
@@ -40,8 +43,11 @@ const ReceiveBookRequests = () => {
   const [orderBy, setOrderBy] = useState<any>("bookTitle");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-  // const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState<number>(17);
+  const [
+    modalAcceptingOrDecliningReceiverUserRequest,
+    setModalAcceptingOrDecliningReceiverUserRequest,
+  ] = useState<boolean>(false);
 
   // Table Section
   const rows: any = [
@@ -371,7 +377,16 @@ const ReceiveBookRequests = () => {
                           <TableCell>{row.author}</TableCell>
                           <TableCell>
                             <div className="btn_block">
-                              <button>Accept</button>
+                              <button
+                                className="bg-[green] px-2.5 py-1.5 rounded-[5px] text-white text-[14px] font-500 cursor-pointer outline-none"
+                                onClick={() => {
+                                  setModalAcceptingOrDecliningReceiverUserRequest(
+                                    true,
+                                  );
+                                }}
+                              >
+                                Accept
+                              </button>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -395,6 +410,49 @@ const ReceiveBookRequests = () => {
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
             </Paper>
+
+            <Dialog
+              open={modalAcceptingOrDecliningReceiverUserRequest}
+              onClose={() => {
+                setModalAcceptingOrDecliningReceiverUserRequest(false);
+              }}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+              sx={{}}
+              fullWidth
+            >
+              <div className="modal_delete_book_block px-4 py-4">
+                <div className="header_delete_book_block flex items-center gap-6 justify-between">
+                  <h1 className="text-[26px] font-600">
+                    Request Receiving Book
+                  </h1>
+                  <button
+                    className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
+                    onClick={() => {
+                      setModalAcceptingOrDecliningReceiverUserRequest(false);
+                    }}
+                  >
+                    <MdOutlineClose size={27} className="" />
+                  </button>
+                </div>
+                <DialogTitle>
+                  {"Did this person really receive this book?"}
+                </DialogTitle>
+                <div className="block_btns flex gap-5 justify-between">
+                  <button
+                    className="hover:bg-[#20ACFF] p-2.5 rounded-[10px] text-[#20ACFF] hover:text-white text-[18px] font-500 cursor-pointer w-full duration-300"
+                    onClick={() => {
+                      setModalAcceptingOrDecliningReceiverUserRequest(false);
+                    }}
+                  >
+                    No
+                  </button>
+                  <button className="hover:bg-[red] text-[red] p-2.5 rounded-[10px] hover:text-white text-[18px] font-500 cursor-pointer w-full duration-300">
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </Dialog>
           </div>
         </div>
       </div>
