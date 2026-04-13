@@ -132,7 +132,7 @@ const Layout = () => {
     <>
       <div className="layout_component flex sm:flex-col md:flex-row relative min-h-screen">
         {/* Desktop Header */}
-        <header className="header bg-[#2262C6] hidden md:flex flex-col justify-between h-screen py-5 sticky top-0 max-w-70 overflow-scroll gap-10">
+        <header className="header bg-[#2262C6] hidden md:flex flex-col justify-between h-screen py-5 sticky top-0 max-w-70 overflow-auto gap-10">
           <div className="logo_and_nav_block">
             <Link to={"/dashboard"} className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
