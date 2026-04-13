@@ -2,8 +2,8 @@ import { HiOutlineSearch } from "react-icons/hi";
 import userImg from "../../assets/user-img.svg";
 
 // Icons
-import TuneIcon from "@mui/icons-material/Tune";
-import { LuPlus } from "react-icons/lu";
+// import TuneIcon from "@mui/icons-material/Tune";
+// import { LuPlus } from "react-icons/lu";
 // import FormControl from "@mui/material/FormControl";
 // import InputLabel from "@mui/material/InputLabel";
 // import Select from "@mui/material/Select";
@@ -13,13 +13,13 @@ import { useMemo, useState } from "react";
 //Material UI
 import {
   alpha,
-  styled,
+  // styled,
   // useTheme
 } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
@@ -29,79 +29,79 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-import { IoClose } from "react-icons/io5";
-import { AiFillEdit } from "react-icons/ai";
+// import { IoClose } from "react-icons/io5";
+// import { AiFillEdit } from "react-icons/ai";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-import DialogActions from "@mui/material/DialogActions";
+// import DialogActions from "@mui/material/DialogActions";
 import { MdDelete, MdOutlineClose } from "react-icons/md";
 
 const ReceivedMembers = () => {
-  const allFiltersByCategory: any = [
-    {
-      id: "fantasy",
-      filterName: "Fantasy",
-    },
-    {
-      id: "best-book",
-      filterName: "Best Book",
-    },
-    {
-      id: "classics",
-      filterName: "Classics",
-    },
-    {
-      id: "romance",
-      filterName: "Romance",
-    },
-    {
-      id: "science-fiction",
-      filterName: "Science Fiction",
-    },
-    {
-      id: "mystery",
-      filterName: "Mystery",
-    },
-    {
-      id: "historycal-fiction",
-      filterName: "Historical Fiction",
-    },
-    {
-      id: "finance",
-      filterName: "Finance",
-    },
-  ];
+  // const allFiltersByCategory: any = [
+  //   {
+  //     id: "fantasy",
+  //     filterName: "Fantasy",
+  //   },
+  //   {
+  //     id: "best-book",
+  //     filterName: "Best Book",
+  //   },
+  //   {
+  //     id: "classics",
+  //     filterName: "Classics",
+  //   },
+  //   {
+  //     id: "romance",
+  //     filterName: "Romance",
+  //   },
+  //   {
+  //     id: "science-fiction",
+  //     filterName: "Science Fiction",
+  //   },
+  //   {
+  //     id: "mystery",
+  //     filterName: "Mystery",
+  //   },
+  //   {
+  //     id: "historycal-fiction",
+  //     filterName: "Historical Fiction",
+  //   },
+  //   {
+  //     id: "finance",
+  //     filterName: "Finance",
+  //   },
+  // ];
 
-  const filtersByCategory: any = [
-    {
-      id: "fantasy",
-      filterName: "Fantasy",
-    },
-    {
-      id: "best-book",
-      filterName: "Best Book",
-    },
-    {
-      id: "classics",
-      filterName: "Classics",
-    },
-    {
-      id: "romance",
-      filterName: "Romance",
-    },
-    {
-      id: "science-fiction",
-      filterName: "Science Fiction",
-    },
-    {
-      id: "mystery",
-      filterName: "Mystery",
-    },
-    {
-      id: "historycal-fiction",
-      filterName: "Historical Fiction",
-    },
-  ];
+  // const filtersByCategory: any = [
+  //   {
+  //     id: "fantasy",
+  //     filterName: "Fantasy",
+  //   },
+  //   {
+  //     id: "best-book",
+  //     filterName: "Best Book",
+  //   },
+  //   {
+  //     id: "classics",
+  //     filterName: "Classics",
+  //   },
+  //   {
+  //     id: "romance",
+  //     filterName: "Romance",
+  //   },
+  //   {
+  //     id: "science-fiction",
+  //     filterName: "Science Fiction",
+  //   },
+  //   {
+  //     id: "mystery",
+  //     filterName: "Mystery",
+  //   },
+  //   {
+  //     id: "historycal-fiction",
+  //     filterName: "Historical Fiction",
+  //   },
+  // ];
 
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<any>("bookTitle");
@@ -109,47 +109,47 @@ const ReceivedMembers = () => {
   const [page, setPage] = useState(0);
   // const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState<number>(17);
-  const [modalFilter, setModalFilter] = useState<boolean>(false);
-  const [modalShowAllFilters, setModalShowAllFilters] =
-    useState<boolean>(false);
-  const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
+  // const [modalFilter, setModalFilter] = useState<boolean>(false);
+  // const [modalShowAllFilters, setModalShowAllFilters] =
+  //   useState<boolean>(false);
+  // const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
   const [modalDeleteReceivedUser, setModalDeleteReceivedUser] = useState(false);
 
-  function removeScrollbar() {
-    document.body.classList.add("scroll_hidden_modal_filter_without_overlay");
-    document.body.classList.remove(
-      "scroll_visible_modal_filter_without_overlay",
-    );
-  }
+  // function removeScrollbar() {
+  //   document.body.classList.add("scroll_hidden_modal_filter_without_overlay");
+  //   document.body.classList.remove(
+  //     "scroll_visible_modal_filter_without_overlay",
+  //   );
+  // }
 
-  function showScrollbar() {
-    document.body.classList.add("scroll_visible_modal_filter_without_overlay");
-    document.body.classList.remove(
-      "scroll_hidden_modal_filter_without_overlay",
-    );
-  }
+  // function showScrollbar() {
+  //   document.body.classList.add("scroll_visible_modal_filter_without_overlay");
+  //   document.body.classList.remove(
+  //     "scroll_hidden_modal_filter_without_overlay",
+  //   );
+  // }
 
   //For Table
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-      whiteSpace: "nowrap",
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-      whiteSpace: "nowrap",
-    },
-  }));
+  // const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  //   [`&.${tableCellClasses.head}`]: {
+  //     backgroundColor: theme.palette.common.black,
+  //     color: theme.palette.common.white,
+  //     whiteSpace: "nowrap",
+  //   },
+  //   [`&.${tableCellClasses.body}`]: {
+  //     fontSize: 14,
+  //     whiteSpace: "nowrap",
+  //   },
+  // }));
 
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  }));
+  // const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  //   "&:nth-of-type(odd)": {
+  //     backgroundColor: theme.palette.action.hover,
+  //   },
+  //   "&:last-child td, &:last-child th": {
+  //     border: 0,
+  //   },
+  // }));
 
   // Table Section
   const rows: any = [
@@ -401,23 +401,23 @@ const ReceivedMembers = () => {
                 placeholder="Search enter..."
               />
 
-              <div className="btn_filter_and_modal_filter_overlay_transparent_block md:relative flex flex-col">
-                <button
-                  className="icons_filter_block shadow-[0_0_6px_gray] flex justify-center items-center p-2 rounded-[10px] cursor-pointer"
-                  onClick={() => {
-                    setModalFilter(true);
-                    removeScrollbar();
-                  }}
-                >
-                  <TuneIcon
-                    sx={{
-                      fontSize: "36px",
+              {/* <div className="btn_filter_and_modal_filter_overlay_transparent_block md:relative flex flex-col"> */}
+              {/* <button
+                    className="icons_filter_block shadow-[0_0_6px_gray] flex justify-center items-center p-2 rounded-[10px] cursor-pointer"
+                    onClick={() => {
+                      setModalFilter(true);
+                      removeScrollbar();
                     }}
-                  />
-                </button>
+                  >
+                    <TuneIcon
+                      sx={{
+                        fontSize: "36px",
+                      }}
+                    />
+                  </button> */}
 
-                {/* Modal filter */}
-                <div
+              {/* Modal filter */}
+              {/* <div
                   className={`modal_filter_transparent_overlay_main_block absolute sm:left-0 sm:w-full sm:top-16 md:top-15 md:-left-30.5 p-3 z-40 rounded-2xl duration-300
                 md:w-77.5
                 bg-white shadow-2xl
@@ -495,25 +495,20 @@ const ReceivedMembers = () => {
                       </button>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                {/* Modal Show All Filters */}
-                <Dialog
+              {/* Modal Show All Filters */}
+              {/* <Dialog
                   open={modalShowAllFilters}
                   onClose={() => {
                     setModalShowAllFilters(false);
                     showScrollbar();
                   }}
-                  // fullScreen={fullScreen}
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                   sx={{}}
                 >
                   <div className="modal_show_all_filters_block px-4 py-4">
-                    {/* <h1 className="title_filter_by_category text-[#A1A1A1] text-[16px] font-400">
-                    Filter by Category
-                  </h1> */}
-
                     <DialogTitle id="alert-dialog-title">
                       {"Filter by Category"}
                     </DialogTitle>
@@ -551,10 +546,10 @@ const ReceivedMembers = () => {
                       </button>
                     </DialogActions>
                   </div>
-                </Dialog>
+                </Dialog> */}
 
-                {/* Modal Filter Options */}
-                <Dialog
+              {/* Modal Filter Options */}
+              {/* <Dialog
                   open={modalFilterOptions}
                   onClose={() => {
                     setModalFilterOptions(false);
@@ -652,8 +647,8 @@ const ReceivedMembers = () => {
                       </TableContainer>
                     </div>
                   </div>
-                </Dialog>
-              </div>
+                </Dialog> */}
+              {/* </div> */}
             </div>
             <div className="fullname_img_of_admin_and_admin_title sm:hidden md:flex items-center gap-3">
               <div className="fullname_of_user_and_admin_title">
@@ -755,13 +750,13 @@ const ReceivedMembers = () => {
             </div>
           </div>
 
-          <div
+          {/* <div
             className={`transpartent_overlay_modal_filter absolute inset-0 ${modalFilter ? "pointer-events-auto" : "pointer-events-none"}`}
             onClick={() => {
               setModalFilter(false);
               showScrollbar();
             }}
-          ></div>
+          ></div> */}
 
           <Dialog
             open={modalDeleteReceivedUser}
