@@ -32,11 +32,107 @@ const Layout = () => {
     document.body.classList.remove("scroll_hidden");
   }
 
+  // Navigation items array
+  const navigationItems = [
+    {
+      id: 1,
+      path: "/dashboard",
+      icon: GoHome,
+      label: "Dashboard",
+      exact: true,
+    },
+    {
+      id: 2,
+      path: "/dashboard/books",
+      icon: PiBookOpen,
+      label: "Books",
+      exact: false,
+    },
+    {
+      id: 3,
+      path: "/dashboard/members",
+      icon: PiUsersThree,
+      label: "Members",
+      exact: false,
+    },
+    {
+      id: 4,
+      path: "/dashboard/received-members",
+      icon: SecurityUpdateGoodOutlinedIcon,
+      label: "Received Members",
+      exact: false,
+    },
+    {
+      id: 5,
+      path: "/dashboard/receive-book-requests",
+      icon: CallReceivedIcon,
+      label: "Receive Book Requests",
+      exact: false,
+    },
+    {
+      id: 6,
+      path: "/dashboard/return-book-requests",
+      icon: PiKeyReturnFill,
+      label: "Return Book Requests",
+      exact: false,
+    },
+    {
+      id: 7,
+      path: "/dashboard/notifications",
+      icon: GrNotification,
+      label: "Notification",
+      exact: false,
+    },
+    {
+      id: 8,
+      path: "/dashboard/profile",
+      icon: CgProfile,
+      label: "Profile",
+      exact: false,
+    },
+  ];
+
+  // Helper function to check if path is active
+  const isActivePath = (path: string, exact: boolean = false) => {
+    if (exact) {
+      return location.pathname === path;
+    }
+    return location.pathname === path;
+  };
+
+  // Render navigation links (reusable component)
+  const renderNavLinks = (isMobile: boolean = false) => {
+    const handleClick = () => {
+      if (isMobile) {
+        setMenuMobileSize(false);
+        showScrollbar();
+      }
+    };
+
+    return navigationItems.map((item:any) => (
+      <Link
+        key={item.id}
+        className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${
+          isActivePath(item.path, item.exact) && "border-b-3"
+        }`}
+        onClick={handleClick}
+        to={item.path}
+      >
+        <li className="navigations_list_item flex items-center gap-2.5">
+          <item.icon className="text-white text-[22px]" />
+          <span className="navigations_name text-white text-[22px] font-500 outline-none">
+            {item.label}
+          </span>
+        </li>
+      </Link>
+    ));
+  };
+
   return (
     <>
       <div className="layout_component flex sm:flex-col md:flex-row relative min-h-screen">
         {/* Desktop Header */}
-        <header className="header bg-[#2262C6] hidden md:flex flex-col justify-between h-screen py-5 sticky top-0 max-w-70">
+        <header className="header bg-[#2262C6] hidden md:flex flex-col justify-between h-screen py-5 sticky top-0 max-w-70 overflow-scroll gap-10">
           <div className="logo_and_nav_block">
             <Link to={"/dashboard"} className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
@@ -49,118 +145,7 @@ const Layout = () => {
             </Link>
             <nav className="nav mt-5">
               <ul className="nav_list flex flex-col gap-2">
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard" && "border-b-3"}`}
-                  to={"/dashboard"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <GoHome className="text-white text-[22px]" />
-                    <Link
-                      className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard"}
-                    >
-                      Dashboard
-                    </Link>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/books" && "border-b-3"}`}
-                  to={"/dashboard/books"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <PiBookOpen className="text-white text-[22px]" />
-                    <Link
-                      className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard/books"}
-                    >
-                      Books
-                    </Link>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/members" && "border-b-3"}`}
-                  to={"/dashboard/members"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <PiUsersThree className="text-white text-[22px]" />
-                    <Link
-                      className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard/members"}
-                    >
-                      Members
-                    </Link>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/received-members" && "border-b-3"}`}
-                  to={"/dashboard/received-members"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <SecurityUpdateGoodOutlinedIcon className="text-white text-[22px]" />
-                    <Link
-                      className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard/received-members"}
-                    >
-                      Received Members
-                    </Link>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/receive-book-requests" && "border-b-3"}`}
-                  to={"/dashboard/receive-book-requests"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <CallReceivedIcon className="text-white text-[22px]" />
-                    <Link
-                      className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard/receive-book-requests"}
-                    >
-                      Receive Book Requests
-                    </Link>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/return-book-requests" && "border-b-3"}`}
-                  to={"/dashboard/return-book-requests"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <PiKeyReturnFill className="text-white text-[22px]" />
-                    <Link
-                      className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard/return-book-requests"}
-                    >
-                      Return Book Requests
-                    </Link>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/notifications" && "border-b-3"}`}
-                  to={"/dashboard/notifications"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <GrNotification className="text-white text-[22px]" />
-                    <Link
-                      className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard/notifications"}
-                    >
-                      Notification
-                    </Link>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/profile" && "border-b-3"}`}
-                  to={"/dashboard/profile"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <CgProfile className="text-white text-[22px]" />
-                    <Link
-                      className="navigations_name text-white text-[22px] font-500 outline-none"
-                      to={"/dashboard/profile"}
-                    >
-                      Profile
-                    </Link>
-                  </li>
-                </Link>
+                {renderNavLinks(false)}
               </ul>
             </nav>
           </div>
@@ -216,23 +201,25 @@ const Layout = () => {
         </div>
 
         {/* Overlay */}
-        {/* {menuMobileSize && ( */}
         <div
-          className={`md:hidden fixed inset-0 opacity-50 z-45 transition-all ${menuMobileSize ? "pointer-events-auto bg-black " : "pointer-events-none bg-none"}`}
+          className={`md:hidden fixed inset-0 opacity-50 z-45 transition-all ${
+            menuMobileSize
+              ? "pointer-events-auto bg-black"
+              : "pointer-events-none bg-none"
+          }`}
           onClick={() => {
             setMenuMobileSize(false);
             showScrollbar();
           }}
         />
-        {/* )} */}
 
         {/* Mobile Header */}
         <header
-          className={`fixed md:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out pb-21 
+          className={`fixed md:hidden bg-[#2262C6] flex flex-col justify-between h-screen py-5 top-0 left-0 z-50 max-w-70 transform transition-transform duration-300 ease-in-out pb-21 overflow-auto gap-10
             ${menuMobileSize ? "translate-x-0" : "-translate-x-full"}
           `}
         >
-          <div className="logo_and_nav_block overflow-y-auto">
+          <div className="logo_and_nav_block">
             <Link to={"/dashboard"} className="logo_block flex items-center">
               <img className="w-14 h-14" src={logo} alt="" />
               <Link
@@ -248,131 +235,7 @@ const Layout = () => {
             </Link>
             <nav className="nav mt-5">
               <ul className="nav_list flex flex-col gap-2">
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard" && "border-b-3"}`}
-                  onClick={() => {
-                    setMenuMobileSize(false);
-                    showScrollbar();
-                  }}
-                  to={"/dashboard"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <GoHome className="text-white text-[22px]" />
-                    <span className="navigations_name text-white text-[22px] font-500 outline-none">
-                      Dashboard
-                    </span>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/books" && "border-b-3"}`}
-                  onClick={() => {
-                    setMenuMobileSize(false);
-                    showScrollbar();
-                  }}
-                  to={"/dashboard/books"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <PiBookOpen className="text-white text-[22px]" />
-                    <span className="navigations_name text-white text-[22px] font-500 outline-none">
-                      Books
-                    </span>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/members" && "border-b-3"}`}
-                  onClick={() => {
-                    setMenuMobileSize(false);
-                    showScrollbar();
-                  }}
-                  to={"/dashboard/members"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <PiUsersThree className="text-white text-[22px]" />
-                    <span className="navigations_name text-white text-[22px] font-500 outline-none">
-                      Members
-                    </span>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/received-members" && "border-b-3"}`}
-                  onClick={() => {
-                    setMenuMobileSize(false);
-                    showScrollbar();
-                  }}
-                  to={"/dashboard/received-members"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <SecurityUpdateGoodOutlinedIcon className="text-white text-[22px]" />
-                    <span className="navigations_name text-white text-[22px] font-500 outline-none">
-                      Received Members
-                    </span>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/receive-book-requests" && "border-b-3"}`}
-                  onClick={() => {
-                    setMenuMobileSize(false);
-                    showScrollbar();
-                  }}
-                  to={"/dashboard/receive-book-requests"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <CallReceivedIcon className="text-white text-[22px]" />
-                    <span
-                      className="navigations_name text-white text-[22px] font-500 outline-none"
-                      
-                    >
-                      Receive Book Requests
-                    </span>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/return-book-requests" && "border-b-3"}`}
-                  onClick={() => {
-                    setMenuMobileSize(false);
-                    showScrollbar();
-                  }}
-                  to={"/dashboard/return-book-requests"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <PiKeyReturnFill className="text-white text-[22px]" />
-                    <span
-                      className="navigations_name text-white text-[22px] font-500 outline-none"
-                    >
-                      Return Book Requests
-                    </span>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/notifications" && "border-b-3"}`}
-                  onClick={() => {
-                    setMenuMobileSize(false);
-                    showScrollbar();
-                  }}
-                  to={"/dashboard/notifications"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <GrNotification className="text-white text-[22px]" />
-                    <span className="navigations_name text-white text-[22px] font-500 outline-none">
-                      Notification
-                    </span>
-                  </li>
-                </Link>
-                <Link
-                  className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${location.pathname === "/dashboard/profile" && "border-b-3"}`}
-                  onClick={() => {
-                    setMenuMobileSize(false);
-                    showScrollbar();
-                  }}
-                  to={"/dashboard/profile"}
-                >
-                  <li className="navigations_list_item flex items-center gap-2.5">
-                    <CgProfile className="text-white text-[22px]" />
-                    <span className="navigations_name text-white text-[22px] font-500 outline-none">
-                      Profile
-                    </span>
-                  </li>
-                </Link>
+                {renderNavLinks(true)}
               </ul>
             </nav>
           </div>
