@@ -3,3 +3,7 @@
 @theme {
   --breakpoint-sm: 290px;
 }
+
+* {
+  font-family: "Poppins", sans-serif;
+}
