@@ -232,12 +232,12 @@ const ReceivedMembers = () => {
       disablePadding: true,
       label: "Author",
     },
-    {
-      id: "action",
-      numeric: false,
-      disablePadding: false,
-      label: "Action",
-    },
+    // {
+    //   id: "action",
+    //   numeric: false,
+    //   disablePadding: false,
+    //   label: "Action",
+    // },
   ];
 
   interface EnhancedTableProps {
@@ -715,7 +715,8 @@ const ReceivedMembers = () => {
                               {row.bookTitle}
                             </TableCell>
                             <TableCell>{row.author}</TableCell>
-                            <TableCell>
+
+                            {/* <TableCell>
                               <div className="btn_func_block flex items-center gap-1.5">
                                 <MdDelete
                                   size={27}
@@ -725,7 +726,7 @@ const ReceivedMembers = () => {
                                   className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
                                 />
                               </div>
-                            </TableCell>
+                            </TableCell> */}
                           </TableRow>
                         );
                       })}

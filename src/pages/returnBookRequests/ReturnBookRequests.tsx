@@ -439,16 +439,16 @@ const ReturnBookRequests = () => {
                 <DialogTitle>
                   {"Did this person really return this book?"}
                 </DialogTitle>
-                <div className="block_btns flex gap-5 justify-between">
+                <div className="block_btns flex gap-2 justify-between sm:flex-col md:flex-row">
                   <button
-                    className="hover:bg-[#20ACFF] p-2.5 rounded-[10px] text-[#20ACFF] hover:text-white text-[18px] font-500 cursor-pointer w-full duration-300"
+                    className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full duration-300"
                     onClick={() => {
                       setModalAcceptingOrDecliningReceiverUserRequest(false);
                     }}
                   >
                     No
                   </button>
-                  <button className="hover:bg-[red] text-[red] p-2.5 rounded-[10px] hover:text-white text-[18px] font-500 cursor-pointer w-full duration-300">
+                  <button className="bg-[red] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full duration-300">
                     Yes
                   </button>
                 </div>
