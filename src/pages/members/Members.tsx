@@ -297,10 +297,10 @@ const Members = () => {
         <div className="members_component_block p-4">
           <div className="header_member_component flex justify-between items-center gap-6">
             <div className="search_logo_and_search_input relative flex-1">
-              <HiOutlineSearch size={24} className="absolute top-4 left-4" />
+              <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />
               <input
                 type="search"
-                className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-3 rounded-[30px] text-[20px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
+                className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-2 rounded-[30px] text-[18px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
                 placeholder="Search enter..."
               />
             </div>

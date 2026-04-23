@@ -43,10 +43,10 @@ const Notifications = () => {
         <div className="notifications_component_block">
           <div className="header_notifications_component flex justify-between items-center gap-6">
             <div className="search_logo_and_search_input relative flex-1">
-              <HiOutlineSearch size={24} className="absolute top-4 left-4" />
+              <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />
               <input
                 type="search"
-                className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-3 rounded-[30px] text-[20px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
+                className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-2 rounded-[30px] text-[18px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
                 placeholder="Search enter..."
               />
             </div>
@@ -530,7 +530,7 @@ const Notifications = () => {
                         htmlFor="user_select"
                         className="cursor-pointer text-[15px] font-500"
                       >
-                        For
+                        Of
                       </label>
                       <FormControl fullWidth>
                         <InputLabel id="demo-simple-select-label">
@@ -641,7 +641,7 @@ const Notifications = () => {
             >
               <div className="modal_delete_notification_block px-4 py-4">
                 <div className="header_delete_notification_block flex items-center gap-6 justify-between">
-                  <h1 className="text-[26px] font-600">Delete Notification</h1>
+                  <h1 className="text-[17px] font-600">Delete Notification</h1>
                   <button
                     className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
                     onClick={() => {
@@ -651,7 +651,11 @@ const Notifications = () => {
                     <MdOutlineClose size={27} className="" />
                   </button>
                 </div>
-                <DialogTitle>
+                <DialogTitle
+                  sx={{
+                    fontSize: 15,
+                  }}
+                >
                   {
                     "Are you sure to delete this notification? This action can't be undone"
                   }

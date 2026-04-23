@@ -457,10 +457,10 @@ const Books = () => {
       <div className="books_component p-4">
         <div className="header_books flex justify-between items-center gap-6">
           <div className="search_logo_and_search_input relative flex items-center flex-1 gap-4">
-            <HiOutlineSearch size={24} className="absolute top-4 left-4" />
+            <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />
             <input
               type="search"
-              className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-3 rounded-[30px] text-[20px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
+              className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-2 rounded-[30px] text-[18px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
               placeholder="Search enter..."
             />
 
@@ -474,14 +474,14 @@ const Books = () => {
               >
                 <TuneIcon
                   sx={{
-                    fontSize: "36px",
+                    fontSize: "26px",
                   }}
                 />
               </button>
 
               {/* Modal filter */}
               <div
-                className={`modal_filter_transparent_overlay_main_block absolute sm:left-0 sm:w-full sm:top-16 md:top-15 md:-left-30.5 p-3 z-40 rounded-2xl duration-300
+                className={`modal_filter_transparent_overlay_main_block absolute sm:left-0 sm:w-full sm:top-13 md:top-13 md:-left-32 p-3 z-40 rounded-2xl duration-300
                 md:w-77.5
                 bg-white shadow-2xl
                 ${modalFilter ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}
@@ -531,9 +531,10 @@ const Books = () => {
                       })}
                     </div>
                   </div>
-                  <div className="btns_show_filters_and_filter_options flex justify-between mt-1 px-5">
+                  <div className="btns_show_filters_and_filter_options flex justify-between mt-3 px-5">
                     <button
-                      className="show_filters cursor-pointer outline-none text-[14px] font-400 text-[gray] hover:text-green-500"
+                      className="show_filters cursor-pointer outline-none text-[14px] font-400 text-green-500"
+                      style={{}}
                       onClick={() => {
                         setModalShowAllFilters(true);
                         setModalFilter(false);
@@ -542,7 +543,7 @@ const Books = () => {
                       Show All Filters
                     </button>
                     <button
-                      className="filter_options cursor-pointer outline-none text-[14px] font-400 text-[gray] hover:text-green-500"
+                      className="filter_options cursor-pointer outline-none text-[14px] font-400 text-green-500"
                       onClick={() => {
                         setModalFilterOptions(true);
                         setModalFilter(false);
@@ -666,9 +667,9 @@ const Books = () => {
                                 <AiFillEdit
                                   size={27}
                                   className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                                onClick={() => {
-                                  setModalFilterEdit(true)
-                                }}
+                                  onClick={() => {
+                                    setModalFilterEdit(true);
+                                  }}
                                 />
                                 <MdDelete
                                   size={27}
@@ -691,9 +692,9 @@ const Books = () => {
                                 <AiFillEdit
                                   size={27}
                                   className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                                onClick={() => {
-                                  setModalFilterEdit(true)
-                                }}
+                                  onClick={() => {
+                                    setModalFilterEdit(true);
+                                  }}
                                 />
                                 <MdDelete
                                   size={27}
@@ -716,9 +717,9 @@ const Books = () => {
                                 <AiFillEdit
                                   size={27}
                                   className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                                onClick={() => {
-                                  setModalFilterEdit(true)
-                                }}
+                                  onClick={() => {
+                                    setModalFilterEdit(true);
+                                  }}
                                 />
                                 <MdDelete
                                   size={27}
@@ -903,7 +904,7 @@ const Books = () => {
         >
           <div className="modal_delete_book_block px-4 py-4">
             <div className="header_delete_book_block flex items-center gap-6 justify-between">
-              <h1 className="text-[26px] font-600">Delete Book</h1>
+              <h1 className="text-[19px] font-600">Delete Book</h1>
               <button
                 className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
                 onClick={() => {
@@ -913,7 +914,11 @@ const Books = () => {
                 <MdOutlineClose size={27} className="" />
               </button>
             </div>
-            <DialogTitle>
+            <DialogTitle
+              sx={{
+                fontSize: 17,
+              }}
+            >
               {"Are you sure to delete this book? This action can't be undone"}
             </DialogTitle>
             <div className="block_btns flex gap-2 justify-between sm:flex-col md:flex-row">
@@ -1038,7 +1043,7 @@ const Books = () => {
         >
           <div className="modal_delete_filter_block px-4 py-4">
             <div className="header_delete_filter_block flex items-center gap-6 justify-between">
-              <h1 className="text-[26px] font-600">Delete Filter</h1>
+              <h1 className="text-[19px] font-600">Delete Filter</h1>
               <button
                 className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
                 onClick={() => {
@@ -1048,7 +1053,11 @@ const Books = () => {
                 <MdOutlineClose size={27} className="" />
               </button>
             </div>
-            <DialogTitle>
+            <DialogTitle
+              sx={{
+                fontSize: 17,
+              }}
+            >
               {
                 "Are you sure to delete this filter? This action can't be undone"
               }

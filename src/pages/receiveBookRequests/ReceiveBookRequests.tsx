@@ -299,10 +299,10 @@ const ReceiveBookRequests = () => {
         <div className="received_book_requests_conponent_block px-4 py-4">
           <div className="header_received_book_requests flex justify-between items-center gap-6">
             <div className="search_logo_and_search_input relative flex-1">
-              <HiOutlineSearch size={24} className="absolute top-4 left-4" />
+              <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />
               <input
                 type="search"
-                className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-3 rounded-[30px] text-[20px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
+                className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-2 rounded-[30px] text-[18px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
                 placeholder="Search enter..."
               />
             </div>
@@ -423,7 +423,7 @@ const ReceiveBookRequests = () => {
             >
               <div className="modal_delete_book_block px-4 py-4">
                 <div className="header_delete_book_block flex items-center gap-6 justify-between">
-                  <h1 className="text-[26px] font-600">
+                  <h1 className="text-[17px] font-600">
                     Request Receiving Book
                   </h1>
                   <button
@@ -435,7 +435,11 @@ const ReceiveBookRequests = () => {
                     <MdOutlineClose size={27} className="" />
                   </button>
                 </div>
-                <DialogTitle>
+                <DialogTitle
+                  sx={{
+                    fontSize: 15,
+                  }}
+                >
                   {"Did this person really receive this book?"}
                 </DialogTitle>
                 <div className="block_btns flex gap-2 justify-between sm:flex-col md:flex-row">

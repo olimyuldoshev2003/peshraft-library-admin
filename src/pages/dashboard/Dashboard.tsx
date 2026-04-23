@@ -8,7 +8,6 @@ import { LuUsers } from "react-icons/lu";
 import { PiBookOpen } from "react-icons/pi";
 import SecurityUpdateGoodOutlinedIcon from "@mui/icons-material/SecurityUpdateGoodOutlined";
 import { MdOutlineSecurityUpdateWarning } from "react-icons/md";
-// import { AiFillEdit } from "react-icons/ai";
 
 import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
@@ -19,6 +18,40 @@ import TableRow from "@mui/material/TableRow";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { styled } from "@mui/material/styles";
 import TableBody from "@mui/material/TableBody";
+
+// Table data array
+const overdueBorrowersData = [
+  {
+    id: 1,
+    fullName: "Olim Yuldoshev",
+    phoneNumber: "+992919697875",
+    role: "Volunteer",
+    bookTitle: "Cashflow Quadrant",
+    borrowDate: "2026-02-24",
+    dueDate: "2024-03-24",
+    daysOverdue: "30 days left",
+  },
+  {
+    id: 2,
+    fullName: "Olim Yuldoshev",
+    phoneNumber: "+992919697875",
+    role: "Volunteer",
+    bookTitle: "Cashflow Quadrant",
+    borrowDate: "2026-02-24",
+    dueDate: "2024-03-24",
+    daysOverdue: "30 days left",
+  },
+  {
+    id: 3,
+    fullName: "John Doe",
+    phoneNumber: "+992919697876",
+    role: "Student",
+    bookTitle: "Rich Dad Poor Dad",
+    borrowDate: "2026-02-20",
+    dueDate: "2024-03-20",
+    daysOverdue: "25 days left",
+  },
+];
 
 const Dashboard = () => {
   const volunteersData = [
@@ -129,10 +162,10 @@ const Dashboard = () => {
       <div className="dashboard_component p-4">
         <div className="header_dashboard_admin flex justify-between items-center">
           <div className="search_logo_and_search_input relative flex-1">
-            <HiOutlineSearch size={24} className="absolute top-4 left-4" />
+            <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />
             <input
               type="search"
-              className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-3 rounded-[30px] text-[20px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
+              className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-2 rounded-[30px] text-[18px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
               placeholder="Search enter..."
             />
           </div>
@@ -253,9 +286,6 @@ const Dashboard = () => {
               <Table aria-label="customized table">
                 <TableHead>
                   <TableRow>
-                    {/* <StyledTableCell sx={{ width: 50 }}>
-                      <input type="checkbox" className="outline-none w-5 h-5" />
-                    </StyledTableCell> */}
                     <StyledTableCell sx={{ minWidth: 150 }}>
                       Full Name
                     </StyledTableCell>
@@ -280,42 +310,17 @@ const Dashboard = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <StyledTableRow>
-                    {/* <StyledTableCell>
-                      <input type="checkbox" className="outline-none w-5 h-5" />
-                    </StyledTableCell> */}
-                    <StyledTableCell>Olim Yuldoshev</StyledTableCell>
-                    <StyledTableCell>+992919697875</StyledTableCell>
-                    <StyledTableCell>Volunteer</StyledTableCell>
-                    <StyledTableCell>Cashflow Quadrant</StyledTableCell>
-                    <StyledTableCell>2026-02-24</StyledTableCell>
-                    <StyledTableCell>2024-03-24</StyledTableCell>
-                    <StyledTableCell>30 days left</StyledTableCell>
-                  </StyledTableRow>
-                  <StyledTableRow>
-                    {/* <StyledTableCell>
-                      <input type="checkbox" className="outline-none w-5 h-5" />
-                    </StyledTableCell> */}
-                    <StyledTableCell>Olim Yuldoshev</StyledTableCell>
-                    <StyledTableCell>+992919697875</StyledTableCell>
-                    <StyledTableCell>Volunteer</StyledTableCell>
-                    <StyledTableCell>Cashflow Quadrant</StyledTableCell>
-                    <StyledTableCell>2026-02-24</StyledTableCell>
-                    <StyledTableCell>2024-03-24</StyledTableCell>
-                    <StyledTableCell>30 days left</StyledTableCell>
-                  </StyledTableRow>
-                  <StyledTableRow>
-                    {/* <StyledTableCell>
-                      <input type="checkbox" className="outline-none w-5 h-5" />
-                    </StyledTableCell> */}
-                    <StyledTableCell>John Doe</StyledTableCell>
-                    <StyledTableCell>+992919697876</StyledTableCell>
-                    <StyledTableCell>Student</StyledTableCell>
-                    <StyledTableCell>Rich Dad Poor Dad</StyledTableCell>
-                    <StyledTableCell>2026-02-20</StyledTableCell>
-                    <StyledTableCell>2024-03-20</StyledTableCell>
-                    <StyledTableCell>25 days left</StyledTableCell>
-                  </StyledTableRow>
+                  {overdueBorrowersData.map((borrower:any) => (
+                    <StyledTableRow key={borrower.id}>
+                      <StyledTableCell>{borrower.fullName}</StyledTableCell>
+                      <StyledTableCell>{borrower.phoneNumber}</StyledTableCell>
+                      <StyledTableCell>{borrower.role}</StyledTableCell>
+                      <StyledTableCell>{borrower.bookTitle}</StyledTableCell>
+                      <StyledTableCell>{borrower.borrowDate}</StyledTableCell>
+                      <StyledTableCell>{borrower.dueDate}</StyledTableCell>
+                      <StyledTableCell>{borrower.daysOverdue}</StyledTableCell>
+                    </StyledTableRow>
+                  ))}
                 </TableBody>
               </Table>
             </TableContainer>
