@@ -196,6 +196,12 @@ const SignIn = () => {
                 Sign In
               </button>
             </Link>
+            <p className="text-center text-[#8E8E8E] text-[18px] font-400 mt-4">
+              Don't have an account?{" "}
+              <Link to={"/sign-up"} className="text-[#3A65FF] hover:underline">
+                Sign up
+              </Link>
+            </p>
           </form>
         </div>
       </div>

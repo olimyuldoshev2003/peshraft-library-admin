@@ -13,12 +13,17 @@ import EditBook from "./pages/editBook/EditBook";
 import ReceivedMembers from "./pages/receivedMembers/ReceivedMembers";
 import ReceiveBookRequests from "./pages/receiveBookRequests/ReceiveBookRequests";
 import ReturnBookRequests from "./pages/returnBookRequests/ReturnBookRequests";
+import SignUp from "./pages/signUp/SignUp";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <SignIn />,
+    },
+    {
+      path: "/sign-up",
+      element: <SignUp />,
     },
     {
       path: "/dashboard",
@@ -75,8 +80,8 @@ function App() {
     },
     {
       path: "*",
-      element: <NotFound/>
-    }
+      element: <NotFound />,
+    },
   ]);
 
   return (
