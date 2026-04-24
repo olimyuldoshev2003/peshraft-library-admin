@@ -369,7 +369,7 @@ const SignUp = () => {
   return (
     <>
       <div className="sign_up_component flex">
-        <div className="sign_up_block_1 h-screen flex justify-center items-center w-full sm:flex-col md:flex-row pt-6">
+        <div className="sign_up_block_1 h-screen flex justify-center items-center w-full sm:flex-col md:flex-row sm:pt-30 md:pt-6">
           <form onSubmit={handleSubmit} className="form_sign_up px-4">
             <div className="block_logo_and_title_sign_up_component flex flex-col justify-center items-center">
               <div className="logo_block sm:flex md:hidden items-center gap-1">
