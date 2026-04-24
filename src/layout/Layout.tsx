@@ -120,7 +120,7 @@ const Layout = () => {
       >
         <li className="navigations_list_item flex items-center gap-2.5">
           <item.icon className="text-white text-[22px]" />
-          <span className="navigations_name text-white text-[22px] font-500 outline-none">
+          <span className="navigations_name text-white text-[20px] font-500 outline-none">
             {item.label}
           </span>
         </li>
