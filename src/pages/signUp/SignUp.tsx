@@ -295,7 +295,7 @@ const SignUp = () => {
   const formattedPhone = (errors as any)._formattedPhone;
 
   // Determine if error should be shown for a field
-  const shouldShowError:any = (fieldName: keyof typeof touched) => {
+  const shouldShowError: any = (fieldName: keyof typeof touched) => {
     return (touched[fieldName] || attemptedSubmit) && errors[fieldName];
   };
 
@@ -369,8 +369,8 @@ const SignUp = () => {
   return (
     <>
       <div className="sign_up_component flex">
-        <div className="sign_up_block_1 h-screen flex justify-center items-center w-full sm:flex-col md:flex-row sm:pt-30 md:pt-6">
-          <form onSubmit={handleSubmit} className="form_sign_up px-4">
+        <div className="sign_up_block_1 h-screen flex md:justify-center w-full sm:flex-col md:flex-row mt-3 mb-11">
+          <form onSubmit={handleSubmit} className="form_sign_up px-4 pb-9">
             <div className="block_logo_and_title_sign_up_component flex flex-col justify-center items-center">
               <div className="logo_block sm:flex md:hidden items-center gap-1">
                 <img src={logoSignIn} alt="Logo" className="w-23 h-23" />
@@ -614,7 +614,7 @@ const SignUp = () => {
             </p>
           </form>
         </div>
-        <div className="sign_up_block_2 w-1/2 h-screen sm:hidden md:block">
+        <div className="sign_up_block_2 w-1/2 h-screen sm:hidden md:block sticky top-0">
           <Swiper
             autoplay={{
               delay: 2500,
