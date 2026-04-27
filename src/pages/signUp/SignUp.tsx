@@ -346,7 +346,7 @@ const SignUp = () => {
     if (!hasErrors) {
       // All validations passed - proceed with sign up
       console.log("Form submitted successfully!");
-      navigate("/dashboard");
+      navigate("/");
     }
   };
 
@@ -391,8 +391,8 @@ const SignUp = () => {
                 Sign Up
               </h1>
             </div>
-            <div className="label_input_email_password_sign_up mt-2 flex flex-col gap-5">
-              <div className="form_sign_up_block_1_email">
+            <div className="labels_and_inputs_sign_up mt-2 flex flex-col gap-5">
+              <div className="form_sign_up_block_1_fullname">
                 <label
                   htmlFor="fullname"
                   className="label_email text-[#9794AA] text-[16px] font-500 cursor-pointer"
@@ -419,7 +419,7 @@ const SignUp = () => {
               <div className="form_sign_up_block_2_date_of_birth">
                 <label
                   htmlFor="dateOfBirth"
-                  className="label_email text-[#9794AA] text-[16px] font-500 cursor-pointer"
+                  className="label_date_of_birth text-[#9794AA] text-[16px] font-500 cursor-pointer"
                 >
                   Date of Birth
                 </label>
@@ -439,15 +439,15 @@ const SignUp = () => {
                     marginTop: 1,
                   }}
                   type="date"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
+                  // InputLabelProps={{
+                  //   shrink: true,
+                  // }}
                 />
               </div>
               <div className="form_sign_up_block_3_phone_number">
                 <label
                   htmlFor="phoneNumber"
-                  className="label_email text-[#9794AA] text-[16px] font-500 cursor-pointer"
+                  className="label_phone_number text-[#9794AA] text-[16px] font-500 cursor-pointer"
                 >
                   Phone Number
                 </label>
@@ -553,7 +553,7 @@ const SignUp = () => {
               <div className="form_sign_up_block_6_confirm_password">
                 <label
                   htmlFor="confirm_password"
-                  className="label_password text-[#9794AA] text-[16px] font-500 cursor-pointer"
+                  className="label_confirm_password text-[#9794AA] text-[16px] font-500 cursor-pointer"
                 >
                   Confirm Password
                 </label>
