@@ -148,11 +148,20 @@ const getFieldErrors = (
 ): Record<string, string> => {
   const errors: Record<string, string> = {};
 
-  // Full Name validation
+  // Full Name validation - must be 2 or more words
   if (!fullName.trim()) {
     errors.fullName = "Full name is required";
-  } else if (fullName.trim().length < 3) {
-    errors.fullName = "Full name must be at least 3 characters";
+  } else {
+    const trimmedName = fullName.trim();
+    const words = trimmedName.split(/\s+/).filter((word) => word.length > 0);
+
+    if (words.length < 2) {
+      errors.fullName = "Please enter your full name (first and last name)";
+    } else if (words.length < 2 || !words[0] || !words[1]) {
+      errors.fullName = "Please enter both first name and last name";
+    } else if (trimmedName.length < 3) {
+      errors.fullName = "Full name must be at least 3 characters";
+    }
   }
 
   // Date of Birth validation (must be at least 13 years old)
@@ -392,7 +401,7 @@ const SignUp = () => {
                 </label>
                 <TextField
                   id="fullname"
-                  label="Enter your full name"
+                  label="Enter your full name (first and last name)"
                   variant="outlined"
                   fullWidth
                   value={fullName}
