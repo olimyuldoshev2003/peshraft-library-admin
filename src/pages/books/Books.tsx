@@ -454,7 +454,7 @@ const Books = () => {
 
   return (
     <>
-      <div className="books_component p-4">
+      <div className="books_component p-4 max-w-360 mx-auto">
         <div className="header_books flex justify-between items-center gap-6">
           <div className="search_logo_and_search_input relative flex items-center flex-1 gap-4">
             <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />

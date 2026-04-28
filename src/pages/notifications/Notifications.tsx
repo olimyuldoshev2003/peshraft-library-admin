@@ -39,8 +39,8 @@ const Notifications = () => {
 
   return (
     <>
-      <div className="notifications_component p-4">
-        <div className="notifications_component_block">
+      <div className="notifications_component">
+        <div className="notifications_component_block p-4 max-w-360 mx-auto">
           <div className="header_notifications_component flex justify-between items-center gap-6">
             <div className="search_logo_and_search_input relative flex-1">
               <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />

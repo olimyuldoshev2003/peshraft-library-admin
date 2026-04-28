@@ -294,7 +294,7 @@ const Members = () => {
   return (
     <>
       <div className="members_component">
-        <div className="members_component_block p-4">
+        <div className="members_component_block p-4 max-w-360 mx-auto">
           <div className="header_member_component flex justify-between items-center gap-6">
             <div className="search_logo_and_search_input relative flex-1">
               <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />

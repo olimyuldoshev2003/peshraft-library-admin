@@ -296,7 +296,7 @@ const ReturnBookRequests = () => {
   return (
     <>
       <div className="return_book_request_component">
-        <div className="return_book_request_component_block px-4 py-4">
+        <div className="return_book_request_component_block px-4 py-4 max-w-360 mx-auto">
           <div className="header_return_book_requests flex justify-between items-center gap-6">
             <div className="search_logo_and_search_input relative flex-1">
               <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />

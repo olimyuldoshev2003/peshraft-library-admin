@@ -439,9 +439,9 @@ const SignUp = () => {
                     marginTop: 1,
                   }}
                   type="date"
-                  // InputLabelProps={{
-                  //   shrink: true,
-                  // }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
               </div>
               <div className="form_sign_up_block_3_phone_number">

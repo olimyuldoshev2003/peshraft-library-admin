@@ -159,7 +159,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <div className="dashboard_component p-4">
+      <div className="dashboard_component p-4 max-w-360 mx-auto">
         <div className="header_dashboard_admin flex justify-between items-center">
           <div className="search_logo_and_search_input relative flex-1">
             <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />
@@ -310,7 +310,7 @@ const Dashboard = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {overdueBorrowersData.map((borrower:any) => (
+                  {overdueBorrowersData.map((borrower: any) => (
                     <StyledTableRow key={borrower.id}>
                       <StyledTableCell>{borrower.fullName}</StyledTableCell>
                       <StyledTableCell>{borrower.phoneNumber}</StyledTableCell>

@@ -391,7 +391,7 @@ const ReceivedMembers = () => {
   return (
     <>
       <div className="borrowed_books_component">
-        <div className="borrowed_books_component_block p-4">
+        <div className="borrowed_books_component_block p-4 max-w-360 mx-auto">
           <div className="header_borrowed_books flex justify-between items-center gap-6">
             <div className="search_logo_and_search_input relative flex items-center flex-1 gap-4">
               <HiOutlineSearch size={24} className="absolute top-2.5 left-3" />
