@@ -569,9 +569,11 @@ const Profile = () => {
                     fontSize: 15,
                   }}
                 >
-                  {"Is this person really user of admin side of peshraft library?"}
+                  {
+                    "Is this person really user of admin side of peshraft library?"
+                  }
                 </DialogTitle>
-                <div className="block_btns flex gap-2 justify-between sm:flex-col md:flex-row">
+                <div className="block_btns flex gap-2 justify-between sm:flex-col-reverse md:flex-row">
                   <button
                     className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full duration-300"
                     onClick={() => {
