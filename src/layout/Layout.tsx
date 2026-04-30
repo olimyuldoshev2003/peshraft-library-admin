@@ -114,7 +114,7 @@ const Layout = () => {
         key={item.id}
         className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${
           isActivePath(item.path, item.exact) && "border-b-3"
-        } transition-all duration-300`}
+        } transition-all duration-200`}
         onClick={handleClick}
         to={item.path}
       >
