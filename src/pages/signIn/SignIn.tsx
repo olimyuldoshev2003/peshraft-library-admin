@@ -1,9 +1,10 @@
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import React, { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
+import axios from "axios";
 
 import slideImg1 from "../../assets/signIn/slide-img-1.svg";
 import slideImg2 from "../../assets/signIn/slide-img-2.svg";
@@ -28,26 +29,9 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { Link } from "react-router-dom";
+// import { saveToken } from "../../utils/token";
 
 const SignIn = () => {
-  const [isShowPassword, setIsShowPassword] = useState(false);
-
-  const handleClickPassword = () => {
-    setIsShowPassword(!isShowPassword);
-  };
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-  };
-
-  const handleMouseUpPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-  };
-
   // Array of slide data
   const slidesData = [
     {
@@ -72,6 +56,54 @@ const SignIn = () => {
         "All the features and improvements of the program are in your hands and you can use them actively.",
     },
   ];
+
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [emailInpValue, setEmailInpValue] = useState<string>("");
+  const [passwordInpValue, setPasswordInpValue] = useState<string>("");
+
+  const handleClickPassword = () => {
+    setIsShowPassword(!isShowPassword);
+  };
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.preventDefault();
+  };
+
+  function handleSignIn(event: React.ChangeEvent<HTMLFormElement>) {
+    event.preventDefault();
+    signInToAccount();
+  }
+
+  async function signInToAccount() {
+    try {
+      const trimmedUserData = {
+        email: emailInpValue.trim(),
+        password: passwordInpValue.trim(),
+      };
+
+      const response = await axios.post(
+        "https://melodious-friendship-production-e718.up.railway.app/auth/login",
+        {
+          email: trimmedUserData.email,
+          password: trimmedUserData.password,
+        },
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        console.log(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <>
@@ -119,7 +151,7 @@ const SignIn = () => {
           </Swiper>
         </div>
         <div className="sign_in_block_2 h-screen flex justify-center items-center w-full sm:flex-col md:flex-row">
-          <form action="" className="form_sign_in px-4">
+          <form action="" className="form_sign_in px-4" onSubmit={handleSignIn}>
             <div className="block_logo_and_title_sign_in_component flex flex-col justify-center items-center">
               <div className="logo_block sm:flex md:hidden items-center gap-1">
                 <img src={logoSignIn} alt="Logo" className="w-23 h-23" />
@@ -146,6 +178,15 @@ const SignIn = () => {
                   fullWidth
                   sx={{
                     marginTop: 1,
+                  }}
+                  value={emailInpValue}
+                  onChange={(
+                    event: React.ChangeEvent<
+                      HTMLInputElement | HTMLTextAreaElement,
+                      Element
+                    >,
+                  ) => {
+                    setEmailInpValue(event.target.value);
                   }}
                 />
               </div>
@@ -184,18 +225,27 @@ const SignIn = () => {
                       </InputAdornment>
                     }
                     label="Password"
+                    value={passwordInpValue}
+                    onChange={(
+                      event: React.ChangeEvent<
+                        HTMLInputElement | HTMLTextAreaElement,
+                        Element
+                      >,
+                    ) => {
+                      setPasswordInpValue(event.target.value);
+                    }}
                   />
                 </FormControl>
               </div>
             </div>
-            <Link to={"/dashboard"}>
-              <button
-                type="submit"
-                className="bg-[#7A5AF8] w-full mt-6 py-2 rounded-lg cursor-pointer text-white text-[20px] font-500 hover:bg-[#7A5AF8]/90 transition-colors duration-300"
-              >
-                Sign In
-              </button>
-            </Link>
+            {/* <Link to={"/dashboard"}> */}
+            <button
+              type="submit"
+              className="bg-[#7A5AF8] w-full mt-6 py-2 rounded-lg cursor-pointer text-white text-[20px] font-500 hover:bg-[#7A5AF8]/90 transition-colors duration-300"
+            >
+              Sign In
+            </button>
+            {/* </Link> */}
             <p className="text-center text-[#8E8E8E] text-[18px] font-400 mt-4">
               Don't have an account?{" "}
               <Link to={"/sign-up"} className="text-[#3A65FF] hover:underline">
