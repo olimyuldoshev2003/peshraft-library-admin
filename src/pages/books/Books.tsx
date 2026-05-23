@@ -71,6 +71,7 @@ const Books = () => {
 
   // Books
   const [books, setBooks] = useState<any>([]);
+  const [searchInpValue, setSearchInpValue] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   // Table
@@ -419,14 +420,14 @@ const Books = () => {
   // };
 
   const handleChangePage = (_: unknown, newPage: number) => {
-    setPage(newPage);
+    setPage(newPage + 1);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    // setPage(0);
   };
 
   // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -485,7 +486,7 @@ const Books = () => {
     try {
       setLoading(true);
       const { data } = await axiosRequest.get(
-        `${import.meta.env.VITE_API_URL}/books`,
+        `${import.meta.env.VITE_API_URL}/books/search?title=${searchInpValue}&author=${searchInpValue}&page=${page + 1}&page_size=${rowsPerPage}`,
       );
 
       setBooks(data.data);
@@ -498,7 +499,7 @@ const Books = () => {
 
   useEffect(() => {
     getBooks();
-  }, []);
+  }, [searchInpValue, page, rowsPerPage]);
 
   return (
     <>
@@ -510,6 +511,12 @@ const Books = () => {
               type="search"
               className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-2 rounded-[30px] text-[18px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
               placeholder="Search enter..."
+              value={searchInpValue}
+              onChange={(
+                event: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
+              ) => {
+                setSearchInpValue(event.target.value);
+              }}
             />
             <div className="btn_filter_and_modal_filter_overlay_transparent_block md:relative flex flex-col">
               <button
@@ -1137,7 +1144,7 @@ const Books = () => {
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
       >
-        <CircularProgress color="primary" />
+        <CircularProgress color="inherit" />
       </Backdrop>
     </>
   );
