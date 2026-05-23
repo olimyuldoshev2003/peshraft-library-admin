@@ -8,7 +8,7 @@ import { LuPlus } from "react-icons/lu";
 // import InputLabel from "@mui/material/InputLabel";
 // import Select from "@mui/material/Select";
 // import MenuItem from "@mui/material/MenuItem";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 //Material UI
 import {
@@ -37,6 +37,8 @@ import DialogActions from "@mui/material/DialogActions";
 import { MdDelete, MdOutlineClose } from "react-icons/md";
 import { Link } from "react-router-dom";
 import TextField from "@mui/material/TextField";
+// import axios from "axios";
+import { axiosRequest } from "../../utils/axiosRequest";
 // import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Books = () => {
@@ -66,6 +68,9 @@ const Books = () => {
   const [modalFilterAdd, setModalFilterAdd] = useState<boolean>(false);
   const [modalFilterEdit, setModalFilterEdit] = useState<boolean>(false);
   const [modalFilterDelete, setModalFilterDelete] = useState<boolean>(false);
+
+  // Books
+  // const [books, setBooks] = useState<any>([]);
 
   // Table
   // interface Data {
@@ -451,6 +456,19 @@ const Books = () => {
       border: 0,
     },
   }));
+
+  async function getBooks() {
+    try {
+      // const { data } = await axiosRequest.get(`${import.meta.env.VITE_API_URL}/books`);
+      // setBooks(data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getBooks();
+  }, []);
 
   return (
     <>
