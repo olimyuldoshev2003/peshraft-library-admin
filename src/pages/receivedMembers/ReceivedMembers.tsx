@@ -29,127 +29,18 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-// import { IoClose } from "react-icons/io5";
-// import { AiFillEdit } from "react-icons/ai";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
-// import DialogActions from "@mui/material/DialogActions";
-import { MdOutlineClose } from "react-icons/md";
+import { MdDelete, MdOutlineClose } from "react-icons/md";
 
 const ReceivedMembers = () => {
-  // const allFiltersByCategory: any = [
-  //   {
-  //     id: "fantasy",
-  //     filterName: "Fantasy",
-  //   },
-  //   {
-  //     id: "best-book",
-  //     filterName: "Best Book",
-  //   },
-  //   {
-  //     id: "classics",
-  //     filterName: "Classics",
-  //   },
-  //   {
-  //     id: "romance",
-  //     filterName: "Romance",
-  //   },
-  //   {
-  //     id: "science-fiction",
-  //     filterName: "Science Fiction",
-  //   },
-  //   {
-  //     id: "mystery",
-  //     filterName: "Mystery",
-  //   },
-  //   {
-  //     id: "historycal-fiction",
-  //     filterName: "Historical Fiction",
-  //   },
-  //   {
-  //     id: "finance",
-  //     filterName: "Finance",
-  //   },
-  // ];
-
-  // const filtersByCategory: any = [
-  //   {
-  //     id: "fantasy",
-  //     filterName: "Fantasy",
-  //   },
-  //   {
-  //     id: "best-book",
-  //     filterName: "Best Book",
-  //   },
-  //   {
-  //     id: "classics",
-  //     filterName: "Classics",
-  //   },
-  //   {
-  //     id: "romance",
-  //     filterName: "Romance",
-  //   },
-  //   {
-  //     id: "science-fiction",
-  //     filterName: "Science Fiction",
-  //   },
-  //   {
-  //     id: "mystery",
-  //     filterName: "Mystery",
-  //   },
-  //   {
-  //     id: "historycal-fiction",
-  //     filterName: "Historical Fiction",
-  //   },
-  // ];
-
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<any>("bookTitle");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   // const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState<number>(17);
-  // const [modalFilter, setModalFilter] = useState<boolean>(false);
-  // const [modalShowAllFilters, setModalShowAllFilters] =
-  //   useState<boolean>(false);
-  // const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
   const [modalDeleteReceivedUser, setModalDeleteReceivedUser] = useState(false);
-
-  // function removeScrollbar() {
-  //   document.body.classList.add("scroll_hidden_modal_filter_without_overlay");
-  //   document.body.classList.remove(
-  //     "scroll_visible_modal_filter_without_overlay",
-  //   );
-  // }
-
-  // function showScrollbar() {
-  //   document.body.classList.add("scroll_visible_modal_filter_without_overlay");
-  //   document.body.classList.remove(
-  //     "scroll_hidden_modal_filter_without_overlay",
-  //   );
-  // }
-
-  //For Table
-  // const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  //   [`&.${tableCellClasses.head}`]: {
-  //     backgroundColor: theme.palette.common.black,
-  //     color: theme.palette.common.white,
-  //     whiteSpace: "nowrap",
-  //   },
-  //   [`&.${tableCellClasses.body}`]: {
-  //     fontSize: 14,
-  //     whiteSpace: "nowrap",
-  //   },
-  // }));
-
-  // const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  //   "&:nth-of-type(odd)": {
-  //     backgroundColor: theme.palette.action.hover,
-  //   },
-  //   "&:last-child td, &:last-child th": {
-  //     border: 0,
-  //   },
-  // }));
 
   // Table Section
   const rows: any = [
@@ -159,6 +50,7 @@ const ReceivedMembers = () => {
       borrowerName: "Olim Yuldoshev",
       dateBorrowed: "2025-11-19",
       dueDate: "2026-11-11",
+      status: "Danger",
       phoneNumber: "919697875",
       bookTitle: "Cashflow Quadrant",
       author: "Robert T. Kiyosaki",
@@ -215,6 +107,12 @@ const ReceivedMembers = () => {
       label: "Due Date",
     },
     {
+      id: "status",
+      numeric: false,
+      disablePadding: false,
+      label: "Status",
+    },
+    {
       id: "phone-number",
       numeric: false,
       disablePadding: false,
@@ -232,12 +130,12 @@ const ReceivedMembers = () => {
       disablePadding: true,
       label: "Author",
     },
-    // {
-    //   id: "action",
-    //   numeric: false,
-    //   disablePadding: false,
-    //   label: "Action",
-    // },
+    {
+      id: "action",
+      numeric: false,
+      disablePadding: false,
+      label: "Action",
+    },
   ];
 
   interface EnhancedTableProps {
@@ -456,6 +354,7 @@ const ReceivedMembers = () => {
                             <TableCell>{row.borrowerName}</TableCell>
                             <TableCell>{row.dateBorrowed}</TableCell>
                             <TableCell>{row.dueDate}</TableCell>
+                            <TableCell>{row.status}</TableCell>
                             <TableCell>{row.phoneNumber}</TableCell>
                             <TableCell
                               component="th"
@@ -467,7 +366,7 @@ const ReceivedMembers = () => {
                             </TableCell>
                             <TableCell>{row.author}</TableCell>
 
-                            {/* <TableCell>
+                            <TableCell>
                               <div className="btn_func_block flex items-center gap-1.5">
                                 <MdDelete
                                   size={27}
@@ -477,7 +376,7 @@ const ReceivedMembers = () => {
                                   className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
                                 />
                               </div>
-                            </TableCell> */}
+                            </TableCell>
                           </TableRow>
                         );
                       })}
@@ -501,14 +400,6 @@ const ReceivedMembers = () => {
               </Paper>
             </div>
           </div>
-
-          {/* <div
-            className={`transpartent_overlay_modal_filter absolute inset-0 ${modalFilter ? "pointer-events-auto" : "pointer-events-none"}`}
-            onClick={() => {
-              setModalFilter(false);
-              showScrollbar();
-            }}
-          ></div> */}
 
           <Dialog
             open={modalDeleteReceivedUser}

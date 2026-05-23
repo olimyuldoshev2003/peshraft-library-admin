@@ -4,10 +4,6 @@ import userImg from "../../assets/user-img.svg";
 // Icons
 import TuneIcon from "@mui/icons-material/Tune";
 import { LuPlus } from "react-icons/lu";
-// import FormControl from "@mui/material/FormControl";
-// import InputLabel from "@mui/material/InputLabel";
-// import Select from "@mui/material/Select";
-// import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useMemo, useState } from "react";
 
 //Material UI
@@ -35,8 +31,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import { MdDelete, MdOutlineClose } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
+import CircularProgress from "@mui/material/CircularProgress";
+import Backdrop from "@mui/material/Backdrop";
 // import axios from "axios";
 import { axiosRequest } from "../../utils/axiosRequest";
 // import useMediaQuery from "@mui/material/useMediaQuery";
@@ -45,9 +43,11 @@ const Books = () => {
   // const theme = useTheme();
   // const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
+  const navigate = useNavigate();
+
   // const [limitPerPage, setLimitPerPage] = useState<number>(17);
   const [order, setOrder] = useState<Order>("asc");
-  const [orderBy, setOrderBy] = useState<any>("bookTitle");
+  const [orderBy, setOrderBy] = useState<any>("title");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
   // const [dense, setDense] = useState(false);
@@ -70,7 +70,8 @@ const Books = () => {
   const [modalFilterDelete, setModalFilterDelete] = useState<boolean>(false);
 
   // Books
-  // const [books, setBooks] = useState<any>([]);
+  const [books, setBooks] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   // Table
   // interface Data {
@@ -192,23 +193,28 @@ const Books = () => {
   //   },
   // ];
 
-  const rows: any = [
-    {
-      id: 1,
-      img: "/src/assets/signIn/logo-pehraft-sign-in.svg",
-      bookTitle: "Cashflow Quadrant",
-      author: "Robert Kiyosaki",
-      category: "Finance",
-      bookPage: 256,
-      status: "Available",
-    },
-  ];
-
   function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-    if (b[orderBy] < a[orderBy]) {
+    let aValue = a[orderBy];
+    let bValue = b[orderBy];
+
+    // Handle string comparisons (case insensitive)
+    if (typeof aValue === "string" && typeof bValue === "string") {
+      aValue = aValue.toLowerCase() as any;
+      bValue = bValue.toLowerCase() as any;
+    }
+
+    // Handle number comparisons
+    if (typeof aValue === "number" && typeof bValue === "number") {
+      if (bValue < aValue) return -1;
+      if (bValue > aValue) return 1;
+      return 0;
+    }
+
+    // Default comparison
+    if (bValue < aValue) {
       return -1;
     }
-    if (b[orderBy] > a[orderBy]) {
+    if (bValue > aValue) {
       return 1;
     }
     return 0;
@@ -230,46 +236,60 @@ const Books = () => {
 
   const headCells: any = [
     {
-      id: "img",
+      id: "image_url",
       numeric: false,
       disablePadding: true,
       label: "Image",
+      sortable: false,
     },
     {
-      id: "bookTitle",
+      id: "title",
       numeric: false,
       disablePadding: true,
       label: "Book Title",
+      sortable: true,
     },
     {
       id: "author",
       numeric: false,
       disablePadding: false,
       label: "Author",
+      sortable: true,
     },
     {
       id: "category",
       numeric: false,
       disablePadding: false,
       label: "Category",
+      sortable: true,
     },
     {
       id: "bookPage",
       numeric: true,
       disablePadding: false,
       label: "Book Page",
+      sortable: true,
     },
     {
-      id: "status",
+      id: "year",
       numeric: false,
       disablePadding: false,
-      label: "Status",
+      label: "Year",
+      sortable: true,
+    },
+    {
+      id: "available_copies",
+      numeric: false,
+      disablePadding: false,
+      label: "Available Copies",
+      sortable: true,
     },
     {
       id: "action",
       numeric: false,
       disablePadding: false,
       label: "Action",
+      sortable: false,
     },
   ];
 
@@ -306,20 +326,24 @@ const Books = () => {
               padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
             >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
+              {headCell.sortable !== false ? (
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : "asc"}
+                  onClick={createSortHandler(headCell.id)}
+                >
+                  {headCell.label}
+                  {orderBy === headCell.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              ) : (
+                headCell.label
+              )}
             </TableCell>
           ))}
         </TableRow>
@@ -368,7 +392,7 @@ const Books = () => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n: any) => n.id);
+      const newSelected = books.map((n: any) => n.id);
       setSelected(newSelected);
       return;
     }
@@ -411,14 +435,14 @@ const Books = () => {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - books.length) : 0;
 
   const visibleRows = useMemo(
     () =>
-      [...rows]
+      [...books]
         .sort(getComparator(order, orderBy))
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage],
+    [order, orderBy, page, rowsPerPage, books],
   );
 
   function removeScrollbar() {
@@ -459,10 +483,16 @@ const Books = () => {
 
   async function getBooks() {
     try {
-      // const { data } = await axiosRequest.get(`${import.meta.env.VITE_API_URL}/books`);
-      // setBooks(data.data);
+      setLoading(true);
+      const { data } = await axiosRequest.get(
+        `${import.meta.env.VITE_API_URL}/books`,
+      );
+
+      setBooks(data.data);
+      setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
     }
   }
 
@@ -481,7 +511,6 @@ const Books = () => {
               className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-2 rounded-[30px] text-[18px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
               placeholder="Search enter..."
             />
-
             <div className="btn_filter_and_modal_filter_overlay_transparent_block md:relative flex flex-col">
               <button
                 className="icons_filter_block shadow-[0_0_6px_gray] flex justify-center items-center p-2 rounded-[10px] cursor-pointer"
@@ -773,12 +802,17 @@ const Books = () => {
               Manage Books
             </h1>
             <div className="filter_and_btn_add_block flex justify-between items-center gap-6">
-              <Link to={"/dashboard/add-book"}>
-                <button className="flex items-center gap-2 bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer">
-                  <LuPlus />
-                  <span className="sm:hidden md:block">Add new book</span>
-                </button>
-              </Link>
+              {/* <Link to={"/dashboard/add-book"}> */}
+              <button
+                className="flex items-center gap-2 bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer"
+                onClick={() => {
+                  navigate("/dashboard/add-book");
+                }}
+              >
+                <LuPlus />
+                <span className="sm:hidden md:block">Add new book</span>
+              </button>
+              {/* </Link> */}
             </div>
           </div>
 
@@ -789,6 +823,7 @@ const Books = () => {
                 // mb: 2,
                 paddingLeft: 3,
                 paddingRight: 3,
+                position: "relative",
               }}
             >
               <EnhancedTableToolbar numSelected={selected.length} />
@@ -804,11 +839,10 @@ const Books = () => {
                     orderBy={orderBy}
                     onSelectAllClick={handleSelectAllClick}
                     onRequestSort={handleRequestSort}
-                    rowCount={rows.length}
+                    rowCount={books.length}
                   />
                   <TableBody>
-                    {visibleRows.map((row, index) => {
-                      // const isItemSelected = selected.includes(row.id);
+                    {visibleRows.map((book: any, index: number) => {
                       const labelId = `enhanced-table-checkbox-${index}`;
 
                       return (
@@ -816,11 +850,11 @@ const Books = () => {
                           hover
                           role="checkbox"
                           tabIndex={-1}
-                          key={row.id}
+                          key={book.id}
                         >
                           <TableCell>
                             <img
-                              src={row.img}
+                              src={book.image_url}
                               className="w-10 h-10 rounded-full"
                               alt="Book cover"
                             />
@@ -831,12 +865,13 @@ const Books = () => {
                             scope="row"
                             padding="none"
                           >
-                            {row.bookTitle}
+                            {book.title}
                           </TableCell>
-                          <TableCell>{row.author}</TableCell>
-                          <TableCell>{row.category}</TableCell>
-                          <TableCell>{row.bookPage}</TableCell>
-                          <TableCell>{row.status}</TableCell>
+                          <TableCell>{book.author}</TableCell>
+                          <TableCell>{book.category}</TableCell>
+                          <TableCell>{book.bookPage}</TableCell>
+                          <TableCell>{book.year}</TableCell>
+                          <TableCell>{book.available_copies}</TableCell>
                           <TableCell>
                             <div className="btn_func_block flex items-center gap-1.5">
                               <Link to={"/dashboard/edit-book"}>
@@ -863,7 +898,7 @@ const Books = () => {
                     })}
                     {emptyRows > 0 && (
                       <TableRow>
-                        <TableCell colSpan={6} />
+                        <TableCell colSpan={8} />
                       </TableRow>
                     )}
                   </TableBody>
@@ -872,7 +907,7 @@ const Books = () => {
               <TablePagination
                 rowsPerPageOptions={[17, 10, 8, 5]}
                 component="div"
-                count={rows.length}
+                count={books.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
@@ -1096,6 +1131,14 @@ const Books = () => {
           </div>
         </Dialog>
       </div>
+
+      {/* Loading Backdrop */}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="primary" />
+      </Backdrop>
     </>
   );
 };
