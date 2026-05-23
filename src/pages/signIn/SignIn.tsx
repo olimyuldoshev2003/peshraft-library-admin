@@ -102,9 +102,7 @@ const SignIn = () => {
       newErrors.email = "Email is required";
       isValid = false;
     } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-        emailInpValue.trim(),
-      )
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(emailInpValue.trim())
     ) {
       newErrors.email = "Invalid email address";
       isValid = false;
@@ -115,16 +113,10 @@ const SignIn = () => {
       newErrors.password = "Password is required";
       isValid = false;
     } else if (passwordInpValue.trim().length < 8) {
-      newErrors.password =
-        "Password must be at least 8 characters";
+      newErrors.password = "Password must be at least 8 characters";
       isValid = false;
-    } else if (
-      !/(?=.*[a-z])(?=.*\d)/.test(
-        passwordInpValue.trim(),
-      )
-    ) {
-      newErrors.password =
-        "Password must contain lowercase and number";
+    } else if (!/(?=.*[a-z])(?=.*\d)/.test(passwordInpValue.trim())) {
+      newErrors.password = "Password must contain lowercase and number";
       isValid = false;
     }
 
@@ -134,9 +126,7 @@ const SignIn = () => {
   }
 
   // Submit Form
-  function handleSignIn(
-    event: React.FormEvent<HTMLFormElement>,
-  ) {
+  function handleSignIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const isValid = validateForm();
@@ -166,7 +156,7 @@ const SignIn = () => {
 
         // Save token if exists
         if (response.data?.token) {
-          saveToken(response.data.token)
+          saveToken(response.data.token);
         }
 
         // Redirect
@@ -174,24 +164,19 @@ const SignIn = () => {
       }
     } catch (error: any) {
       if (error.response?.status === 401) {
-        setErrors((prev) => ({
-          ...prev,
+        setErrors({
+          email: "Invalid email or password",
           password: "Invalid email or password",
-        }));
+        });
       } else if (error.response?.status === 404) {
         setErrors((prev) => ({
           ...prev,
           email: "User not found",
         }));
       } else if (error.request) {
-        alert(
-          "Unable to connect to server. Check your internet connection.",
-        );
+        alert("Unable to connect to server. Check your internet connection.");
       } else {
-        alert(
-          error.response?.data?.message ||
-            "Something went wrong",
-        );
+        alert(error.response?.data?.message || "Something went wrong");
       }
     } finally {
       setIsLoading(false);
@@ -255,18 +240,11 @@ const SignIn = () => {
 
         {/* Right Form */}
         <div className="sign_in_block_2 h-screen flex justify-center items-center w-full sm:flex-col md:flex-row">
-          <form
-            className="form_sign_in px-4"
-            onSubmit={handleSignIn}
-          >
+          <form className="form_sign_in px-4" onSubmit={handleSignIn}>
             {/* Logo */}
             <div className="block_logo_and_title_sign_in_component flex flex-col justify-center items-center">
               <div className="logo_block sm:flex md:hidden items-center gap-1">
-                <img
-                  src={logoSignIn}
-                  alt="Logo"
-                  className="w-23 h-23"
-                />
+                <img src={logoSignIn} alt="Logo" className="w-23 h-23" />
 
                 <h1 className="text-[#7EC7EC] text-[30px] font-400">
                   Peshraft Library
@@ -334,14 +312,10 @@ const SignIn = () => {
 
                   <OutlinedInput
                     id="outlined-adornment-password"
-                    type={
-                      isShowPassword ? "text" : "password"
-                    }
+                    type={isShowPassword ? "text" : "password"}
                     value={passwordInpValue}
                     onChange={(event) => {
-                      setPasswordInpValue(
-                        event.target.value,
-                      );
+                      setPasswordInpValue(event.target.value);
 
                       if (errors.password) {
                         setErrors((prev) => ({
@@ -354,22 +328,14 @@ const SignIn = () => {
                       <InputAdornment position="end">
                         <IconButton
                           aria-label={
-                            isShowPassword
-                              ? "hide password"
-                              : "show password"
+                            isShowPassword ? "hide password" : "show password"
                           }
                           onClick={handleClickPassword}
-                          onMouseDown={
-                            handleMouseDownPassword
-                          }
+                          onMouseDown={handleMouseDownPassword}
                           onMouseUp={handleMouseUpPassword}
                           edge="end"
                         >
-                          {isShowPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
+                          {isShowPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -378,9 +344,7 @@ const SignIn = () => {
                 </FormControl>
 
                 {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.password}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{errors.password}</p>
                 )}
               </div>
             </div>
@@ -389,24 +353,19 @@ const SignIn = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full mt-6 py-2 rounded-lg text-white text-[20px] font-500 transition-colors duration-300 ${
+              className={`w-full mt-6 py-2 rounded-lg text-white text-[20px] font-500 transition-colors duration-300 cursor-pointer ${
                 isLoading
                   ? "bg-gray-400 cursor-not-allowed"
                   : "bg-[#7A5AF8] hover:bg-[#7A5AF8]/90"
               }`}
             >
-              {isLoading
-                ? "Signing In..."
-                : "Sign In"}
+              {isLoading ? "Signing In..." : "Sign In"}
             </button>
 
             {/* Sign Up */}
             <p className="text-center text-[#8E8E8E] text-[18px] font-400 mt-4">
               Don't have an account?{" "}
-              <Link
-                to={"/sign-up"}
-                className="text-[#3A65FF] hover:underline"
-              >
+              <Link to={"/sign-up"} className="text-[#3A65FF] hover:underline">
                 Sign up
               </Link>
             </p>
