@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const AuthCheck = (props: any) => {
+const AuthCheck = ({ children }: any) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
 
-  useEffect((): any => {
+  useEffect(() => {
     if (token) {
-      return navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     }
-  }, [navigate, token]);
+  }, [token, navigate]);
 
-  return props.children;
+  return children;
 };
 
 export default AuthCheck;

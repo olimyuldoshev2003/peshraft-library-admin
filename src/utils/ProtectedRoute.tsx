@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const ProtectedRoute = (props: any) => {
+const ProtectedRoute = ({ children }: any) => {
   const navigate = useNavigate();
   const token = localStorage.getItem("access_token");
 
-  useEffect((): any => {
+  useEffect(() => {
     if (!token) {
-      return navigate("/");
+      navigate("/", { replace: true });
     }
-  }, [navigate, token]);
+  }, [token, navigate]);
 
-  return props.children;
+  return children;
 };
 
 export default ProtectedRoute;
