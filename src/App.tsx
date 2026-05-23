@@ -14,67 +14,125 @@ import ReceivedMembers from "./pages/receivedMembers/ReceivedMembers";
 import ReceiveBookRequests from "./pages/receiveBookRequests/ReceiveBookRequests";
 import ReturnBookRequests from "./pages/returnBookRequests/ReturnBookRequests";
 import SignUp from "./pages/signUp/SignUp";
+import AuthCheck from "./utils/AuthCheck";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <SignIn />,
+      element: (
+        <AuthCheck>
+          <SignIn />
+        </AuthCheck>
+      ),
     },
     {
       path: "/sign-up",
-      element: <SignUp />,
+      element: (
+        <AuthCheck>
+          <SignUp />
+        </AuthCheck>
+      ),
     },
     {
       path: "/dashboard",
-      element: <Layout />,
+      element: (
+        <ProtectedRoute>
+          <Layout />
+        </ProtectedRoute>
+      ),
       children: [
         // main pages
         {
           index: true,
-          element: <Dashboard />,
+          element: (
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "books",
-          element: <Books />,
+          element: (
+            <ProtectedRoute>
+              <Books />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "members",
-          element: <Members />,
+          element: (
+            <ProtectedRoute>
+              <Members />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "received-members",
-          element: <ReceivedMembers />,
+          element: (
+            <ProtectedRoute>
+              <ReceivedMembers />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "notifications",
-          element: <Notifications />,
+          element: (
+            <ProtectedRoute>
+              <Notifications />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "profile",
-          element: <Profile />,
+          element: (
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          ),
         },
 
         // pages for functionalities
         {
           path: "add-book",
-          element: <AddBook />,
+          element: (
+            <ProtectedRoute>
+              <AddBook />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "edit-book",
-          element: <EditBook />,
+          element: (
+            <ProtectedRoute>
+              <EditBook />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "member",
-          element: <Member />,
+          element: (
+            <ProtectedRoute>
+              <Member />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "receive-book-requests",
-          element: <ReceiveBookRequests />,
+          element: (
+            <ProtectedRoute>
+              <ReceiveBookRequests />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "return-book-requests",
-          element: <ReturnBookRequests />,
+          element: (
+            <ProtectedRoute>
+              <ReturnBookRequests />
+            </ProtectedRoute>
+          ),
         },
       ],
     },
