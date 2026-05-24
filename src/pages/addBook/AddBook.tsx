@@ -228,7 +228,7 @@ const AddBook = () => {
                   </label>
                   <TextField
                     id="available-copies"
-                    label="Enter Available Copies"
+                    label="Available Copies"
                     variant="outlined"
                     type="number"
                   />

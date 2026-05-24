@@ -219,6 +219,20 @@ const EditBook = () => {
                     variant="outlined"
                   />
                 </div>
+                <div className="label_input_available_copies flex flex-col gap-2">
+                  <label
+                    htmlFor="available-copies"
+                    className="cursor-pointer text-[15px] font-500"
+                  >
+                    Available Copies
+                  </label>
+                  <TextField
+                    id="available-copies"
+                    label="Available Copies"
+                    variant="outlined"
+                    type="number"
+                  />
+                </div>
               </div>
               <div className="second_block flex flex-col gap-2 mt-4">
                 <label htmlFor="edit_book_info">Summary Book</label>
