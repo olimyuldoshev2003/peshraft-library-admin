@@ -434,9 +434,6 @@ const Books = () => {
   //   setDense(event.target.checked);
   // };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - books.length) : 0;
 
   const visibleRows = useMemo(
     () =>
@@ -488,7 +485,8 @@ const Books = () => {
       const { data } = await axiosRequest.get(
         `${import.meta.env.VITE_API_URL}/books/search?title=${searchInpValue}&author=${searchInpValue}&page=${page + 1}&page_size=${rowsPerPage}`,
       );
-
+      console.log(data);
+      
       setBooks(data.data);
       setLoading(false);
     } catch (error) {
@@ -888,7 +886,7 @@ const Books = () => {
                                   // onClick={() => {
                                   //   setModalBookInfoAndEdit(true);
                                   //   removeScrollbar()
-                                  // }}
+                                  // }}f
                                 />
                               </Link>
                               <MdDelete
@@ -903,9 +901,11 @@ const Books = () => {
                         </TableRow>
                       );
                     })}
-                    {emptyRows > 0 && (
+                    {books.length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={8} />
+                        <TableCell colSpan={8}>
+                          <h1 className="text-center">Book not found</h1>
+                        </TableCell>
                       </TableRow>
                     )}
                   </TableBody>
