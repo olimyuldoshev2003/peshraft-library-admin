@@ -18,6 +18,8 @@ import TableRow from "@mui/material/TableRow";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { styled } from "@mui/material/styles";
 import TableBody from "@mui/material/TableBody";
+import { useEffect, useState } from "react";
+import { axiosRequest } from "../../utils/axiosRequest";
 
 // Table data array
 const overdueBorrowersData = [
@@ -54,6 +56,8 @@ const overdueBorrowersData = [
 ];
 
 const Dashboard = () => {
+  const [stat, setStat] = useState<any>({});
+
   // const volunteersData = [
   //   { id: 0, value: 50, label: "Male" },
   //   { id: 1, value: 50, label: "Female" },
@@ -157,6 +161,84 @@ const Dashboard = () => {
     },
   }));
 
+  async function getStat() {
+    try {
+      const { data } = await axiosRequest.get(
+        `${import.meta.env.VITE_API_URL}/admin/stats`,
+      );
+      console.log(data);
+
+      setStat(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getStat();
+  }, []);
+
+  // Dashboard page
+  // 1. Stat
+  // get()
+  // {
+  //  total_members: 20,
+  //  total_books: 100,
+  //  active_borrows: 5,
+  //  overdue_books: 3
+  // }
+
+  // 2. Stat in month(in chart)
+  // get()
+  //  [
+  //    {
+  //      overdue: 3,
+  //      borrowed: 5,
+  //      date: "01-01-2024",
+  //      month: 1
+  //    },
+  // ...
+  //  ]
+
+  // 3. Overdue Received Members
+  // get()
+  // [
+  //   {
+  //     id: "",
+  //     name: ""
+  //   },
+  //   ...
+  // ]
+
+  // Book page
+  // 1. Filter
+  // get()
+  // [
+  //   {
+  //     id: "1",
+  //     filterName: "Finance",
+  //   },
+  //   {
+  //     id: "2",
+  //     filterName: "Fantasy",
+  //   },
+  //   {
+  //     id: "3",
+  //     filterName: "Drama",
+  //   },
+  // ];
+
+  // post() (add), put() (edit)
+  //  {
+  //   id: newId(type string),
+  //    filterName: "newFilter"
+  // }
+
+  // delete()
+  // delete filter by id
+
+  // 2. Books
+
   return (
     <>
       <div className="dashboard_component p-4 max-w-360 mx-auto">
@@ -187,7 +269,7 @@ const Dashboard = () => {
             <div className="amount_block_members bg-[#F1E7FF] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
               <div className="title_and_amount_block">
                 <h1 className="title">Members</h1>
-                <h1 className="amount">60</h1>
+                <h1 className="amount">{stat.total_members}</h1>
               </div>
               <LuUsers
                 style={{
@@ -199,7 +281,7 @@ const Dashboard = () => {
             <div className="amount_block_total_books bg-[#E4F5FF] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
               <div className="title_and_amount_block">
                 <h1 className="title">Total Books</h1>
-                <h1 className="amount">600</h1>
+                <h1 className="amount">{stat.total_books}</h1>
               </div>
               <PiBookOpen
                 style={{
@@ -211,7 +293,7 @@ const Dashboard = () => {
             <div className="amount_block_books_borrowers bg-[#EAFEEF] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
               <div className="title_and_amount_block">
                 <h1 className="title">Books Borrowers</h1>
-                <h1 className="amount">76</h1>
+                <h1 className="amount">{stat.active_borrows}</h1>
               </div>
               <SecurityUpdateGoodOutlinedIcon
                 style={{
@@ -223,7 +305,7 @@ const Dashboard = () => {
             <div className="amount_block_overdue_books bg-[#FFDADB] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
               <div className="title_and_amount_block">
                 <h1 className="title">Overdue Books</h1>
-                <h1 className="amount">60</h1>
+                <h1 className="amount">{stat.overdue_books}</h1>
               </div>
               <MdOutlineSecurityUpdateWarning
                 style={{
@@ -292,9 +374,6 @@ const Dashboard = () => {
                     <StyledTableCell sx={{ minWidth: 150 }}>
                       Phone Number
                     </StyledTableCell>
-                    <StyledTableCell sx={{ minWidth: 100 }}>
-                      Role
-                    </StyledTableCell>
                     <StyledTableCell sx={{ minWidth: 200 }}>
                       Book Title
                     </StyledTableCell>
@@ -307,6 +386,9 @@ const Dashboard = () => {
                     <StyledTableCell sx={{ minWidth: 120 }}>
                       Days Overdue
                     </StyledTableCell>
+                    <StyledTableCell sx={{ minWidth: 120 }}>
+                      Status
+                    </StyledTableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -314,11 +396,11 @@ const Dashboard = () => {
                     <StyledTableRow key={borrower.id}>
                       <StyledTableCell>{borrower.fullName}</StyledTableCell>
                       <StyledTableCell>{borrower.phoneNumber}</StyledTableCell>
-                      <StyledTableCell>{borrower.role}</StyledTableCell>
                       <StyledTableCell>{borrower.bookTitle}</StyledTableCell>
                       <StyledTableCell>{borrower.borrowDate}</StyledTableCell>
                       <StyledTableCell>{borrower.dueDate}</StyledTableCell>
                       <StyledTableCell>{borrower.daysOverdue}</StyledTableCell>
+                      <StyledTableCell>Danger</StyledTableCell>
                     </StyledTableRow>
                   ))}
                 </TableBody>
