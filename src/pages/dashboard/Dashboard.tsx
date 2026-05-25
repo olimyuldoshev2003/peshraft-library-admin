@@ -205,7 +205,12 @@ const Dashboard = () => {
   // [
   //   {
   //     id: "",
-  //     name: ""
+  //     name: "",
+  //     phone:"",
+  //     bookTitle:"",
+  //     borrowDate: "",
+  //     dueDate: "",
+  //     daysOverdue: "",
   //   },
   //   ...
   // ]
@@ -238,6 +243,7 @@ const Dashboard = () => {
   // delete filter by id
 
   // 2. Books
+  
 
   return (
     <>
