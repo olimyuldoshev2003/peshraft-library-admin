@@ -52,6 +52,7 @@ const ReceivedMembers = () => {
       dueDate: "2026-11-11",
       status: "Danger",
       phoneNumber: "919697875",
+      email: "oy39@gmail.com",
       bookTitle: "Cashflow Quadrant",
       author: "Robert T. Kiyosaki",
     },
@@ -117,6 +118,12 @@ const ReceivedMembers = () => {
       numeric: false,
       disablePadding: false,
       label: "Phone number",
+    },
+    {
+      id: "email",
+      numeric: false,
+      disablePadding: false,
+      label: "Email",
     },
     {
       id: "book-title",
@@ -356,6 +363,7 @@ const ReceivedMembers = () => {
                             <TableCell>{row.dueDate}</TableCell>
                             <TableCell>{row.status}</TableCell>
                             <TableCell>{row.phoneNumber}</TableCell>
+                            <TableCell>{row.email}</TableCell>
                             <TableCell
                               component="th"
                               id={labelId}

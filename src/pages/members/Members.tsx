@@ -98,12 +98,6 @@ const Members = () => {
       label: "Date of Birthday",
     },
     {
-      id: "job-position",
-      numeric: false,
-      disablePadding: false,
-      label: "Job Position",
-    },
-    {
       id: "phone-number",
       numeric: false,
       disablePadding: false,
@@ -114,12 +108,6 @@ const Members = () => {
       numeric: false,
       disablePadding: false,
       label: "Email Adress",
-    },
-    {
-      id: "status",
-      numeric: false,
-      disablePadding: false,
-      label: "Status",
     },
     {
       id: "action",
@@ -367,10 +355,8 @@ const Members = () => {
                             {row.fullname}
                           </TableCell>
                           <TableCell>{row.birthDate}</TableCell>
-                          <TableCell>{row.jobPosition}</TableCell>
                           <TableCell>{row.phoneNumber}</TableCell>
                           <TableCell>{row.email}</TableCell>
-                          <TableCell>{row.status}</TableCell>
                           <TableCell>
                             <BsThreeDots
                               size={27}
@@ -443,10 +429,6 @@ const Members = () => {
                       <h1 className="text-[#6E6E6E] text-[17px] font-500">
                         Birth Date:{" "}
                         <span className="text-black font-400">19.11.2003</span>
-                      </h1>
-                      <h1 className="text-[#6E6E6E] text-[17px] font-500">
-                        Job Title:{" "}
-                        <span className="text-black font-400">Volunteer</span>
                       </h1>
                       <h1 className="text-[#6E6E6E] text-[17px] font-500">
                         Phone:{" "}

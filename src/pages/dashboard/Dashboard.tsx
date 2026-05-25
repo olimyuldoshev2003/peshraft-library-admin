@@ -179,6 +179,7 @@ const Dashboard = () => {
   }, []);
 
   // Dashboard page
+  ////////////////////////////////////////////////////////////////
   // 1. Stat
   // get()
   // {
@@ -190,15 +191,15 @@ const Dashboard = () => {
 
   // 2. Stat in month(in chart)
   // get()
-  //  [
-  //    {
+  // [
+  //   {
   //      overdue: 3,
   //      borrowed: 5,
   //      date: "01-01-2024",
   //      month: 1
-  //    },
-  // ...
-  //  ]
+  //   },
+  //   ...
+  // ]
 
   // 3. Overdue Received Members
   // get()
@@ -207,15 +208,17 @@ const Dashboard = () => {
   //     id: "",
   //     name: "",
   //     phone:"",
-  //     bookTitle:"",
-  //     borrowDate: "",
+  //     book_title:"",
+  //     borrow_date: "",
   //     dueDate: "",
   //     daysOverdue: "",
   //   },
   //   ...
   // ]
+  ////////////////////////////////////////////////////////////////
 
-  // Book page
+  // Books page
+  ////////////////////////////////////////////////////////////////
   // 1. Filter
   // get()
   // [
@@ -231,11 +234,12 @@ const Dashboard = () => {
   //     id: "3",
   //     filterName: "Drama",
   //   },
+  //   ...
   // ];
 
   // post() (add), put() (edit)
-  //  {
-  //   id: newId(type string),
+  // {
+  //   id: new id (add) or existed id (edit) (type string),
   //    filterName: "newFilter"
   // }
 
@@ -243,7 +247,64 @@ const Dashboard = () => {
   // delete filter by id
 
   // 2. Books
+  // get()
+  // [
+  //   {
+  //     id: "",
+  //     image_url: "",
+  //     title: "",
+  //     author: "",
+  //     category: "",
+  //     book_page: "",
+  //     year: 2005 (type number),
+  //     available_copies: 3 (type number),
+  //   },
+  //   ...
+  // ]
+
+  // post() (add), put() (edit)
+  // {
+  //   id: new id (add) or existed id (edit) (type string),
+  //   bg_image_url: "",
+  //   image_url: "",
+  //   title: "",
+  //   category: "",
+  //   year: 2005 (type number),
+  //   author: "",
+  //   book_page: "",
+  //   language: "",
+  //   available_copies: 3 (type number),
+  //   description: "",
+  // },
+
+  // delete()
+  // delete book by id
+  ////////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////////
+  // Members page
+  // 1. Members
+  // get()
+  // [
+  //   {
+  //     id: "",
+  //     image_url: "",
+  //     name: "",
+  //     date_of_birth:"",
+  //     phone: "",
+  //     email: "",
+  //   }
+  //   ...
+  // ]
+
+  // 2. Bookshelf (Received books by id)
   
+
+  // post() (add), put() (edit)
+
+  // delete()
+
+  ////////////////////////////////////////////////////////////////
 
   return (
     <>
