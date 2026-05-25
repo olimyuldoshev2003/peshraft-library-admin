@@ -9,7 +9,7 @@ import { PiBookOpen } from "react-icons/pi";
 import SecurityUpdateGoodOutlinedIcon from "@mui/icons-material/SecurityUpdateGoodOutlined";
 import { MdOutlineSecurityUpdateWarning } from "react-icons/md";
 
-import { PieChart } from "@mui/x-charts/PieChart";
+// import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
 import TableContainer from "@mui/material/TableContainer";
 import Table from "@mui/material/Table";
@@ -54,10 +54,10 @@ const overdueBorrowersData = [
 ];
 
 const Dashboard = () => {
-  const volunteersData = [
-    { id: 0, value: 50, label: "Male" },
-    { id: 1, value: 50, label: "Female" },
-  ];
+  // const volunteersData = [
+  //   { id: 0, value: 50, label: "Male" },
+  //   { id: 1, value: 50, label: "Female" },
+  // ];
 
   const dataset = [
     {
@@ -250,7 +250,7 @@ const Dashboard = () => {
                 />
               </div>
             </div>
-            <div className="volunteers_graph_block w-full lg:w-1/3">
+            {/* <div className="volunteers_graph_block w-full lg:w-1/3">
               <h1 className="title_volunteers text-[25px] font-600 mb-4 sm:text-start md:text-center">
                 Volunteers
               </h1>
@@ -275,7 +275,7 @@ const Dashboard = () => {
                   }}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="priority_overdue_borrewers_list_block mt-8">
             <h1 className="title_priority_overdue_borrewers text-[25px] font-600 mb-4">
