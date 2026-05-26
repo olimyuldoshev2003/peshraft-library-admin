@@ -72,7 +72,12 @@ const Books = () => {
   // Books
   const [books, setBooks] = useState<any>([]);
   const [searchInpValue, setSearchInpValue] = useState<any>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingBooks, setLoadingBooks] = useState<boolean>(false);
+
+  // Filters
+  const [filtersOrCategories, setFiltersOrCategories] = useState<any>([]);
+  const [loadingFiltersOrCategories, setLoadingFiltersOrCategories] =
+    useState<boolean>(false);
 
   // Table
   // interface Data {
@@ -105,71 +110,71 @@ const Books = () => {
   //   };
   // }
 
-  const allFiltersByCategory: any = [
-    {
-      id: "fantasy",
-      filterName: "Fantasy",
-    },
-    {
-      id: "best-book",
-      filterName: "Best Book",
-    },
-    {
-      id: "classics",
-      filterName: "Classics",
-    },
-    {
-      id: "romance",
-      filterName: "Romance",
-    },
-    {
-      id: "science-fiction",
-      filterName: "Science Fiction",
-    },
-    {
-      id: "mystery",
-      filterName: "Mystery",
-    },
-    {
-      id: "historycal-fiction",
-      filterName: "Historical Fiction",
-    },
-    {
-      id: "finance",
-      filterName: "Finance",
-    },
-  ];
+  // const allFiltersByCategory: any = [
+  //   {
+  //     id: "fantasy",
+  //     filterName: "Fantasy",
+  //   },
+  //   {
+  //     id: "best-book",
+  //     filterName: "Best Book",
+  //   },
+  //   {
+  //     id: "classics",
+  //     filterName: "Classics",
+  //   },
+  //   {
+  //     id: "romance",
+  //     filterName: "Romance",
+  //   },
+  //   {
+  //     id: "science-fiction",
+  //     filterName: "Science Fiction",
+  //   },
+  //   {
+  //     id: "mystery",
+  //     filterName: "Mystery",
+  //   },
+  //   {
+  //     id: "historycal-fiction",
+  //     filterName: "Historical Fiction",
+  //   },
+  //   {
+  //     id: "finance",
+  //     filterName: "Finance",
+  //   },
+  // ];
 
-  const filtersByCategory: any = [
-    {
-      id: "fantasy",
-      filterName: "Fantasy",
-    },
-    {
-      id: "best-book",
-      filterName: "Best Book",
-    },
-    {
-      id: "classics",
-      filterName: "Classics",
-    },
-    {
-      id: "romance",
-      filterName: "Romance",
-    },
-    {
-      id: "science-fiction",
-      filterName: "Science Fiction",
-    },
-    {
-      id: "mystery",
-      filterName: "Mystery",
-    },
-    {
-      id: "historycal-fiction",
-      filterName: "Historical Fiction",
-    },
-  ];
+  // const filtersByCategory: any = [
+  //   {
+  //     id: "fantasy",
+  //     filterName: "Fantasy",
+  //   },
+  //   {
+  //     id: "best-book",
+  //     filterName: "Best Book",
+  //   },
+  //   {
+  //     id: "classics",
+  //     filterName: "Classics",
+  //   },
+  //   {
+  //     id: "romance",
+  //     filterName: "Romance",
+  //   },
+  //   {
+  //     id: "science-fiction",
+  //     filterName: "Science Fiction",
+  //   },
+  //   {
+  //     id: "mystery",
+  //     filterName: "Mystery",
+  //   },
+  //   {
+  //     id: "historycal-fiction",
+  //     filterName: "Historical Fiction",
+  //   },
+  // ];
 
   // const filtersByStatus = [
   //   {
@@ -434,7 +439,6 @@ const Books = () => {
   //   setDense(event.target.checked);
   // };
 
-
   const visibleRows = useMemo(
     () =>
       [...books]
@@ -479,21 +483,38 @@ const Books = () => {
     },
   }));
 
-  async function getBooks() {
+  async function getFiltersByCategory() {
+    setLoadingFiltersOrCategories(true);
     try {
-      setLoading(true);
+      const { data } = await axiosRequest.get(
+        `${import.meta.env.VITE_API_URL}/admin/filters`,
+      );
+
+      setFiltersOrCategories(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingFiltersOrCategories(false);
+    }
+  }
+
+  async function getBooks() {
+    setLoadingBooks(true);
+    try {
       const { data } = await axiosRequest.get(
         `${import.meta.env.VITE_API_URL}/books/search?title=${searchInpValue}&author=${searchInpValue}&page=${page + 1}&page_size=${rowsPerPage}`,
       );
-      console.log(data);
-      
       setBooks(data.data);
-      setLoading(false);
     } catch (error) {
       console.error(error);
-      setLoading(false);
+    } finally {
+      setLoadingBooks(false);
     }
   }
+
+  useEffect(() => {
+    getFiltersByCategory();
+  }, []);
 
   useEffect(() => {
     getBooks();
@@ -560,27 +581,39 @@ const Books = () => {
                       Category
                     </h1>
                     <div className="filter_by_category mt-1 grid grid-cols-2 gap-2">
-                      {filtersByCategory?.map((item: any) => {
-                        return (
-                          <div
-                            key={item.id}
-                            className="flex items-center gap-2"
-                          >
-                            <input
-                              type="checkbox"
-                              name=""
-                              id={item.id}
-                              className="outline-none cursor-pointer"
-                            />
-                            <label
-                              className="text-[#6C757D] text-[13px] font-400 cursor-pointer"
-                              htmlFor={item.id}
+                      {loadingFiltersOrCategories ? (
+                        <>
+                          <h1>Loading...</h1>
+                        </>
+                      ) : (
+                        filtersOrCategories?.slice(0, 8)?.map((item: any) => {
+                          return (
+                            <div
+                              key={item.id}
+                              className="flex items-center gap-2"
                             >
-                              {item.filterName}
-                            </label>
-                          </div>
-                        );
-                      })}
+                              <input
+                                type="checkbox"
+                                name=""
+                                id={item.id}
+                                className="outline-none cursor-pointer"
+                              />
+                              <label
+                                className="text-[#6C757D] text-[13px] font-400 cursor-pointer"
+                                htmlFor={item.id}
+                              >
+                                {item.filterName}
+                              </label>
+                            </div>
+                          );
+                        })
+                      )}
+                      {loadingFiltersOrCategories === false &&
+                        filtersOrCategories.length === 0 && (
+                          <>
+                            <h1>Filters not found</h1>
+                          </>
+                        )}
                     </div>
                   </div>
                   <div className="btns_show_filters_and_filter_options flex justify-between mt-3 px-5">
@@ -634,24 +667,39 @@ const Books = () => {
                     {"Filter by Category"}
                   </DialogTitle>
                   <div className="filter_by_category mt-1 grid sm:grid-cols-2 md:grid-cols-5 gap-2">
-                    {allFiltersByCategory?.map((item: any) => {
-                      return (
-                        <div key={item.id} className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            name=""
-                            id={item.id}
-                            className="outline-none cursor-pointer"
-                          />
-                          <label
-                            className="text-[#6C757D] text-[13px] font-400 cursor-pointer"
-                            htmlFor={item.id}
+                    {loadingFiltersOrCategories ? (
+                      <>
+                        <h1>Loading...</h1>
+                      </>
+                    ) : (
+                      filtersOrCategories?.map((item: any) => {
+                        return (
+                          <div
+                            key={item.id}
+                            className="flex items-center gap-2"
                           >
-                            {item.filterName}
-                          </label>
-                        </div>
-                      );
-                    })}
+                            <input
+                              type="checkbox"
+                              name=""
+                              id={item.id}
+                              className="outline-none cursor-pointer"
+                            />
+                            <label
+                              className="text-[#6C757D] text-[13px] font-400 cursor-pointer"
+                              htmlFor={item.id}
+                            >
+                              {item.filterName}
+                            </label>
+                          </div>
+                        );
+                      })
+                    )}
+                    {loadingFiltersOrCategories === false &&
+                      filtersOrCategories.length === 0 && (
+                        <>
+                          <h1>Filters not found</h1>
+                        </>
+                      )}
                   </div>
                   <DialogActions>
                     <button
@@ -901,7 +949,7 @@ const Books = () => {
                         </TableRow>
                       );
                     })}
-                    {books.length === 0 && (
+                    {loadingBooks === false && books.length === 0 && (
                       <TableRow>
                         <TableCell colSpan={8}>
                           <h1 className="text-center">Book not found</h1>
@@ -951,7 +999,6 @@ const Books = () => {
             showScrollbar();
           }}
         ></div>
-
         <Dialog
           open={modalDeleteBook}
           onClose={() => {
@@ -1142,7 +1189,7 @@ const Books = () => {
       {/* Loading Backdrop */}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
+        open={loadingBooks}
       >
         <CircularProgress color="inherit" />
       </Backdrop>

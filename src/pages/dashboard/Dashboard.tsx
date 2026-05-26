@@ -57,6 +57,7 @@ const overdueBorrowersData = [
 
 const Dashboard = () => {
   const [stat, setStat] = useState<any>({});
+  const [loadingStat, setLoadingStat] = useState<boolean>(false);
 
   // const volunteersData = [
   //   { id: 0, value: 50, label: "Male" },
@@ -162,15 +163,17 @@ const Dashboard = () => {
   }));
 
   async function getStat() {
+    setLoadingStat(true);
     try {
       const { data } = await axiosRequest.get(
         `${import.meta.env.VITE_API_URL}/admin/stats`,
       );
-      console.log(data);
 
       setStat(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoadingStat(false);
     }
   }
 
@@ -298,12 +301,7 @@ const Dashboard = () => {
   // ]
 
   // 2. Bookshelf (Received books by id)
-  
-
-  // post() (add), put() (edit)
-
-  // delete()
-
+  // get()
   ////////////////////////////////////////////////////////////////
 
   return (
@@ -332,56 +330,64 @@ const Dashboard = () => {
           <h1 className="title_admin_dashboard text-[25px] font-600">
             Admin Dashboard
           </h1>
-          <div className="amount_block flex justify-between items-center mt-2 sm:flex-col md:flex-row md:flex-wrap gap-4">
-            <div className="amount_block_members bg-[#F1E7FF] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
-              <div className="title_and_amount_block">
-                <h1 className="title">Members</h1>
-                <h1 className="amount">{stat.total_members}</h1>
+          {loadingStat ? (
+            <>
+              <h1>Loading...</h1>
+            </>
+          ) : (
+            <div className="amount_block flex justify-between items-center mt-2 sm:flex-col md:flex-row md:flex-wrap gap-4">
+              <div className="amount_block_members bg-[#F1E7FF] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
+                <div className="title_and_amount_block">
+                  <h1 className="title">Members</h1>
+                  <h1 className="amount">{stat.total_members}</h1>
+                </div>
+                <LuUsers
+                  style={{
+                    color: "#6D05FF",
+                    fontSize: "40px",
+                  }}
+                />
               </div>
-              <LuUsers
-                style={{
-                  color: "#6D05FF",
-                  fontSize: "40px",
-                }}
-              />
-            </div>
-            <div className="amount_block_total_books bg-[#E4F5FF] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
-              <div className="title_and_amount_block">
-                <h1 className="title">Total Books</h1>
-                <h1 className="amount">{stat.total_books}</h1>
+              <div className="amount_block_total_books bg-[#E4F5FF] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
+                <div className="title_and_amount_block">
+                  <h1 className="title">Total Books</h1>
+                  <h1 className="amount">{stat.total_books}</h1>
+                </div>
+                <PiBookOpen
+                  style={{
+                    color: "#37B5FF",
+                    fontSize: "40px",
+                  }}
+                />
               </div>
-              <PiBookOpen
-                style={{
-                  color: "#37B5FF",
-                  fontSize: "40px",
-                }}
-              />
-            </div>
-            <div className="amount_block_books_borrowers bg-[#EAFEEF] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
-              <div className="title_and_amount_block">
-                <h1 className="title">Books Borrowers</h1>
-                <h1 className="amount">{stat.active_borrows}</h1>
+              <div className="amount_block_books_borrowers bg-[#EAFEEF] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
+                <div className="title_and_amount_block">
+                  <h1 className="title">Books Borrowers</h1>
+                  <h1 className="amount">{stat.active_borrows}</h1>
+                </div>
+                <SecurityUpdateGoodOutlinedIcon
+                  style={{
+                    color: "#00FF40",
+                    fontSize: "40px",
+                  }}
+                />
               </div>
-              <SecurityUpdateGoodOutlinedIcon
-                style={{
-                  color: "#00FF40",
-                  fontSize: "40px",
-                }}
-              />
-            </div>
-            <div className="amount_block_overdue_books bg-[#FFDADB] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
-              <div className="title_and_amount_block">
-                <h1 className="title">Overdue Books</h1>
-                <h1 className="amount">{stat.overdue_books}</h1>
+              <div className="amount_block_overdue_books bg-[#FFDADB] p-2.5 flex justify-between items-center gap-5 rounded-[10px] sm:w-full md:w-[48%] lg:w-max flex-1">
+                <div className="title_and_amount_block">
+                  <h1 className="title">Overdue Books</h1>
+                  <h1 className="amount">{stat.overdue_books}</h1>
+                </div>
+                <MdOutlineSecurityUpdateWarning
+                  style={{
+                    color: "#FD286F",
+                    fontSize: "40px",
+                  }}
+                />
               </div>
-              <MdOutlineSecurityUpdateWarning
-                style={{
-                  color: "#FD286F",
-                  fontSize: "40px",
-                }}
-              />
             </div>
-          </div>
+          )}
+          {loadingStat === false && stat.length === 0 && <><h1>Statistics not found</h1></>}
+
           <div className="monthly_borrowing_summary_and_volunteeers_graph_block mt-5 flex flex-col lg:flex-row justify-between gap-8 lg:gap-20">
             <div className="monthly_borrowing_summary_graph_block w-full lg:w-2/3 overflow-x-auto">
               <h1 className="title_monthly_borrowing_summary text-[25px] font-600 mb-4">
