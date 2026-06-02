@@ -181,6 +181,8 @@ const Dashboard = () => {
     getStat();
   }, []);
 
+  // Admin Side
+  ////////////////////////////////////////////////////////////////
   // Dashboard page
   ////////////////////////////////////////////////////////////////
   // 1. Stat
@@ -213,8 +215,8 @@ const Dashboard = () => {
   //     phone:"",
   //     book_title:"",
   //     borrow_date: "",
-  //     dueDate: "",
-  //     daysOverdue: "",
+  //     due_date: "",
+  //     days_overdue: "",
   //   },
   //   ...
   // ]
@@ -284,14 +286,14 @@ const Dashboard = () => {
   // delete book by id
   ////////////////////////////////////////////////////////////////
 
-  ////////////////////////////////////////////////////////////////
   // Members page
+  ////////////////////////////////////////////////////////////////
   // 1. Members
   // get()
   // [
   //   {
   //     id: "",
-  //     image_url: "",
+  //     member_image_url: "",
   //     name: "",
   //     date_of_birth:"",
   //     phone: "",
@@ -300,10 +302,232 @@ const Dashboard = () => {
   //   ...
   // ]
 
-  // 2. Bookshelf (Received books by id)
+  // 2. Bookshelf (Received books by user_id)
   // get()
+  // [
+  //   {
+  //      id: "",
+  //      image_url: "",
+  //      title: "",
+  //      author: ""
+  //      borrow_date: "",
+  //      due_date: "",
+  //    }
+  //   ...
+  // ]
+
+  // 3. History (History of already read book by user_id)
+  // get()
+  // [
+  //   {
+  //      id: "",
+  //      image_url: "",
+  //      title: "",
+  //      author: ""
+  //   }
+  //   ...
+  // ]
   ////////////////////////////////////////////////////////////////
 
+  // Received Members Page
+  ////////////////////////////////////////////////////////////////
+  // 1. Received Members
+  // get()
+  // [
+  //   {
+  //      id: "",
+  //      member_image_url: "",
+  //      borrower_name: "",
+  //      borrow_date: "",
+  //      due_date: "",
+  //      phone:"",
+  //      email:  ""
+  //      book_title:"",
+  //      author:  ""
+  //   }
+  //   ...
+  // ]
+
+  // delete()
+  // delete Received Member by id
+  ////////////////////////////////////////////////////////////////
+
+  // Receive Book Requests Page
+  ////////////////////////////////////////////////////////////////
+  // 1. Receive Book Requests
+  // get()
+  // [
+  //   {
+  //      id: "",
+  //      member_image_url: "",
+  //      receiver_name: "",
+  //      phone:"",
+  //      email:  ""
+  //      request_date: "",
+  //      due_date: "",
+  //      book_title:"",
+  //      author:  ""
+  //   }
+  //   ...
+  // ]
+
+  // post() (add), delete() (Accept Button) (both actions in one request: delete - receive book request by id,
+  // post - received member)
+  // post()
+  // [
+  //   {
+  //      id: "",
+  //      member_image_url: "",
+  //      borrower_name: "",
+  //      borrow_date: "",
+  //      due_date: "",
+  //      phone:"",
+  //      email:  ""
+  //      book_title:"",
+  //      author:  ""
+  //   }
+  //   ...
+  // ]
+
+  // delete()
+  // Delete Receive Book Request by id
+  ////////////////////////////////////////////////////////////////
+
+  // Return Book Requests Page
+  ////////////////////////////////////////////////////////////////
+  // 1. Return Book Requests
+  // get()
+  // [
+  //   {
+  //      id: "",
+  //      member_image_url: "",
+  //      returner_name: "",
+  //      phone:"",
+  //      email:  ""
+  //      borrowed_date: "",
+  //      due_date: "",
+  //      request_date: "",
+  //      book_title:"",
+  //      author:  ""
+  //   }
+  //   ...
+  // ]
+
+  // delete(), delete() (Accept Button) (both actions in one request: delete - return book request by id,
+  // delete - received member by id)
+
+  // delete()
+  // Delete Return Book Request by id, Received Member By id
+  ////////////////////////////////////////////////////////////////
+
+  // Notifications Page
+  ////////////////////////////////////////////////////////////////
+  // 1. Notifications
+  // get()
+  // [
+  //   {
+  //      id: "",
+  //      title: "",
+  //      description: "",
+  //   }
+  //   ...
+  // ]
+
+  // post() (add), put() (edit)
+  // In here the database notificaion has to have the filter by notification type.
+  // If notification type is duetime, we need to send the notification to the defined user by user id,
+  // but if notification type is news, the notification has to be sent to all users
+  // {
+  //   id: "",
+  //   member: "user_id, all_users", (In here member will be chosen from members - getting the members)
+  //   notification_type: "duetime or news",
+  //   title: "",
+  //   description: "",
+  // }
+
+  // delete()
+  // Delete notification by notification_id
+  ////////////////////////////////////////////////////////////////
+
+  // Profile Page
+  ////////////////////////////////////////////////////////////////
+  // 1. Main Admin and Admins Profile
+  // get()
+  // {
+  //   id: "",
+  //   admin_image_url: "",
+  //   name: "",
+  //   date_of_birth: "",
+  //   phone: "",
+  //   email: "",
+  // }
+
+  // put() (Change Password)
+  // {
+  //   old_password: "",
+  //   new_password: "",
+  // }
+
+  // put()
+  // {
+  //   id: "",
+  //   admin_image_url: "",
+  //   name: "",
+  //   date_of_birth: "",
+  //   phone: "",
+  //   email: "",
+  // }
+
+  // 2. All Admins (will be showed only to Main Admin for management other admins)
+  // get()
+  // [
+  //  {
+  //    id: "",
+  //    name: "",
+  //    date_of_birth: "",
+  //    phone: "",
+  //    email: "",
+  //  }
+  // ...
+  // ]
+  // post() (Accepting registered Admin as Admin - Allowing to use the data od Peshraft Library and being Admin)
+  // Accepting the request
+  ////////////////////////////////////////////////////////////////
+
+  // Sign Up Page (Admin side)
+  ////////////////////////////////////////////////////////////////
+  // 1. Sign Up
+  // post()
+  // {
+  //   name: "",
+  //   date_of_birth: "",
+  //   phone: "",
+  //   email: "",
+  //   password: "",
+  //   confirm_password: "",
+  // }
+  ////////////////////////////////////////////////////////////////
+  
+  // Sign In Page (Admin side)
+  ////////////////////////////////////////////////////////////////
+  // 1. Sign In
+  // post()
+  // {
+  //   email: "",
+  //   password: "",
+  // }
+  ////////////////////////////////////////////////////////////////
+
+  // Forget Password Page (Admin side)
+  ////////////////////////////////////////////////////////////////
+  // 1. Forget Password
+  // post()
+  // {
+  //   new_password: "",
+  //   confirm_new_password: "",
+  // }
+  ////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////
   return (
     <>
       <div className="dashboard_component p-4 max-w-360 mx-auto">
@@ -386,7 +610,11 @@ const Dashboard = () => {
               </div>
             </div>
           )}
-          {loadingStat === false && stat.length === 0 && <><h1>Statistics not found</h1></>}
+          {loadingStat === false && stat.length === 0 && (
+            <>
+              <h1>Statistics not found</h1>
+            </>
+          )}
 
           <div className="monthly_borrowing_summary_and_volunteeers_graph_block mt-5 flex flex-col lg:flex-row justify-between gap-8 lg:gap-20">
             <div className="monthly_borrowing_summary_graph_block w-full lg:w-2/3 overflow-x-auto">

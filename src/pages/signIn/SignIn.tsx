@@ -170,7 +170,7 @@ const SignIn = () => {
         });
       } else if (error.response?.status === 404) {
         setErrors((prev) => ({
-          ...prev,
+          ...prev,  
           email: "User not found",
         }));
       } else if (error.request) {
