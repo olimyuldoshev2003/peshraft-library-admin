@@ -27,16 +27,19 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import { MdDelete, MdOutlineClose } from "react-icons/md";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
 import { axiosRequest } from "../../utils/axiosRequest";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { setBooksForEditing } from "../../reducers/booksState/booksState";
 
 const Books = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<any>("title");
@@ -271,14 +274,13 @@ const Books = () => {
     },
   }));
 
-  
   async function getBooks() {
     setLoadingBooks(true);
     try {
       const { data } = await axiosRequest.get(
         `${import.meta.env.VITE_API_URL}/admin/books`,
       );
-      
+
       setBooks(data.data || []);
       setTotalBooksCount(data.total || data.data?.length || 0);
     } catch (error) {
@@ -288,7 +290,7 @@ const Books = () => {
       setLoadingBooks(false);
     }
   }
-  
+
   async function getFiltersByCategory() {
     setLoadingFiltersOrCategories(true);
     try {
@@ -296,7 +298,7 @@ const Books = () => {
         `${import.meta.env.VITE_API_URL}/admin/filters`,
       );
       console.log(data.filters);
-      
+
       setFiltersOrCategories(data.filters);
     } catch (error) {
       console.error(error);
@@ -305,7 +307,7 @@ const Books = () => {
       setLoadingFiltersOrCategories(false);
     }
   }
-  
+
   async function addFilterOrCategory() {
     if (!filterOrCategoryNameInpValueForAdding.trim()) {
       showSnackbar("Please enter a filter name", "warning");
@@ -324,7 +326,6 @@ const Books = () => {
       );
 
       console.log(data);
-      
 
       showSnackbar("Filter added successfully", "success");
       setModalFilterAdd(false);
@@ -896,12 +897,14 @@ const Books = () => {
                           <TableCell>{book.available_copies}</TableCell>
                           <TableCell>
                             <div className="btn_func_block flex items-center gap-1.5">
-                              <Link to={`/dashboard/edit-book/${book.id}`}>
-                                <AiFillEdit
-                                  size={27}
-                                  className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                                />
-                              </Link>
+                              <AiFillEdit
+                                size={27}
+                                className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                                onClick={() => {
+                                  dispatch(setBooksForEditing(book));
+                                  navigate(`/dashboard/edit-book/`);
+                                }}
+                              />
                               <MdDelete
                                 size={27}
                                 className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
