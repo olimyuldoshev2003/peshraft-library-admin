@@ -278,7 +278,6 @@ const Books = () => {
       const { data } = await axiosRequest.get(
         `${import.meta.env.VITE_API_URL}/admin/books`,
       );
-      console.log(data);
       
       setBooks(data.data || []);
       setTotalBooksCount(data.total || data.data?.length || 0);
@@ -1010,7 +1009,7 @@ const Books = () => {
           open={modalFilterAdd}
           onClose={() => {
             setModalFilterAdd(false);
-            setFilterOrCategoryNameInpValueForAdding("");
+            // setFilterOrCategoryNameInpValueForAdding("");
           }}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
@@ -1023,7 +1022,7 @@ const Books = () => {
                 className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
                 onClick={() => {
                   setModalFilterAdd(false);
-                  setFilterOrCategoryNameInpValueForAdding("");
+                  // setFilterOrCategoryNameInpValueForAdding("");
                 }}
               >
                 <MdOutlineClose size={27} />
