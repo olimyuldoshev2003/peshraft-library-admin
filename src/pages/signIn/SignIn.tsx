@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Swiper, SwiperSlide } from "swiper/react";
-import axios from "axios";
 
 import slideImg1 from "../../assets/signIn/slide-img-1.svg";
 import slideImg2 from "../../assets/signIn/slide-img-2.svg";
