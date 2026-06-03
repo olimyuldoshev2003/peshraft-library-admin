@@ -109,7 +109,7 @@ const Layout = () => {
       }
     };
 
-    return navigationItems.map((item:any) => (
+    return navigationItems.map((item: any) => (
       <Link
         key={item.id}
         className={`navigations px-3 py-1.5 hover:border-b-3 border-[#D9D9D9] outline-none ${

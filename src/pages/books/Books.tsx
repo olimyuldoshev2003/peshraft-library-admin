@@ -7,11 +7,7 @@ import { LuPlus } from "react-icons/lu";
 import { useEffect, useMemo, useState } from "react";
 
 //Material UI
-import {
-  alpha,
-  styled,
-  // useTheme
-} from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -35,33 +31,23 @@ import { Link, useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
 import Backdrop from "@mui/material/Backdrop";
-// import axios from "axios";
 import { axiosRequest } from "../../utils/axiosRequest";
-// import useMediaQuery from "@mui/material/useMediaQuery";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const Books = () => {
-  // const theme = useTheme();
-  // const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-
   const navigate = useNavigate();
 
-  // const [limitPerPage, setLimitPerPage] = useState<number>(17);
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<any>("title");
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-  // const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState<number>(17);
 
   const [modalFilter, setModalFilter] = useState<boolean>(false);
-
   const [modalShowAllFilters, setModalShowAllFilters] =
     useState<boolean>(false);
   const [modalFilterOptions, setModalFilterOptions] = useState<boolean>(false);
-
-  const [modalBookInfoAndEdit, setModalBookInfoAndEdit] =
-    useState<boolean>(false);
-
   const [modalDeleteBook, setModalDeleteBook] = useState<boolean>(false);
 
   // Filter functionalities states
@@ -71,152 +57,56 @@ const Books = () => {
 
   // Books
   const [books, setBooks] = useState<any>([]);
-  const [searchInpValue, setSearchInpValue] = useState<any>([]);
+  const [searchInpValue, setSearchInpValue] = useState<string>("");
   const [loadingBooks, setLoadingBooks] = useState<boolean>(false);
+  const [selectedBookId, setSelectedBookId] = useState<number | null>(null);
+  const [selectedFilterId, setSelectedFilterId] = useState<number | null>(null);
+  const [totalBooksCount, setTotalBooksCount] = useState<number>(0);
 
   // Filters
   const [filtersOrCategories, setFiltersOrCategories] = useState<any>([]);
   const [loadingFiltersOrCategories, setLoadingFiltersOrCategories] =
     useState<boolean>(false);
+  const [loadingAddFiltersOrCategories, setLoadingAddFiltersOrCategories] =
+    useState<boolean>(false);
+  const [loadingEditFiltersOrCategories, setLoadingEditFiltersOrCategories] =
+    useState<boolean>(false);
+  const [loadingDeleteFilter, setLoadingDeleteFilter] =
+    useState<boolean>(false);
+  const [loadingDeleteBook, setLoadingDeleteBook] = useState<boolean>(false);
 
-  // Table
-  // interface Data {
-  //   id: number;
-  //   img: string;
-  //   bookTitle: string;
-  //   author: string;
-  //   category: string;
-  //   bookPage: number;
-  //   status: string;
-  // }
+  // Values of Input
+  const [
+    filterOrCategoryNameInpValueForAdding,
+    setFilterOrCategoryNameInpValueForAdding,
+  ] = useState<string>("");
+  const [
+    filterOrCategoryNameInpValueForEditing,
+    setFilterOrCategoryNameInpValueForEditing,
+  ] = useState<string>("");
 
-  // function createData(
-  //   id: number,
-  //   img: string,
-  //   bookTitle: string,
-  //   author: string,
-  //   category: string,
-  //   bookPage: number,
-  //   status: string,
-  // ): Data {
-  //   return {
-  //     id,
-  //     img,
-  //     bookTitle,
-  //     author,
-  //     category,
-  //     bookPage,
-  //     status,
-  //   };
-  // }
-
-  // const allFiltersByCategory: any = [
-  //   {
-  //     id: "fantasy",
-  //     filterName: "Fantasy",
-  //   },
-  //   {
-  //     id: "best-book",
-  //     filterName: "Best Book",
-  //   },
-  //   {
-  //     id: "classics",
-  //     filterName: "Classics",
-  //   },
-  //   {
-  //     id: "romance",
-  //     filterName: "Romance",
-  //   },
-  //   {
-  //     id: "science-fiction",
-  //     filterName: "Science Fiction",
-  //   },
-  //   {
-  //     id: "mystery",
-  //     filterName: "Mystery",
-  //   },
-  //   {
-  //     id: "historycal-fiction",
-  //     filterName: "Historical Fiction",
-  //   },
-  //   {
-  //     id: "finance",
-  //     filterName: "Finance",
-  //   },
-  // ];
-
-  // const filtersByCategory: any = [
-  //   {
-  //     id: "fantasy",
-  //     filterName: "Fantasy",
-  //   },
-  //   {
-  //     id: "best-book",
-  //     filterName: "Best Book",
-  //   },
-  //   {
-  //     id: "classics",
-  //     filterName: "Classics",
-  //   },
-  //   {
-  //     id: "romance",
-  //     filterName: "Romance",
-  //   },
-  //   {
-  //     id: "science-fiction",
-  //     filterName: "Science Fiction",
-  //   },
-  //   {
-  //     id: "mystery",
-  //     filterName: "Mystery",
-  //   },
-  //   {
-  //     id: "historycal-fiction",
-  //     filterName: "Historical Fiction",
-  //   },
-  // ];
-
-  // const filtersByStatus = [
-  //   {
-  //     id: "1",
-  //     filterName: "New",
-  //   },
-  //   {
-  //     id: "2",
-  //     filterName: "Excellent",
-  //   },
-  //   {
-  //     id: "3",
-  //     filterName: "Good",
-  //   },
-  //   {
-  //     id: "4",
-  //     filterName: "Danger",
-  //   },
-  //   {
-  //     id: "5",
-  //     filterName: "Needs Repair",
-  //   },
-  // ];
+  // Snackbar states
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error" | "warning" | "info",
+  });
 
   function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     let aValue = a[orderBy];
     let bValue = b[orderBy];
 
-    // Handle string comparisons (case insensitive)
     if (typeof aValue === "string" && typeof bValue === "string") {
       aValue = aValue.toLowerCase() as any;
       bValue = bValue.toLowerCase() as any;
     }
 
-    // Handle number comparisons
     if (typeof aValue === "number" && typeof bValue === "number") {
       if (bValue < aValue) return -1;
       if (bValue > aValue) return 1;
       return 0;
     }
 
-    // Default comparison
     if (bValue < aValue) {
       return -1;
     }
@@ -270,7 +160,7 @@ const Books = () => {
       sortable: true,
     },
     {
-      id: "bookPage",
+      id: "book_page",
       numeric: true,
       disablePadding: false,
       label: "Book Page",
@@ -308,58 +198,285 @@ const Books = () => {
     rowCount: number;
   }
 
-  function EnhancedTableHead(props: EnhancedTableProps) {
-    const {
-      // onSelectAllClick,
-      order,
-      orderBy,
-      // numSelected,
-      // rowCount,
-      onRequestSort,
-    } = props;
-    const createSortHandler =
-      (property: any) => (event: React.MouseEvent<unknown>) => {
-        onRequestSort(event, property);
-      };
-
-    return (
-      <TableHead>
-        <TableRow>
-          {headCells.map((headCell: any) => (
-            <TableCell
-              key={headCell.id}
-              // align={headCell.numeric ? "right" : "left"}
-              padding={headCell.disablePadding ? "none" : "normal"}
-              sortDirection={orderBy === headCell.id ? order : false}
-            >
-              {headCell.sortable !== false ? (
-                <TableSortLabel
-                  active={orderBy === headCell.id}
-                  direction={orderBy === headCell.id ? order : "asc"}
-                  onClick={createSortHandler(headCell.id)}
-                >
-                  {headCell.label}
-                  {orderBy === headCell.id ? (
-                    <Box component="span" sx={visuallyHidden}>
-                      {order === "desc"
-                        ? "sorted descending"
-                        : "sorted ascending"}
-                    </Box>
-                  ) : null}
-                </TableSortLabel>
-              ) : (
-                headCell.label
-              )}
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-    );
-  }
-
   interface EnhancedTableToolbarProps {
     numSelected: number;
   }
+
+  const handleRequestSort = (_: React.MouseEvent<unknown>, property: any) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      const newSelected = books.map((n: any) => n.id);
+      setSelected(newSelected);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleChangePage = (_: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const visibleRows = useMemo(
+    () =>
+      [...books]
+        .sort(getComparator(order, orderBy))
+        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [order, orderBy, page, rowsPerPage, books],
+  );
+
+  function removeScrollbar() {
+    document.body.classList.add("scroll_hidden_modal_filter_without_overlay");
+    document.body.classList.remove(
+      "scroll_visible_modal_filter_without_overlay",
+    );
+  }
+
+  function showScrollbar() {
+    document.body.classList.add("scroll_visible_modal_filter_without_overlay");
+    document.body.classList.remove(
+      "scroll_hidden_modal_filter_without_overlay",
+    );
+  }
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+      whiteSpace: "nowrap",
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+      whiteSpace: "nowrap",
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+
+  
+  async function getBooks() {
+    setLoadingBooks(true);
+    try {
+      const { data } = await axiosRequest.get(
+        `${import.meta.env.VITE_API_URL}/admin/books`,
+      );
+      console.log(data);
+      
+      setBooks(data.data || []);
+      setTotalBooksCount(data.total || data.data?.length || 0);
+    } catch (error) {
+      console.error(error);
+      showSnackbar("Failed to load books", "error");
+    } finally {
+      setLoadingBooks(false);
+    }
+  }
+  
+  async function getFiltersByCategory() {
+    setLoadingFiltersOrCategories(true);
+    try {
+      const { data } = await axiosRequest.get(
+        `${import.meta.env.VITE_API_URL}/admin/filters`,
+      );
+      console.log(data.filters);
+      
+      setFiltersOrCategories(data.filters);
+    } catch (error) {
+      console.error(error);
+      showSnackbar("Failed to load filters", "error");
+    } finally {
+      setLoadingFiltersOrCategories(false);
+    }
+  }
+  
+  async function addFilterOrCategory() {
+    if (!filterOrCategoryNameInpValueForAdding.trim()) {
+      showSnackbar("Please enter a filter name", "warning");
+      return;
+    }
+
+    setLoadingAddFiltersOrCategories(true);
+    try {
+      const newFilter = {
+        filterName: filterOrCategoryNameInpValueForAdding,
+      };
+
+      const { data } = await axiosRequest.post(
+        `${import.meta.env.VITE_API_URL}/admin/filters`,
+        newFilter,
+      );
+
+      console.log(data);
+      
+
+      showSnackbar("Filter added successfully", "success");
+      setModalFilterAdd(false);
+      setFilterOrCategoryNameInpValueForAdding("");
+      getFiltersByCategory();
+    } catch (error) {
+      console.error(error);
+      showSnackbar("Failed to add filter", "error");
+    } finally {
+      setLoadingAddFiltersOrCategories(false);
+    }
+  }
+
+  async function editFilterOrCategory() {
+    if (!filterOrCategoryNameInpValueForEditing.trim()) {
+      showSnackbar("Please enter a filter name", "warning");
+      return;
+    }
+
+    if (!selectedFilterId) {
+      showSnackbar("No filter selected", "error");
+      return;
+    }
+
+    setLoadingEditFiltersOrCategories(true);
+    try {
+      const updatedFilter = {
+        filterName: filterOrCategoryNameInpValueForEditing,
+      };
+
+      await axiosRequest.put(
+        `${import.meta.env.VITE_API_URL}/admin/filters/${selectedFilterId}`,
+        updatedFilter,
+      );
+
+      showSnackbar("Filter updated successfully", "success");
+      setModalFilterEdit(false);
+      setFilterOrCategoryNameInpValueForEditing("");
+      setSelectedFilterId(null);
+      getFiltersByCategory();
+    } catch (error) {
+      console.error(error);
+      showSnackbar("Failed to update filter", "error");
+    } finally {
+      setLoadingEditFiltersOrCategories(false);
+    }
+  }
+
+  async function deleteFilterOrCategory() {
+    if (!selectedFilterId) {
+      showSnackbar("No filter selected", "error");
+      return;
+    }
+
+    setLoadingDeleteFilter(true);
+    try {
+      await axiosRequest.delete(
+        `${import.meta.env.VITE_API_URL}/admin/filters/${selectedFilterId}`,
+      );
+
+      showSnackbar("Filter deleted successfully", "success");
+      setModalFilterDelete(false);
+      setSelectedFilterId(null);
+      getFiltersByCategory();
+    } catch (error) {
+      console.error(error);
+      showSnackbar("Failed to delete filter", "error");
+    } finally {
+      setLoadingDeleteFilter(false);
+    }
+  }
+
+  async function deleteBook() {
+    if (!selectedBookId) {
+      showSnackbar("No book selected", "error");
+      return;
+    }
+
+    setLoadingDeleteBook(true);
+    try {
+      await axiosRequest.delete(
+        `${import.meta.env.VITE_API_URL}/books/${selectedBookId}`,
+      );
+
+      showSnackbar("Book deleted successfully", "success");
+      setModalDeleteBook(false);
+      setSelectedBookId(null);
+      getBooks();
+    } catch (error) {
+      console.error(error);
+      showSnackbar("Failed to delete book", "error");
+    } finally {
+      setLoadingDeleteBook(false);
+    }
+  }
+
+  const handleSubmitAddingFilter = (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    addFilterOrCategory();
+  };
+
+  const handleSubmitEditingFilter = (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    editFilterOrCategory();
+  };
+
+  const openEditFilterModal = (filter: any) => {
+    setSelectedFilterId(filter.id);
+    setFilterOrCategoryNameInpValueForEditing(filter.filterName);
+    setModalFilterEdit(true);
+  };
+
+  const openDeleteFilterModal = (filter: any) => {
+    setSelectedFilterId(filter.id);
+    setModalFilterDelete(true);
+  };
+
+  const openDeleteBookModal = (bookId: number) => {
+    setSelectedBookId(bookId);
+    setModalDeleteBook(true);
+  };
+
+  const showSnackbar = (
+    message: string,
+    severity: "success" | "error" | "warning" | "info",
+  ) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({
+      ...snackbar,
+      open: false,
+    });
+  };
+
+  useEffect(() => {
+    getFiltersByCategory();
+  }, []);
+
+  useEffect(() => {
+    getBooks();
+  }, [searchInpValue, page, rowsPerPage]);
 
   function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     const { numSelected } = props;
@@ -390,135 +507,47 @@ const Books = () => {
     );
   }
 
-  const handleRequestSort = (_: React.MouseEvent<unknown>, property: any) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
+  function EnhancedTableHead(props: EnhancedTableProps) {
+    const { order, orderBy, onRequestSort } = props;
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = books.map((n: any) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
+    const createSortHandler =
+      (property: any) => (event: React.MouseEvent<unknown>) => {
+        onRequestSort(event, property);
+      };
 
-  // const handleClick = (_: React.MouseEvent<unknown>, id: number) => {
-  //   const selectedIndex = selected.indexOf(id);
-  //   let newSelected: readonly number[] = [];
-
-  //   if (selectedIndex === -1) {
-  //     newSelected = newSelected.concat(selected, id);
-  //   } else if (selectedIndex === 0) {
-  //     newSelected = newSelected.concat(selected.slice(1));
-  //   } else if (selectedIndex === selected.length - 1) {
-  //     newSelected = newSelected.concat(selected.slice(0, -1));
-  //   } else if (selectedIndex > 0) {
-  //     newSelected = newSelected.concat(
-  //       selected.slice(0, selectedIndex),
-  //       selected.slice(selectedIndex + 1),
-  //     );
-  //   }
-  //   setSelected(newSelected);
-  // };
-
-  const handleChangePage = (_: unknown, newPage: number) => {
-    setPage(newPage + 1);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    // setPage(0);
-  };
-
-  // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setDense(event.target.checked);
-  // };
-
-  const visibleRows = useMemo(
-    () =>
-      [...books]
-        .sort(getComparator(order, orderBy))
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage, books],
-  );
-
-  function removeScrollbar() {
-    document.body.classList.add("scroll_hidden_modal_filter_without_overlay");
-    document.body.classList.remove(
-      "scroll_visible_modal_filter_without_overlay",
+    return (
+      <TableHead>
+        <TableRow>
+          {headCells.map((headCell: any) => (
+            <TableCell
+              key={headCell.id}
+              padding={headCell.disablePadding ? "none" : "normal"}
+              sortDirection={orderBy === headCell.id ? order : false}
+            >
+              {headCell.sortable !== false ? (
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : "asc"}
+                  onClick={createSortHandler(headCell.id)}
+                >
+                  {headCell.label}
+                  {orderBy === headCell.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              ) : (
+                headCell.label
+              )}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
     );
   }
-
-  function showScrollbar() {
-    document.body.classList.add("scroll_visible_modal_filter_without_overlay");
-    document.body.classList.remove(
-      "scroll_hidden_modal_filter_without_overlay",
-    );
-  }
-
-  //For Table
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-      whiteSpace: "nowrap",
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-      whiteSpace: "nowrap",
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-  }));
-
-  async function getFiltersByCategory() {
-    setLoadingFiltersOrCategories(true);
-    try {
-      const { data } = await axiosRequest.get(
-        `${import.meta.env.VITE_API_URL}/admin/filters`,
-      );
-
-      setFiltersOrCategories(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoadingFiltersOrCategories(false);
-    }
-  }
-
-  async function getBooks() {
-    setLoadingBooks(true);
-    try {
-      const { data } = await axiosRequest.get(
-        `${import.meta.env.VITE_API_URL}/books/search?title=${searchInpValue}&author=${searchInpValue}&page=${page + 1}&page_size=${rowsPerPage}`,
-      );
-      setBooks(data.data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoadingBooks(false);
-    }
-  }
-
-  useEffect(() => {
-    getFiltersByCategory();
-  }, []);
-
-  useEffect(() => {
-    getBooks();
-  }, [searchInpValue, page, rowsPerPage]);
 
   return (
     <>
@@ -531,10 +560,9 @@ const Books = () => {
               className="inp_search outline-none shadow-[0_0_6px_gray] pl-12 pr-4 py-2 rounded-[30px] text-[18px] font-500 sm:w-full md:w-[90%] lg:w-[80%]"
               placeholder="Search enter..."
               value={searchInpValue}
-              onChange={(
-                event: React.ChangeEvent<HTMLInputElement, HTMLInputElement>,
-              ) => {
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setSearchInpValue(event.target.value);
+                setPage(0);
               }}
             />
             <div className="btn_filter_and_modal_filter_overlay_transparent_block md:relative flex flex-col">
@@ -545,11 +573,7 @@ const Books = () => {
                   removeScrollbar();
                 }}
               >
-                <TuneIcon
-                  sx={{
-                    fontSize: "26px",
-                  }}
-                />
+                <TuneIcon sx={{ fontSize: "26px" }} />
               </button>
 
               {/* Modal filter */}
@@ -566,9 +590,7 @@ const Books = () => {
                   </h1>
                   <IoClose
                     size={31}
-                    style={{
-                      cursor: "pointer",
-                    }}
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
                       setModalFilter(false);
                       showScrollbar();
@@ -582,9 +604,7 @@ const Books = () => {
                     </h1>
                     <div className="filter_by_category mt-1 grid grid-cols-2 gap-2">
                       {loadingFiltersOrCategories ? (
-                        <>
-                          <h1>Loading...</h1>
-                        </>
+                        <CircularProgress size={24} />
                       ) : (
                         filtersOrCategories?.slice(0, 8)?.map((item: any) => {
                           return (
@@ -594,7 +614,6 @@ const Books = () => {
                             >
                               <input
                                 type="checkbox"
-                                name=""
                                 id={item.id}
                                 className="outline-none cursor-pointer"
                               />
@@ -610,16 +629,13 @@ const Books = () => {
                       )}
                       {loadingFiltersOrCategories === false &&
                         filtersOrCategories.length === 0 && (
-                          <>
-                            <h1>Filters not found</h1>
-                          </>
+                          <h1>Filters not found</h1>
                         )}
                     </div>
                   </div>
                   <div className="btns_show_filters_and_filter_options flex justify-between mt-3 px-5">
                     <button
                       className="show_filters cursor-pointer outline-none text-[14px] font-400 text-green-500"
-                      style={{}}
                       onClick={() => {
                         setModalShowAllFilters(true);
                         setModalFilter(false);
@@ -653,24 +669,18 @@ const Books = () => {
                   setModalShowAllFilters(false);
                   showScrollbar();
                 }}
-                // fullScreen={fullScreen}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
-                sx={{}}
+                maxWidth="md"
+                fullWidth
               >
                 <div className="modal_show_all_filters_block px-4 py-4">
-                  {/* <h1 className="title_filter_by_category text-[#A1A1A1] text-[16px] font-400">
-                    Filter by Category
-                  </h1> */}
-
                   <DialogTitle id="alert-dialog-title">
-                    {"Filter by Category"}
+                    Filter by Category
                   </DialogTitle>
-                  <div className="filter_by_category mt-1 grid sm:grid-cols-2 md:grid-cols-5 gap-2">
+                  <div className="filter_by_category mt-1 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                     {loadingFiltersOrCategories ? (
-                      <>
-                        <h1>Loading...</h1>
-                      </>
+                      <CircularProgress size={24} />
                     ) : (
                       filtersOrCategories?.map((item: any) => {
                         return (
@@ -680,7 +690,6 @@ const Books = () => {
                           >
                             <input
                               type="checkbox"
-                              name=""
                               id={item.id}
                               className="outline-none cursor-pointer"
                             />
@@ -696,9 +705,7 @@ const Books = () => {
                     )}
                     {loadingFiltersOrCategories === false &&
                       filtersOrCategories.length === 0 && (
-                        <>
-                          <h1>Filters not found</h1>
-                        </>
+                        <h1>Filters not found</h1>
                       )}
                   </div>
                   <DialogActions>
@@ -723,11 +730,13 @@ const Books = () => {
                 }}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
+                maxWidth="md"
+                fullWidth
               >
                 <div className="modal_filter_options_block px-4 py-4">
                   <div className="header_modal_filter_options_block flex justify-between items-center">
                     <DialogTitle id="alert-dialog-title">
-                      {"Filter Options"}
+                      Filter Options
                     </DialogTitle>
                     <button
                       className="add_filter_btn flex items-center gap-1 bg-[#20ACFF] px-2.5 py-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer"
@@ -741,12 +750,7 @@ const Books = () => {
 
                   <div className="filter_functionalities_or_options">
                     <TableContainer>
-                      <Table
-                        aria-label="customized table"
-                        sx={{
-                          width: 500,
-                        }}
-                      >
+                      <Table aria-label="customized table">
                         <TableHead>
                           <TableRow>
                             <StyledTableCell>Filter name</StyledTableCell>
@@ -756,81 +760,49 @@ const Books = () => {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          <StyledTableRow>
-                            <StyledTableCell>Finance</StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                width: "",
-                              }}
-                            >
-                              <div className="btn_func_block flex items-center gap-1.5">
-                                <AiFillEdit
-                                  size={27}
-                                  className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                                  onClick={() => {
-                                    setModalFilterEdit(true);
-                                  }}
-                                />
-                                <MdDelete
-                                  size={27}
-                                  className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
-                                  onClick={() => {
-                                    setModalFilterDelete(true);
-                                  }}
-                                />
-                              </div>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                          <StyledTableRow>
-                            <StyledTableCell>Fantasy</StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                width: "",
-                              }}
-                            >
-                              <div className="btn_func_block flex items-center gap-1.5">
-                                <AiFillEdit
-                                  size={27}
-                                  className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                                  onClick={() => {
-                                    setModalFilterEdit(true);
-                                  }}
-                                />
-                                <MdDelete
-                                  size={27}
-                                  className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
-                                  onClick={() => {
-                                    setModalFilterDelete(true);
-                                  }}
-                                />
-                              </div>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                          <StyledTableRow>
-                            <StyledTableCell>Drama</StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                width: "",
-                              }}
-                            >
-                              <div className="btn_func_block flex items-center gap-1.5">
-                                <AiFillEdit
-                                  size={27}
-                                  className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                                  onClick={() => {
-                                    setModalFilterEdit(true);
-                                  }}
-                                />
-                                <MdDelete
-                                  size={27}
-                                  className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
-                                  onClick={() => {
-                                    setModalFilterDelete(true);
-                                  }}
-                                />
-                              </div>
-                            </StyledTableCell>
-                          </StyledTableRow>
+                          {loadingFiltersOrCategories ? (
+                            <TableRow>
+                              <TableCell colSpan={2} align="center">
+                                <CircularProgress size={24} />
+                              </TableCell>
+                            </TableRow>
+                          ) : (
+                            filtersOrCategories?.map((item: any) => {
+                              return (
+                                <StyledTableRow key={item.id}>
+                                  <StyledTableCell>
+                                    {item.filterName}
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <div className="btn_func_block flex items-center gap-1.5">
+                                      <AiFillEdit
+                                        size={27}
+                                        className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
+                                        onClick={() =>
+                                          openEditFilterModal(item)
+                                        }
+                                      />
+                                      <MdDelete
+                                        size={27}
+                                        className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
+                                        onClick={() =>
+                                          openDeleteFilterModal(item)
+                                        }
+                                      />
+                                    </div>
+                                  </StyledTableCell>
+                                </StyledTableRow>
+                              );
+                            })
+                          )}
+                          {loadingFiltersOrCategories === false &&
+                            filtersOrCategories.length === 0 && (
+                              <StyledTableRow>
+                                <StyledTableCell colSpan={2} align="center">
+                                  <h1>Filters not found</h1>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            )}
                         </TableBody>
                       </Table>
                     </TableContainer>
@@ -839,23 +811,23 @@ const Books = () => {
               </Dialog>
             </div>
           </div>
-          <div className="  fullname_img_of_admin_and_admin_title sm:hidden md:flex items-center gap-3">
+          <div className="fullname_img_of_admin_and_admin_title sm:hidden md:flex items-center gap-3">
             <div className="fullname_of_user_and_admin_title">
               <h1 className="text-[22px] font-500">Suhrob H.</h1>
               <h1 className="text-[#808080] text-[15px] font-400 text-right">
                 Admin
               </h1>
             </div>
-            <img className="w-14 h-14" src={userImg} alt="" />
+            <img className="w-14 h-14" src={userImg} alt="User avatar" />
           </div>
         </div>
+
         <div className="section_books mt-7">
           <div className="title_filter_btn_add__book_block flex justify-between items-center gap-2">
             <h1 className="title_filter text-[24px] font-medium">
               Manage Books
             </h1>
             <div className="filter_and_btn_add_block flex justify-between items-center gap-6">
-              {/* <Link to={"/dashboard/add-book"}> */}
               <button
                 className="flex items-center gap-2 bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer"
                 onClick={() => {
@@ -865,7 +837,6 @@ const Books = () => {
                 <LuPlus />
                 <span className="sm:hidden md:block">Add new book</span>
               </button>
-              {/* </Link> */}
             </div>
           </div>
 
@@ -873,19 +844,15 @@ const Books = () => {
             <Paper
               sx={{
                 width: "100%",
-                // mb: 2,
                 paddingLeft: 3,
                 paddingRight: 3,
                 position: "relative",
+                overflowX: "auto",
               }}
             >
               <EnhancedTableToolbar numSelected={selected.length} />
               <TableContainer>
-                <Table
-                  sx={{ minWidth: 750 }}
-                  aria-labelledby="tableTitle"
-                  // size={dense ? "small" : "medium"}
-                >
+                <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
                   <EnhancedTableHead
                     numSelected={selected.length}
                     order={order}
@@ -907,8 +874,11 @@ const Books = () => {
                         >
                           <TableCell>
                             <img
-                              src={book.image_url}
-                              className="w-10 h-10 rounded-full"
+                              src={
+                                book.image_url ||
+                                "https://via.placeholder.com/40"
+                              }
+                              className="w-10 h-10 rounded-full object-cover"
                               alt="Book cover"
                             />
                           </TableCell>
@@ -922,27 +892,21 @@ const Books = () => {
                           </TableCell>
                           <TableCell>{book.author}</TableCell>
                           <TableCell>{book.category}</TableCell>
-                          <TableCell>{book.bookPage}</TableCell>
+                          <TableCell>{book.page_count}</TableCell>
                           <TableCell>{book.year}</TableCell>
                           <TableCell>{book.available_copies}</TableCell>
                           <TableCell>
                             <div className="btn_func_block flex items-center gap-1.5">
-                              <Link to={"/dashboard/edit-book"}>
+                              <Link to={`/dashboard/edit-book/${book.id}`}>
                                 <AiFillEdit
                                   size={27}
                                   className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
-                                  // onClick={() => {
-                                  //   setModalBookInfoAndEdit(true);
-                                  //   removeScrollbar()
-                                  // }}f
                                 />
                               </Link>
                               <MdDelete
                                 size={27}
                                 className="cursor-pointer text-red-500 hover:text-red-600 duration-100"
-                                onClick={() => {
-                                  setModalDeleteBook(true);
-                                }}
+                                onClick={() => openDeleteBookModal(book.id)}
                               />
                             </div>
                           </TableCell>
@@ -951,8 +915,15 @@ const Books = () => {
                     })}
                     {loadingBooks === false && books.length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={8}>
-                          <h1 className="text-center">Book not found</h1>
+                        <TableCell colSpan={8} align="center">
+                          <h1>Book not found</h1>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                    {loadingBooks && (
+                      <TableRow>
+                        <TableCell colSpan={8} align="center">
+                          <CircularProgress size={40} />
                         </TableCell>
                       </TableRow>
                     )}
@@ -960,53 +931,35 @@ const Books = () => {
                 </Table>
               </TableContainer>
               <TablePagination
-                rowsPerPageOptions={[17, 10, 8, 5]}
+                rowsPerPageOptions={[5, 8, 10, 17]}
                 component="div"
-                count={books.length}
+                count={totalBooksCount}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
             </Paper>
-            {/* <div
-              className={`modal_transparent_book_info_and_edit fixed top-0 right-0 bg-[#DFDFDF] w-125 h-screen duration-300
-                  ${
-                    modalBookInfoAndEdit
-                      ? "pointer-events-auto opacity-100"
-                      : "pointer-events-none opacity-0"
-                  }
-
-                  
-              `}
-            >
-
-            </div> */}
           </div>
         </div>
+
         <div
           className={`transpartent_overlay_modal_filter absolute inset-0 ${modalFilter ? "pointer-events-auto" : "pointer-events-none"}`}
           onClick={() => {
             setModalFilter(false);
             showScrollbar();
           }}
-        ></div>
+        />
 
-        <div
-          className={`transpartent_overlay_modal_book_info_and_edit absolute inset-0 ${modalBookInfoAndEdit ? "pointer-events-auto" : "pointer-events-none"}`}
-          onClick={() => {
-            setModalBookInfoAndEdit(false);
-            showScrollbar();
-          }}
-        ></div>
+        {/* Modal Delete Book */}
         <Dialog
           open={modalDeleteBook}
           onClose={() => {
             setModalDeleteBook(false);
+            setSelectedBookId(null);
           }}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          sx={{}}
           fullWidth
         >
           <div className="modal_delete_book_block px-4 py-4">
@@ -1016,44 +969,51 @@ const Books = () => {
                 className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
                 onClick={() => {
                   setModalDeleteBook(false);
+                  setSelectedBookId(null);
                 }}
               >
-                <MdOutlineClose size={27} className="" />
+                <MdOutlineClose size={27} />
               </button>
             </div>
-            <DialogTitle
-              sx={{
-                fontSize: 17,
-              }}
-            >
-              {"Are you sure to delete this book? This action can't be undone"}
+            <DialogTitle sx={{ fontSize: 17 }}>
+              Are you sure you want to delete this book? This action cannot be
+              undone.
             </DialogTitle>
             <div className="block_btns flex gap-2 justify-between sm:flex-col md:flex-row">
               <button
                 className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full duration-300"
                 onClick={() => {
                   setModalDeleteBook(false);
+                  setSelectedBookId(null);
                 }}
+                disabled={loadingDeleteBook}
               >
                 No
               </button>
-              <button className="bg-[red] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full duration-300">
-                Yes
+              <button
+                className="bg-[red] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full duration-300 disabled:opacity-50"
+                onClick={deleteBook}
+                disabled={loadingDeleteBook}
+              >
+                {loadingDeleteBook ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Yes"
+                )}
               </button>
             </div>
           </div>
         </Dialog>
 
-        {/* Filter Modals */}
         {/* Modal Add Filter */}
         <Dialog
           open={modalFilterAdd}
           onClose={() => {
             setModalFilterAdd(false);
+            setFilterOrCategoryNameInpValueForAdding("");
           }}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          sx={{}}
           fullWidth
         >
           <div className="modal_add_filter_block px-4 py-4">
@@ -1063,28 +1023,47 @@ const Books = () => {
                 className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
                 onClick={() => {
                   setModalFilterAdd(false);
+                  setFilterOrCategoryNameInpValueForAdding("");
                 }}
               >
-                <MdOutlineClose size={27} className="" />
+                <MdOutlineClose size={27} />
               </button>
             </div>
-            <form action="" className="form flex flex-col gap-2">
+            <form
+              className="form flex flex-col gap-2"
+              onSubmit={handleSubmitAddingFilter}
+            >
               <div className="label_inp_filter flex flex-col gap-2">
                 <label
-                  htmlFor="book_name"
+                  htmlFor="filter_name"
                   className="cursor-pointer text-[15px] font-500"
                 >
                   Filter Name
                 </label>
                 <TextField
-                  id="book_name"
+                  id="filter_name"
                   label="Name of Filter"
                   variant="outlined"
+                  value={filterOrCategoryNameInpValueForAdding}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setFilterOrCategoryNameInpValueForAdding(
+                      event.target.value,
+                    );
+                  }}
+                  required
                 />
               </div>
               <div className="btn_submit_block mt-2">
-                <button className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full">
-                  Submit
+                <button
+                  type="submit"
+                  className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full disabled:opacity-50"
+                  disabled={loadingAddFiltersOrCategories}
+                >
+                  {loadingAddFiltersOrCategories ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
               </div>
             </form>
@@ -1096,10 +1075,11 @@ const Books = () => {
           open={modalFilterEdit}
           onClose={() => {
             setModalFilterEdit(false);
+            setSelectedFilterId(null);
+            setFilterOrCategoryNameInpValueForEditing("");
           }}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          sx={{}}
           fullWidth
         >
           <div className="modal_edit_filter_block px-4 py-4">
@@ -1109,28 +1089,48 @@ const Books = () => {
                 className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
                 onClick={() => {
                   setModalFilterEdit(false);
+                  setSelectedFilterId(null);
+                  setFilterOrCategoryNameInpValueForEditing("");
                 }}
               >
-                <MdOutlineClose size={27} className="" />
+                <MdOutlineClose size={27} />
               </button>
             </div>
-            <form action="" className="form flex flex-col gap-2">
+            <form
+              className="form flex flex-col gap-2"
+              onSubmit={handleSubmitEditingFilter}
+            >
               <div className="label_inp_filter flex flex-col gap-2">
                 <label
-                  htmlFor="book_name"
+                  htmlFor="edit_filter_name"
                   className="cursor-pointer text-[15px] font-500"
                 >
                   Filter Name
                 </label>
                 <TextField
-                  id="book_name"
+                  id="edit_filter_name"
                   label="Name of Filter"
                   variant="outlined"
+                  value={filterOrCategoryNameInpValueForEditing}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setFilterOrCategoryNameInpValueForEditing(
+                      event.target.value,
+                    );
+                  }}
+                  required
                 />
               </div>
               <div className="btn_edit_block mt-2">
-                <button className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full">
-                  Update
+                <button
+                  type="submit"
+                  className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full disabled:opacity-50"
+                  disabled={loadingEditFiltersOrCategories}
+                >
+                  {loadingEditFiltersOrCategories ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    "Update"
+                  )}
                 </button>
               </div>
             </form>
@@ -1142,10 +1142,10 @@ const Books = () => {
           open={modalFilterDelete}
           onClose={() => {
             setModalFilterDelete(false);
+            setSelectedFilterId(null);
           }}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          sx={{}}
           fullWidth
         >
           <div className="modal_delete_filter_block px-4 py-4">
@@ -1155,44 +1155,67 @@ const Books = () => {
                 className="close_modal_btn outline-none cursor-pointer p-2 bg-[#D9D9D9] rounded-full"
                 onClick={() => {
                   setModalFilterDelete(false);
+                  setSelectedFilterId(null);
                 }}
               >
-                <MdOutlineClose size={27} className="" />
+                <MdOutlineClose size={27} />
               </button>
             </div>
-            <DialogTitle
-              sx={{
-                fontSize: 17,
-              }}
-            >
-              {
-                "Are you sure to delete this filter? This action can't be undone"
-              }
+            <DialogTitle sx={{ fontSize: 17 }}>
+              Are you sure you want to delete this filter? This action cannot be
+              undone.
             </DialogTitle>
             <div className="block_btns flex gap-2 justify-between sm:flex-col-reverse md:flex-row">
               <button
-                className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full duration-300"
+                className="bg-[#20ACFF] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full duration-300 disabled:opacity-50"
                 onClick={() => {
                   setModalFilterDelete(false);
+                  setSelectedFilterId(null);
                 }}
+                disabled={loadingDeleteFilter}
               >
                 No
               </button>
-              <button className="bg-[red] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full duration-300">
-                Yes
+              <button
+                className="bg-[red] p-2.5 rounded-[10px] text-white text-[18px] font-500 cursor-pointer w-full duration-300 disabled:opacity-50"
+                onClick={deleteFilterOrCategory}
+                disabled={loadingDeleteFilter}
+              >
+                {loadingDeleteFilter ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Yes"
+                )}
               </button>
             </div>
           </div>
         </Dialog>
       </div>
 
-      {/* Loading Backdrop */}
+      {/* Loading Backdrop for Books */}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loadingBooks}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
+
+      {/* Snackbar for Notifications */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

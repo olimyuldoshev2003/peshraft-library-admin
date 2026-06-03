@@ -29,6 +29,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { Link, useNavigate } from "react-router-dom";
 import { saveToken } from "../../utils/token";
+import { axiosRequest } from "../../utils/axiosRequest";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -146,7 +147,7 @@ const SignIn = () => {
         password: passwordInpValue.trim(),
       };
 
-      const response = await axios.post(
+      const response = await axiosRequest.post(
         `${import.meta.env.VITE_API_URL}/auth/login`,
         trimmedUserData,
       );
@@ -170,7 +171,7 @@ const SignIn = () => {
         });
       } else if (error.response?.status === 404) {
         setErrors((prev) => ({
-          ...prev,  
+          ...prev,
           email: "User not found",
         }));
       } else if (error.request) {
