@@ -334,58 +334,6 @@ const EditBook = () => {
     setShowConfirmDialog(true);
   }
 
-  async function updateBook() {
-    setLoading(true);
-    setShowConfirmDialog(false);
-
-    try {
-      let updatedBook: any = {
-        title: bookName,
-        author: authorName,
-        description: description,
-        category: categoryValue,
-        year: parseInt(publicationYear),
-        available_copies: parseInt(availableCopies),
-        page_count: parseInt(pageSize),
-        // language: language,
-      };
-
-      // Handle main image - use new file if selected, otherwise keep existing
-      // if (imgBookFile) {
-      //   updatedBook.image_url = imgBook;
-      // } else if (booksForEditing?.image_url) {
-      //   updatedBook.image_url = booksForEditing.image_url;
-      // }
-
-      // Handle background image - use new file if selected, otherwise keep existing
-      // if (imgBgBookFile) {
-      //   updatedBook.background_image = imgBgBook;
-      // } else if (booksForEditing?.background_image) {
-      //   updatedBook.background_image = booksForEditing.background_image;
-      // }
-
-      const { data } = await axiosRequest.put(
-        `${import.meta.env.VITE_API_URL}/admin/books/${booksForEditing?.id}`,
-        updatedBook,
-      );
-
-      console.log("Book updated successfully:", data);
-      showSnackbar("Book updated successfully!", "success");
-
-      setTimeout(() => {
-        navigate("/dashboard/books");
-      }, 2000);
-    } catch (error: any) {
-      console.error("Error updating book:", error);
-      const errorMessage =
-        error.response?.data?.message ||
-        "Failed to update book. Please try again.";
-      showSnackbar(errorMessage, "error");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   const showSnackbar = (
     message: string,
     severity: "success" | "error" | "warning" | "info",
@@ -456,6 +404,58 @@ const EditBook = () => {
     setLanguage(value);
     validateField("language", value);
   };
+
+  async function updateBook() {
+    setLoading(true);
+    setShowConfirmDialog(false);
+
+    try {
+      let updatedBook: any = {
+        title: bookName,
+        author: authorName,
+        description: description,
+        category: categoryValue,
+        year: parseInt(publicationYear),
+        available_copies: parseInt(availableCopies),
+        page_count: parseInt(pageSize),
+        // language: language,
+      };
+
+      // Handle main image - use new file if selected, otherwise keep existing
+      // if (imgBookFile) {
+      //   updatedBook.image_url = imgBook;
+      // } else if (booksForEditing?.image_url) {
+      //   updatedBook.image_url = booksForEditing.image_url;
+      // }
+
+      // Handle background image - use new file if selected, otherwise keep existing
+      // if (imgBgBookFile) {
+      //   updatedBook.background_image = imgBgBook;
+      // } else if (booksForEditing?.background_image) {
+      //   updatedBook.background_image = booksForEditing.background_image;
+      // }
+
+      const { data } = await axiosRequest.put(
+        `${import.meta.env.VITE_API_URL}/admin/books/${booksForEditing?.id}`,
+        updatedBook,
+      );
+
+      console.log("Book updated successfully:", data);
+      showSnackbar("Book updated successfully!", "success");
+
+      setTimeout(() => {
+        navigate("/dashboard/books");
+      }, 2000);
+    } catch (error: any) {
+      console.error("Error updating book:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to update book. Please try again.";
+      showSnackbar(errorMessage, "error");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   if (!booksForEditing) {
     return (

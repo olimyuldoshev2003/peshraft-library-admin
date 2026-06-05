@@ -43,6 +43,8 @@ const Members = () => {
 
   const [members, setMembers] = useState<any[]>([]);
   const [loadingMembers, setLoadingMembers] = useState<boolean>(false);
+  const [loadingMemberDetails, setLoadingMemberDetails] =
+    useState<boolean>(false);
   const [memberInsideModal, setMembersInsideModal] = useState<any>(null);
   const [totalMembersCount, setTotalMembersCount] = useState<number>(0);
   const [searchInpValue, setSearchInpValue] = useState<string>("");
@@ -146,6 +148,129 @@ const Members = () => {
     rowCount: number;
   }
 
+  interface EnhancedTableToolbarProps {
+    numSelected: number;
+  }
+
+  const handleRequestSort = (_: React.MouseEvent<unknown>, property: any) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      const newSelected = members.map((n: any) => n.id);
+      setSelected(newSelected);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleChangePage = (_: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const visibleRows = useMemo(
+    () =>
+      [...members]
+        .sort(getComparator(order, orderBy))
+        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
+    [order, orderBy, page, rowsPerPage, members],
+  );
+
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - members.length) : 0;
+
+  const showSnackbar = (
+    message: string,
+    severity: "success" | "error" | "warning" | "info",
+  ) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({
+      ...snackbar,
+      open: false,
+    });
+  };
+
+  async function getMembers() {
+    setLoadingMembers(true);
+    try {
+      const { data } = await axiosRequest.get(
+        `${import.meta.env.VITE_API_URL}/admin/members?search=${searchInpValue}&page=${page + 1}&page_size=${rowsPerPage}`,
+      );
+      setMembers(data.members || data.data || []);
+      setTotalMembersCount(data.total || data.members?.length || 0);
+    } catch (error) {
+      console.error(error);
+      showSnackbar("Failed to load members", "error");
+    } finally {
+      setLoadingMembers(false);
+    }
+  }
+
+  async function getMemberDetails(memberId: number) {
+    setLoadingMemberDetails(true);
+    try {
+      const { data } = await axiosRequest.get(
+        `${import.meta.env.VITE_API_URL}/admin/members/${memberId}`,
+      );
+      setMembersInsideModal(data);
+    } catch (error) {
+      console.error(error);
+      showSnackbar("Failed to load member details", "error");
+    } finally {
+      setLoadingMemberDetails(false);
+    }
+  }
+
+  useEffect(() => {
+    getMembers();
+  }, [searchInpValue, page, rowsPerPage]);
+
+  function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
+    const { numSelected } = props;
+
+    return (
+      <Toolbar
+        sx={{
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+          ...(numSelected > 0 && {
+            bgcolor: (theme) =>
+              alpha(
+                theme.palette.primary.main,
+                theme.palette.action.activatedOpacity,
+              ),
+          }),
+        }}
+      >
+        <Typography
+          sx={{ flex: "1 1 100%" }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        >
+          Members
+        </Typography>
+      </Toolbar>
+    );
+  }
+
   function EnhancedTableHead(props: EnhancedTableProps) {
     const { order, orderBy, onRequestSort } = props;
 
@@ -187,114 +312,6 @@ const Members = () => {
       </TableHead>
     );
   }
-
-  interface EnhancedTableToolbarProps {
-    numSelected: number;
-  }
-
-  function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected } = props;
-
-    return (
-      <Toolbar
-        sx={{
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-          ...(numSelected > 0 && {
-            bgcolor: (theme) =>
-              alpha(
-                theme.palette.primary.main,
-                theme.palette.action.activatedOpacity,
-              ),
-          }),
-        }}
-      >
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Members
-        </Typography>
-      </Toolbar>
-    );
-  }
-
-  const handleRequestSort = (_: React.MouseEvent<unknown>, property: any) => {
-    const isAsc = orderBy === property && order === "asc";
-    setOrder(isAsc ? "desc" : "asc");
-    setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-      const newSelected = members.map((n: any) => n.id);
-      setSelected(newSelected);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleChangePage = (_: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const visibleRows = useMemo(
-    () =>
-      [...members]
-        .sort(getComparator(order, orderBy))
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage, members],
-  );
-
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - members.length) : 0;
-
-  async function getMembers() {
-    setLoadingMembers(true);
-    try {
-      const { data } = await axiosRequest.get(
-        `${import.meta.env.VITE_API_URL}/admin/members?search=${searchInpValue}&page=${page + 1}&page_size=${rowsPerPage}`,
-      );
-      setMembers(data.members || data.data || []);
-      setTotalMembersCount(data.total || data.members?.length || 0);
-    } catch (error) {
-      console.error(error);
-      showSnackbar("Failed to load members", "error");
-    } finally {
-      setLoadingMembers(false);
-    }
-  }
-
-  const showSnackbar = (
-    message: string,
-    severity: "success" | "error" | "warning" | "info",
-  ) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbar({
-      ...snackbar,
-      open: false,
-    });
-  };
-
-  useEffect(() => {
-    getMembers();
-  }, [searchInpValue, page, rowsPerPage]);
 
   return (
     <>
@@ -380,7 +397,7 @@ const Members = () => {
                               className="cursor-pointer text-blue-600 hover:text-blue-800 duration-100"
                               onClick={() => {
                                 setModalInfoAboutMember(true);
-                                setMembersInsideModal(member);
+                                getMemberDetails(member.id);
                               }}
                             />
                           </TableCell>
@@ -431,166 +448,178 @@ const Members = () => {
               maxWidth="md"
               fullWidth
             >
-              {memberInsideModal && (
-                <div className="modal_info_about_member_block sm:p-4 md:p-2.5 flex items-center gap-5 min-w-0 flex-wrap">
-                  <div className="info_about_member shrink-0 flex flex-col sm:justify-center md:justify-start sm:w-full md:w-[45%]">
-                    <div className="btn_close_block">
-                      <IoArrowBackCircleOutline
-                        size={25}
-                        className="cursor-pointer"
-                        onClick={() => {
-                          setModalInfoAboutMember(false);
-                        }}
-                      />
-                    </div>
-                    <div className="info_about_member flex flex-col sm:justify-center md:justify-start sm:items-center md:items-start">
-                      <img
-                        src={memberInsideModal.image_url || memberImg}
-                        className="w-58.5 h-68.5 rounded-xl object-contain"
-                        alt="Member avatar"
-                      />
-                      <div className="info_text_block mt-4">
-                        <h1 className="info_text_title text-[22px] font-500">
-                          Bio Info
-                        </h1>
-                        <h1 className="text-[#6E6E6E] text-[17px] font-500 mt-2">
-                          Full Name:{" "}
-                          <span className="text-black font-400">
-                            {memberInsideModal.name}
-                          </span>
-                        </h1>
-                        <h1 className="text-[#6E6E6E] text-[17px] font-500 mt-1">
-                          Birth Date:{" "}
-                          <span className="text-black font-400">
-                            {memberInsideModal.date_of_birth}
-                          </span>
-                        </h1>
-                        <h1 className="text-[#6E6E6E] text-[17px] font-500 mt-1">
-                          Phone:{" "}
-                          <span className="text-black font-400">
-                            {memberInsideModal.phone}
-                          </span>
-                        </h1>
-                        <h1 className="text-[#6E6E6E] text-[17px] font-500 mt-1">
-                          Email:{" "}
-                          <span className="text-black font-400">
-                            {memberInsideModal.email}
-                          </span>
-                        </h1>
-                        <h1 className="text-[#6E6E6E] text-[17px] font-500 mt-1">
-                          Membership Date:{" "}
-                          <span className="text-black font-400">
-                            {memberInsideModal.created_at
-                              ? new Date(
-                                  memberInsideModal.created_at,
-                                ).toLocaleDateString()
-                              : "N/A"}
-                          </span>
-                        </h1>
-                      </div>
-                    </div>
+              <div className={`modal_info_about_member_block `}>
+                {loadingMemberDetails ? (
+                  <div className="flex justify-center items-center p-10">
+                    <CircularProgress />
                   </div>
-                  <div className="info_bookshelf_and_history_book_block flex flex-col gap-3 flex-1 min-w-0">
-                    <div className="info_about_bookshelf_of_member">
-                      <h1 className="bookshelf_title text-[25px] font-500 border-b-3 pb-2">
-                        Bookshelf
-                      </h1>
-                      <div className="bookshelf_block p-3 h-47 overflow-auto flex flex-col gap-3 border-b-2 border-b-[#D9D9D9] w-full">
-                        {memberInsideModal.current_borrowings &&
-                        memberInsideModal.current_borrowings.length > 0 ? (
-                          memberInsideModal.current_borrowings.map(
-                            (borrowing: any, idx: number) => (
-                              <div
-                                key={idx}
-                                className="boolshelf_container flex justify-between items-center gap-3 sm:w-80 md:w-auto"
-                              >
-                                <div className="img_book_name_and_author_name_block flex items-center gap-3">
-                                  <div className="block_img bg-[#F5EABD] p-2 rounded-[5px]">
-                                    <img
-                                      src={borrowing.book?.image_url || bookImg}
-                                      alt=""
-                                      className="w-10.75 h-15 object-cover"
-                                    />
-                                  </div>
-                                  <div className="name_and_author_of_book">
-                                    <h1 className="name_of_book text-[20px] font-500">
-                                      {borrowing.book?.title || "Unknown Book"}
-                                    </h1>
-                                    <p className="author_of_book text-[#515151] text-[14px] font-400">
-                                      {borrowing.book?.author ||
-                                        "Unknown Author"}
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="icon_and_days_left">
-                                  <h1 className="flex items-center text-[#FF383C] gap-1.5">
-                                    <LuOctagonAlert size={18} />
-                                    <span className="text-[12px] font-600">
-                                      {borrowing.days_left || "Overdue"} days
-                                      left
-                                    </span>
-                                  </h1>
-                                </div>
-                              </div>
-                            ),
-                          )
-                        ) : (
-                          <div className="text-center text-gray-500 py-4">
-                            No books currently borrowed
+                ) : (
+                  memberInsideModal && (
+                    <div className="modal_info_about_member_sub_block sm:p-4 md:p-2.5 flex items-center gap-5 min-w-0 flex-wrap">
+                      <div className="info_about_member shrink-0 flex flex-col sm:justify-center md:justify-start sm:w-full md:w-[45%]">
+                        <div className="btn_close_block">
+                          <IoArrowBackCircleOutline
+                            size={25}
+                            className="cursor-pointer"
+                            onClick={() => {
+                              setModalInfoAboutMember(false);
+                            }}
+                          />
+                        </div>
+                        <div className="info_about_member flex flex-col sm:justify-center md:justify-start sm:items-center md:items-start">
+                          <img
+                            src={memberInsideModal.image_url || memberImg}
+                            className="w-58.5 h-68.5 rounded-xl object-contain"
+                            alt="Member avatar"
+                          />
+                          <div className="info_text_block mt-4">
+                            <h1 className="info_text_title text-[22px] font-500">
+                              Bio Info
+                            </h1>
+                            <h1 className="text-[#6E6E6E] text-[17px] font-500 mt-2">
+                              Full Name:{" "}
+                              <span className="text-black font-400">
+                                {memberInsideModal.name}
+                              </span>
+                            </h1>
+                            <h1 className="text-[#6E6E6E] text-[17px] font-500 mt-1">
+                              Birth Date:{" "}
+                              <span className="text-black font-400">
+                                {memberInsideModal.date_of_birth}
+                              </span>
+                            </h1>
+                            <h1 className="text-[#6E6E6E] text-[17px] font-500 mt-1">
+                              Phone:{" "}
+                              <span className="text-black font-400">
+                                {memberInsideModal.phone}
+                              </span>
+                            </h1>
+                            <h1 className="text-[#6E6E6E] text-[17px] font-500 mt-1">
+                              Email:{" "}
+                              <span className="text-black font-400">
+                                {memberInsideModal.email}
+                              </span>
+                            </h1>
+                            <h1 className="text-[#6E6E6E] text-[17px] font-500 mt-1">
+                              Membership Date:{" "}
+                              <span className="text-black font-400">
+                                {memberInsideModal.created_at
+                                  ? new Date(
+                                      memberInsideModal.created_at,
+                                    ).toLocaleDateString()
+                                  : "N/A"}
+                              </span>
+                            </h1>
                           </div>
-                        )}
+                        </div>
                       </div>
-                    </div>
+                      <div className="info_bookshelf_and_history_book_block flex flex-col gap-3 flex-1 min-w-0">
+                        <div className="info_about_bookshelf_of_member">
+                          <h1 className="bookshelf_title text-[25px] font-500 border-b-3 pb-2">
+                            Bookshelf
+                          </h1>
+                          <div className="bookshelf_block p-3 h-47 overflow-auto flex flex-col gap-3 border-b-2 border-b-[#D9D9D9] w-full">
+                            {memberInsideModal.current_borrowings &&
+                            memberInsideModal.current_borrowings.length > 0 ? (
+                              memberInsideModal.current_borrowings.map(
+                                (borrowing: any, idx: number) => (
+                                  <div
+                                    key={idx}
+                                    className="boolshelf_container flex justify-between items-center gap-3 sm:w-80 md:w-auto"
+                                  >
+                                    <div className="img_book_name_and_author_name_block flex items-center gap-3">
+                                      <div className="block_img bg-[#F5EABD] p-2 rounded-[5px]">
+                                        <img
+                                          src={
+                                            borrowing.book?.image_url || bookImg
+                                          }
+                                          alt=""
+                                          className="w-10.75 h-15 object-cover"
+                                        />
+                                      </div>
+                                      <div className="name_and_author_of_book">
+                                        <h1 className="name_of_book text-[20px] font-500">
+                                          {borrowing.book?.title ||
+                                            "Unknown Book"}
+                                        </h1>
+                                        <p className="author_of_book text-[#515151] text-[14px] font-400">
+                                          {borrowing.book?.author ||
+                                            "Unknown Author"}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="icon_and_days_left">
+                                      <h1 className="flex items-center text-[#FF383C] gap-1.5">
+                                        <LuOctagonAlert size={18} />
+                                        <span className="text-[12px] font-600">
+                                          {borrowing.days_left || "Overdue"}{" "}
+                                          days left
+                                        </span>
+                                      </h1>
+                                    </div>
+                                  </div>
+                                ),
+                              )
+                            ) : (
+                              <div className="text-center text-gray-500 py-4">
+                                No books currently borrowed
+                              </div>
+                            )}
+                          </div>
+                        </div>
 
-                    <div className="info_about_history_book_of_member">
-                      <h1 className="history_book_title text-[25px] font-500 border-b-3 pb-2">
-                        History Book
-                      </h1>
-                      <div className="history_book_block p-3 h-47 overflow-auto flex flex-col gap-3 border-b-2 border-b-[#D9D9D9]">
-                        {memberInsideModal.borrowing_history &&
-                        memberInsideModal.borrowing_history.length > 0 ? (
-                          memberInsideModal.borrowing_history.map(
-                            (history: any, idx: number) => (
-                              <div
-                                key={idx}
-                                className="hisory_book_container flex items-center gap-3 sm:w-50 md:w-auto"
-                              >
-                                <div className="block_img bg-[#F5EABD] p-2 rounded-[5px]">
-                                  <img
-                                    src={history.book?.image_url || bookImg}
-                                    alt=""
-                                    className="w-10.75 h-15 object-cover"
-                                  />
-                                </div>
-                                <div className="name_and_author_of_book">
-                                  <h1 className="name_of_book text-[20px] font-500">
-                                    {history.book?.title || "Unknown Book"}
-                                  </h1>
-                                  <p className="author_of_book text-[#515151] text-[14px] font-400">
-                                    {history.book?.author || "Unknown Author"}
-                                  </p>
-                                  <p className="returned_date text-[#6E6E6E] text-[12px]">
-                                    Returned:{" "}
-                                    {history.returned_at
-                                      ? new Date(
-                                          history.returned_at,
-                                        ).toLocaleDateString()
-                                      : "Not returned"}
-                                  </p>
-                                </div>
+                        <div className="info_about_history_book_of_member">
+                          <h1 className="history_book_title text-[25px] font-500 border-b-3 pb-2">
+                            History Book
+                          </h1>
+                          <div className="history_book_block p-3 h-47 overflow-auto flex flex-col gap-3 border-b-2 border-b-[#D9D9D9]">
+                            {memberInsideModal.borrowing_history &&
+                            memberInsideModal.borrowing_history.length > 0 ? (
+                              memberInsideModal.borrowing_history.map(
+                                (history: any, idx: number) => (
+                                  <div
+                                    key={idx}
+                                    className="hisory_book_container flex items-center gap-3 sm:w-50 md:w-auto"
+                                  >
+                                    <div className="block_img bg-[#F5EABD] p-2 rounded-[5px]">
+                                      <img
+                                        src={history.book?.image_url || bookImg}
+                                        alt=""
+                                        className="w-10.75 h-15 object-cover"
+                                      />
+                                    </div>
+                                    <div className="name_and_author_of_book">
+                                      <h1 className="name_of_book text-[20px] font-500">
+                                        {history.book?.title || "Unknown Book"}
+                                      </h1>
+                                      <p className="author_of_book text-[#515151] text-[14px] font-400">
+                                        {history.book?.author ||
+                                          "Unknown Author"}
+                                      </p>
+                                      <p className="returned_date text-[#6E6E6E] text-[12px]">
+                                        Returned:{" "}
+                                        {history.returned_at
+                                          ? new Date(
+                                              history.returned_at,
+                                            ).toLocaleDateString()
+                                          : "Not returned"}
+                                      </p>
+                                    </div>
+                                  </div>
+                                ),
+                              )
+                            ) : (
+                              <div className="text-center text-gray-500 py-4">
+                                No borrowing history
                               </div>
-                            ),
-                          )
-                        ) : (
-                          <div className="text-center text-gray-500 py-4">
-                            No borrowing history
+                            )}
                           </div>
-                        )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              )}
+                  )
+                )}
+              </div>
             </Dialog>
           </div>
         </div>

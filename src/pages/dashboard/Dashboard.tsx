@@ -140,6 +140,24 @@ const Dashboard = () => {
     },
   }));
 
+  function getMonthName(monthNumber: number): string {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "June",
+      "July",
+      "Aug",
+      "Sept",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    return months[monthNumber - 1] || "Jan";
+  }
+
   async function getStat() {
     setLoadingStat(true);
     try {
@@ -177,24 +195,6 @@ const Dashboard = () => {
     } finally {
       setLoadingMonthlyStats(false);
     }
-  }
-
-  function getMonthName(monthNumber: number): string {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "June",
-      "July",
-      "Aug",
-      "Sept",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    return months[monthNumber - 1] || "Jan";
   }
 
   async function getOverdueBorrowers() {

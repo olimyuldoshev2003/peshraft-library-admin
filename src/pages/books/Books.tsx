@@ -274,6 +274,54 @@ const Books = () => {
     },
   }));
 
+  const handleSubmitAddingFilter = (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    addFilterOrCategory();
+  };
+
+  const handleSubmitEditingFilter = (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+    editFilterOrCategory();
+  };
+
+  const openEditFilterModal = (filter: any) => {
+    setSelectedFilterId(filter.id);
+    setFilterOrCategoryNameInpValueForEditing(filter.filterName);
+    setModalFilterEdit(true);
+  };
+
+  const openDeleteFilterModal = (filter: any) => {
+    setSelectedFilterId(filter.id);
+    setModalFilterDelete(true);
+  };
+
+  const openDeleteBookModal = (bookId: number) => {
+    setSelectedBookId(bookId);
+    setModalDeleteBook(true);
+  };
+
+  const showSnackbar = (
+    message: string,
+    severity: "success" | "error" | "warning" | "info",
+  ) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar({
+      ...snackbar,
+      open: false,
+    });
+  };
+
   async function getBooks() {
     setLoadingBooks(true);
     try {
@@ -422,54 +470,6 @@ const Books = () => {
       setLoadingDeleteBook(false);
     }
   }
-
-  const handleSubmitAddingFilter = (
-    event: React.FormEvent<HTMLFormElement>,
-  ) => {
-    event.preventDefault();
-    addFilterOrCategory();
-  };
-
-  const handleSubmitEditingFilter = (
-    event: React.FormEvent<HTMLFormElement>,
-  ) => {
-    event.preventDefault();
-    editFilterOrCategory();
-  };
-
-  const openEditFilterModal = (filter: any) => {
-    setSelectedFilterId(filter.id);
-    setFilterOrCategoryNameInpValueForEditing(filter.filterName);
-    setModalFilterEdit(true);
-  };
-
-  const openDeleteFilterModal = (filter: any) => {
-    setSelectedFilterId(filter.id);
-    setModalFilterDelete(true);
-  };
-
-  const openDeleteBookModal = (bookId: number) => {
-    setSelectedBookId(bookId);
-    setModalDeleteBook(true);
-  };
-
-  const showSnackbar = (
-    message: string,
-    severity: "success" | "error" | "warning" | "info",
-  ) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbar({
-      ...snackbar,
-      open: false,
-    });
-  };
 
   useEffect(() => {
     getFiltersByCategory();
