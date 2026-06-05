@@ -18,13 +18,16 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
 
 const EditBook = () => {
   const navigate = useNavigate();
   const { booksForEditing } = useAppSelector((state) => state.booksState);
 
   const [imgBook, setImgBook] = useState<any>(null);
+  const [imgBookFile, setImgBookFile] = useState<File | null>(null);
   const [imgBgBook, setImgBgBook] = useState<any>(null);
+  const [imgBgBookFile, setImgBgBookFile] = useState<File | null>(null);
   const [categoryValue, setCategoryValue] = useState<string>(
     booksForEditing?.category || "",
   );
@@ -57,12 +60,155 @@ const EditBook = () => {
   const [filters, setFilters] = useState<any[]>([]);
   const [loadingFilters, setLoadingFilters] = useState<boolean>(false);
 
+  // Validation error states
+  const [errors, setErrors] = useState({
+    bookName: "",
+    authorName: "",
+    categoryValue: "",
+    publicationYear: "",
+    pageSize: "",
+    availableCopies: "",
+    imgBook: "",
+    imgBgBook: "",
+    language: "",
+  });
+
   // Snackbar states
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success" as "success" | "error" | "warning" | "info",
   });
+
+  // Validate single field
+  const validateField = (name: string, value: any) => {
+    let error = "";
+
+    switch (name) {
+      case "bookName":
+        if (!value || !value.trim()) {
+          error = "Book title is required";
+        } else if (value.trim().length < 2) {
+          error = "Book title must be at least 2 characters";
+        } else if (value.trim().length > 200) {
+          error = "Book title must be less than 200 characters";
+        }
+        break;
+
+      case "authorName":
+        if (!value || !value.trim()) {
+          error = "Author name is required";
+        } else if (value.trim().length < 2) {
+          error = "Author name must be at least 2 characters";
+        } else if (value.trim().length > 100) {
+          error = "Author name must be less than 100 characters";
+        }
+        break;
+
+      case "categoryValue":
+        if (!value) {
+          error = "Category is required";
+        }
+        break;
+
+      case "publicationYear":
+        if (!value) {
+          error = "Publication year is required";
+        } else {
+          const year = parseInt(value);
+          const currentYear = new Date().getFullYear();
+          if (isNaN(year) || year < 1000 || year > currentYear) {
+            error = `Publication year must be between 1000 and ${currentYear}`;
+          }
+        }
+        break;
+
+      case "pageSize":
+        if (!value) {
+          error = "Page count is required";
+        } else {
+          const pages = parseInt(value);
+          if (isNaN(pages) || pages < 1) {
+            error = "Page count must be at least 1";
+          } else if (pages > 10000) {
+            error = "Page count must be less than 10000";
+          }
+        }
+        break;
+
+      case "availableCopies":
+        if (!value && value !== 0) {
+          error = "Available copies is required";
+        } else {
+          const copies = parseInt(value);
+          if (isNaN(copies) || copies < 0) {
+            error = "Available copies must be 0 or greater";
+          } else if (copies > 1000) {
+            error = "Available copies must be less than 1000";
+          }
+        }
+        break;
+
+      case "imgBook":
+        // Main image is required - either existing or new file
+        if (!booksForEditing?.image_url && !value) {
+          error = "Book image is required";
+        } else if (value && value.size) {
+          if (!value.type.startsWith("image/")) {
+            error = "Please select an image file";
+          } else if (value.size > 5 * 1024 * 1024) {
+            error = "Image size should be less than 5MB";
+          }
+        }
+        break;
+
+      case "imgBgBook":
+        // Background image is required - either existing or new file
+        if (!booksForEditing?.background_image && !value) {
+          error = "Background image is required";
+        } else if (value && value.size) {
+          if (!value.type.startsWith("image/")) {
+            error = "Please select an image file";
+          } else if (value.size > 5 * 1024 * 1024) {
+            error = "Image size should be less than 5MB";
+          }
+        }
+        break;
+
+      case "language":
+        if (!value || !value.trim()) {
+          error = "Language is required";
+        } else if (value.trim().length < 2) {
+          error = "Language must be at least 2 characters";
+        } else if (value.trim().length > 50) {
+          error = "Language name must be less than 50 characters";
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: error }));
+    return error === "";
+  };
+
+  // Validate all fields
+  const validateAllFields = () => {
+    const validations = [
+      validateField("bookName", bookName),
+      validateField("authorName", authorName),
+      validateField("categoryValue", categoryValue),
+      validateField("publicationYear", publicationYear),
+      validateField("pageSize", pageSize),
+      validateField("availableCopies", availableCopies),
+      validateField("language", language),
+      validateField("imgBook", imgBookFile),
+      validateField("imgBgBook", imgBgBookFile),
+    ];
+
+    return validations.every((v) => v === true);
+  };
 
   // Get filters from API
   async function getFilters() {
@@ -71,7 +217,7 @@ const EditBook = () => {
       const { data } = await axiosRequest.get(
         `${import.meta.env.VITE_API_URL}/admin/filters`,
       );
-      setFilters(data.data.data || []);
+      setFilters(data.data?.data || data.filters || []);
     } catch (error) {
       console.error("Error fetching filters:", error);
       showSnackbar("Failed to load categories", "error");
@@ -88,6 +234,28 @@ const EditBook = () => {
     const file = event.target.files[0];
 
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        showSnackbar("Please select an image file", "error");
+        setErrors((prev) => ({
+          ...prev,
+          imgBook: "Please select an image file",
+        }));
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showSnackbar("Image size should be less than 5MB", "error");
+        setErrors((prev) => ({
+          ...prev,
+          imgBook: "Image size should be less than 5MB",
+        }));
+        return;
+      }
+
+      setImgBookFile(file);
+      setErrors((prev) => ({ ...prev, imgBook: "" }));
       const reader = new FileReader();
 
       reader.onload = (event: any) => {
@@ -95,6 +263,16 @@ const EditBook = () => {
       };
 
       reader.readAsDataURL(file);
+    } else {
+      // If no file selected and there's no existing image, show error
+      if (!booksForEditing?.image_url) {
+        setErrors((prev) => ({
+          ...prev,
+          imgBook: "Book image is required",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, imgBook: "" }));
+      }
     }
   };
 
@@ -102,6 +280,28 @@ const EditBook = () => {
     const file = event.target.files[0];
 
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        showSnackbar("Please select an image file", "error");
+        setErrors((prev) => ({
+          ...prev,
+          imgBgBook: "Please select an image file",
+        }));
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showSnackbar("Image size should be less than 5MB", "error");
+        setErrors((prev) => ({
+          ...prev,
+          imgBgBook: "Image size should be less than 5MB",
+        }));
+        return;
+      }
+
+      setImgBgBookFile(file);
+      setErrors((prev) => ({ ...prev, imgBgBook: "" }));
       const reader = new FileReader();
 
       reader.onload = (event: any) => {
@@ -109,39 +309,25 @@ const EditBook = () => {
       };
 
       reader.readAsDataURL(file);
+    } else {
+      // If no file selected and there's no existing background image, show error
+      if (!booksForEditing?.background_image) {
+        setErrors((prev) => ({
+          ...prev,
+          imgBgBook: "Background image is required",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, imgBgBook: "" }));
+      }
     }
   };
 
   function handleSubmitEditBook(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!bookName.trim()) {
-      showSnackbar("Please enter book title", "warning");
-      return;
-    }
-
-    if (!authorName.trim()) {
-      showSnackbar("Please enter author name", "warning");
-      return;
-    }
-
-    if (!categoryValue) {
-      showSnackbar("Please select a category", "warning");
-      return;
-    }
-
-    if (!publicationYear) {
-      showSnackbar("Please enter publication year", "warning");
-      return;
-    }
-
-    if (!pageSize) {
-      showSnackbar("Please enter page count", "warning");
-      return;
-    }
-
-    if (!availableCopies) {
-      showSnackbar("Please enter available copies", "warning");
+    // Validate all fields
+    if (!validateAllFields()) {
+      showSnackbar("Please fix all validation errors", "warning");
       return;
     }
 
@@ -153,18 +339,30 @@ const EditBook = () => {
     setShowConfirmDialog(false);
 
     try {
-      let updatedBook = {
+      let updatedBook: any = {
         title: bookName,
         author: authorName,
         description: description,
         category: categoryValue,
         year: parseInt(publicationYear),
         available_copies: parseInt(availableCopies),
-        image_url: imgBook || booksForEditing?.image_url,
-        background_image: imgBgBook || booksForEditing?.background_image,
         page_count: parseInt(pageSize),
-        language: language,
+        // language: language,
       };
+
+      // Handle main image - use new file if selected, otherwise keep existing
+      // if (imgBookFile) {
+      //   updatedBook.image_url = imgBook;
+      // } else if (booksForEditing?.image_url) {
+      //   updatedBook.image_url = booksForEditing.image_url;
+      // }
+
+      // Handle background image - use new file if selected, otherwise keep existing
+      // if (imgBgBookFile) {
+      //   updatedBook.background_image = imgBgBook;
+      // } else if (booksForEditing?.background_image) {
+      //   updatedBook.background_image = booksForEditing.background_image;
+      // }
 
       const { data } = await axiosRequest.put(
         `${import.meta.env.VITE_API_URL}/admin/books/${booksForEditing?.id}`,
@@ -206,6 +404,59 @@ const EditBook = () => {
     });
   };
 
+  const handleCancel = () => {
+    navigate("/dashboard/books");
+  };
+
+  // Handle field changes with validation
+  const handleBookNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setBookName(value);
+    validateField("bookName", value);
+  };
+
+  const handleAuthorNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value;
+    setAuthorName(value);
+    validateField("authorName", value);
+  };
+
+  const handleCategoryChange = (event: any) => {
+    const value = event.target.value;
+    setCategoryValue(value);
+    validateField("categoryValue", value);
+  };
+
+  const handlePublicationYearChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value;
+    setPublicationYear(value);
+    validateField("publicationYear", value);
+  };
+
+  const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setPageSize(value);
+    validateField("pageSize", value);
+  };
+
+  const handleAvailableCopiesChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value;
+    setAvailableCopies(value);
+    validateField("availableCopies", value);
+  };
+
+  const handleLanguageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setLanguage(value);
+    validateField("language", value);
+  };
+
   if (!booksForEditing) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -217,7 +468,7 @@ const EditBook = () => {
   return (
     <>
       <div className="edit_book_component px-4 py-4">
-        <div className="edit_book_component_block">
+        <div className="edit_book_component_block max-w-360 mx-auto">
           <form
             className="form_edit_book flex sm:flex-col lg:flex-row lg:justify-center lg:items-end gap-10"
             onSubmit={handleSubmitEditBook}
@@ -228,35 +479,43 @@ const EditBook = () => {
                   <img
                     className="w-38.25 h-53.75 shadow-2xl object-contain rounded-[10px]"
                     src={imgBook}
-                    alt=""
+                    alt="Book cover preview"
                   />
                 ) : booksForEditing?.image_url ? (
                   <img
                     className="w-38.25 h-53.75 shadow-2xl object-cover rounded-[10px]"
                     src={booksForEditing.image_url}
-                    alt=""
+                    alt="Book cover"
                   />
                 ) : (
                   <img
                     className="w-38.25 h-53.75 shadow-2xl object-cover rounded-[10px]"
                     src={noImg}
-                    alt=""
+                    alt="No image placeholder"
                   />
                 )}
                 <div className="label_and_input_book_img flex flex-col gap-1">
                   <label
                     htmlFor="edit_book_img"
-                    className="text-[15px] text-[gray] cursor-pointer"
+                    className="text-[15px] text-[gray] cursor-pointer hover:text-[#20ACFF] transition-colors"
                   >
-                    Book Image
+                    Book Image *
                   </label>
                   <input
                     type="file"
                     className="rounded-[5px] max-w-55 outline-none px-3 shadow-xl py-1 bg-white cursor-pointer"
-                    name=""
+                    accept="image/*"
                     id="edit_book_img"
                     onChange={handleBookImageChange}
                   />
+                  <span className="text-xs text-gray-400">
+                    Max size: 5MB (upload new to replace current)
+                  </span>
+                  {errors.imgBook && (
+                    <span className="text-xs text-red-500">
+                      {errors.imgBook}
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="img_bg_and_input_book flex flex-col gap-3">
@@ -264,86 +523,92 @@ const EditBook = () => {
                   <img
                     className="w-38.25 h-53.75 shadow-2xl object-contain rounded-[10px]"
                     src={imgBgBook}
-                    alt=""
+                    alt="Book background preview"
                   />
                 ) : booksForEditing?.background_image ? (
                   <img
                     className="w-38.25 h-53.75 shadow-2xl object-cover rounded-[10px]"
                     src={booksForEditing.background_image}
-                    alt=""
+                    alt="Book background"
                   />
                 ) : (
                   <img
                     className="w-38.25 h-53.75 shadow-2xl object-cover rounded-[10px]"
                     src={noImg}
-                    alt=""
+                    alt="No image placeholder"
                   />
                 )}
                 <div className="label_and_input_book_bg_img flex flex-col gap-1">
                   <label
                     htmlFor="edit_book_bg_img"
-                    className="text-[15px] text-[gray] cursor-pointer"
+                    className="text-[15px] text-[gray] cursor-pointer hover:text-[#20ACFF] transition-colors"
                   >
-                    Book Background Image
+                    Book Background Image *
                   </label>
                   <input
                     type="file"
                     className="rounded-[5px] max-w-55 outline-none px-3 shadow-xl py-1 bg-white cursor-pointer"
-                    name=""
+                    accept="image/*"
                     id="edit_book_bg_img"
                     onChange={handleBookBgImageChange}
                   />
+                  <span className="text-xs text-gray-400">
+                    Max size: 5MB (upload new to replace current)
+                  </span>
+                  {errors.imgBgBook && (
+                    <span className="text-xs text-red-500">
+                      {errors.imgBgBook}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="labels_select_and_inputs_block">
-              <div className="first_block grid sm:grid-cols-1 md:grid-cols-2 gap-10">
+
+            <div className="labels_select_and_inputs_block flex-1">
+              <div className="first_block grid sm:grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="label_input_book_name flex flex-col gap-2">
                   <label
                     htmlFor="edit_book_name"
                     className="cursor-pointer text-[15px] font-500"
                   >
-                    Book Title
+                    Book Title *
                   </label>
                   <TextField
                     id="edit_book_name"
-                    label="Name of book"
+                    label="Name of Book"
                     variant="outlined"
                     value={bookName}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      setBookName(event.target.value)
-                    }
+                    onChange={handleBookNameChange}
+                    error={!!errors.bookName}
+                    helperText={errors.bookName}
+                    required
+                    fullWidth
                   />
                 </div>
+
                 <div className="label_select_book_category flex flex-col gap-2">
                   <label
                     htmlFor="edit_category"
                     className="cursor-pointer text-[15px] font-500"
                   >
-                    Category
+                    Category *
                   </label>
-
-                  <FormControl fullWidth>
-                    <InputLabel id="edit-demo-simple-select-label">
-                      Category
-                    </InputLabel>
+                  <FormControl
+                    fullWidth
+                    required
+                    error={!!errors.categoryValue}
+                  >
+                    <InputLabel id="edit-category-label">Category</InputLabel>
                     <Select
-                      labelId="edit-demo-simple-select-label"
+                      labelId="edit-category-label"
                       id="edit_category"
                       label="Category"
                       value={categoryValue}
-                      onChange={(event: any) => {
-                        setCategoryValue(event.target.value);
-                      }}
+                      onChange={handleCategoryChange}
                       disabled={loadingFilters}
                     >
-                      <MenuItem
-                        value={""}
-                        sx={{
-                          color: "gray",
-                        }}
-                      >
-                        None
+                      <MenuItem value="">
+                        <em>Select a category</em>
                       </MenuItem>
                       {loadingFilters ? (
                         <MenuItem disabled>Loading categories...</MenuItem>
@@ -355,14 +620,40 @@ const EditBook = () => {
                         ))
                       )}
                     </Select>
+                    {errors.categoryValue && (
+                      <span className="text-xs text-red-500 mt-1">
+                        {errors.categoryValue}
+                      </span>
+                    )}
                   </FormControl>
                 </div>
+
+                <div className="label_input_author_name flex flex-col gap-2">
+                  <label
+                    htmlFor="edit_author_name"
+                    className="cursor-pointer text-[15px] font-500"
+                  >
+                    Author *
+                  </label>
+                  <TextField
+                    id="edit_author_name"
+                    label="Author Name"
+                    variant="outlined"
+                    value={authorName}
+                    onChange={handleAuthorNameChange}
+                    error={!!errors.authorName}
+                    helperText={errors.authorName}
+                    required
+                    fullWidth
+                  />
+                </div>
+
                 <div className="label_input_publication_year flex flex-col gap-2">
                   <label
                     htmlFor="edit_publication_year"
                     className="cursor-pointer text-[15px] font-500"
                   >
-                    Publication Year
+                    Publication Year *
                   </label>
                   <TextField
                     id="edit_publication_year"
@@ -370,69 +661,64 @@ const EditBook = () => {
                     variant="outlined"
                     type="number"
                     value={publicationYear}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      setPublicationYear(event.target.value)
-                    }
+                    onChange={handlePublicationYearChange}
+                    error={!!errors.publicationYear}
+                    helperText={errors.publicationYear}
+                    inputProps={{ min: 1000, max: new Date().getFullYear() }}
+                    required
+                    fullWidth
                   />
                 </div>
-                <div className="label_input_author_name flex flex-col gap-2">
-                  <label
-                    htmlFor="edit_author_name"
-                    className="cursor-pointer text-[15px] font-500"
-                  >
-                    Author
-                  </label>
-                  <TextField
-                    id="edit_author_name"
-                    label="Author Name"
-                    variant="outlined"
-                    value={authorName}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      setAuthorName(event.target.value)
-                    }
-                  />
-                </div>
+
                 <div className="label_input_page_size flex flex-col gap-2">
                   <label
                     htmlFor="edit_page-size"
                     className="cursor-pointer text-[15px] font-500"
                   >
-                    Page Count
+                    Page Count *
                   </label>
                   <TextField
                     id="edit_page-size"
-                    label="Page Size"
+                    label="Page Count"
                     variant="outlined"
                     type="number"
                     value={pageSize}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      setPageSize(event.target.value)
-                    }
+                    onChange={handlePageSizeChange}
+                    error={!!errors.pageSize}
+                    helperText={errors.pageSize}
+                    inputProps={{ min: 1 }}
+                    required
+                    fullWidth
                   />
                 </div>
+
                 <div className="label_input_language flex flex-col gap-2">
                   <label
                     htmlFor="edit_language"
                     className="cursor-pointer text-[15px] font-500"
                   >
-                    Language
+                    Language *
                   </label>
                   <TextField
                     id="edit_language"
-                    label="Language Name"
+                    label="Language"
                     variant="outlined"
                     value={language}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      setLanguage(event.target.value)
-                    }
+                    onChange={handleLanguageChange}
+                    error={!!errors.language}
+                    helperText={errors.language}
+                    required
+                    fullWidth
+                    placeholder="e.g., English, Spanish, French"
                   />
                 </div>
+
                 <div className="label_input_available_copies flex flex-col gap-2">
                   <label
                     htmlFor="available-copies"
                     className="cursor-pointer text-[15px] font-500"
                   >
-                    Available Copies
+                    Available Copies *
                   </label>
                   <TextField
                     id="available-copies"
@@ -440,32 +726,57 @@ const EditBook = () => {
                     variant="outlined"
                     type="number"
                     value={availableCopies}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      setAvailableCopies(event.target.value)
-                    }
+                    onChange={handleAvailableCopiesChange}
+                    error={!!errors.availableCopies}
+                    helperText={errors.availableCopies}
+                    inputProps={{ min: 0 }}
+                    required
+                    fullWidth
                   />
                 </div>
               </div>
-              <div className="second_block flex flex-col gap-2 mt-4">
-                <label htmlFor="edit_book_info">Summary Book</label>
+
+              <div className="second_block flex flex-col gap-2 mt-6">
+                <label
+                  htmlFor="edit_book_info"
+                  className="text-[15px] font-500"
+                >
+                  Summary
+                </label>
                 <textarea
                   id="edit_book_info"
-                  placeholder="Book Information"
-                  className="outline-none border-[3px] border-[#DFEAF2] rounded-[15px] p-1 h-52"
+                  placeholder="Write a brief summary of the book..."
+                  className="outline-none border-2 border-[#DFEAF2] rounded-[15px] p-3 h-40 resize-none focus:border-[#20ACFF] transition-colors"
                   value={description}
                   onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
                     setDescription(event.target.value);
                   }}
                 ></textarea>
+                <span className="text-xs text-gray-400">
+                  {description.length} characters
+                </span>
               </div>
-            </div>
-            <div className="block_btn_submit">
-              <button
-                type="submit"
-                className="btn_submit bg-[#20ACFF] px-5 py-2 rounded-[15px] cursor-pointer text-[#FFFFFF] text-[19px] font-500 sm:w-full"
-              >
-                Update Book
-              </button>
+
+              <div className="block_btn_submit flex gap-4 mt-6 sm:flex-col md:flex-row">
+                <button
+                  type="button"
+                  className="btn_cancel bg-gray-500 px-6 py-2 rounded-[15px] cursor-pointer text-[#FFFFFF] text-[19px] font-500 hover:bg-gray-600 transition-colors sm:w-full"
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn_submit bg-[#20ACFF] px-6 py-2 rounded-[15px] cursor-pointer text-[#FFFFFF] text-[19px] font-500 hover:bg-[#0d8ae0] transition-colors sm:w-full disabled:opacity-50"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <CircularProgress size={24} color="inherit" />
+                  ) : (
+                    "Update Book"
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         </div>
@@ -476,6 +787,7 @@ const EditBook = () => {
         open={showConfirmDialog}
         onClose={() => setShowConfirmDialog(false)}
         aria-labelledby="confirm-dialog-title"
+        aria-describedby="confirm-dialog-description"
       >
         <DialogTitle id="confirm-dialog-title">Confirm Update Book</DialogTitle>
         <DialogContent>
@@ -499,18 +811,20 @@ const EditBook = () => {
             <p>
               <strong>Available Copies:</strong> {availableCopies}
             </p>
+            <p>
+              <strong>Language:</strong> {language}
+            </p>
           </div>
         </DialogContent>
         <DialogActions>
-          <button
-            onClick={() => setShowConfirmDialog(false)}
-            className="px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400 transition-colors"
-          >
+          <Button onClick={() => setShowConfirmDialog(false)} color="primary">
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={updateBook}
-            className="px-4 py-2 bg-[#20ACFF] text-white rounded-lg hover:bg-[#0d8ae0] transition-colors"
+            color="primary"
+            variant="contained"
+            autoFocus
             disabled={loading}
           >
             {loading ? (
@@ -518,7 +832,7 @@ const EditBook = () => {
             ) : (
               "Confirm"
             )}
-          </button>
+          </Button>
         </DialogActions>
       </Dialog>
 

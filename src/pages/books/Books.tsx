@@ -278,9 +278,11 @@ const Books = () => {
     setLoadingBooks(true);
     try {
       const { data } = await axiosRequest.get(
-        `${import.meta.env.VITE_API_URL}/admin/books`,
+        `${import.meta.env.VITE_API_URL}/admin/books?search=${searchInpValue}&page=${page + 1}&limit=${rowsPerPage}`,
       );
 
+      console.log(data);
+      
       setBooks(data.data || []);
       setTotalBooksCount(data.total || data.data?.length || 0);
     } catch (error) {
@@ -297,7 +299,6 @@ const Books = () => {
       const { data } = await axiosRequest.get(
         `${import.meta.env.VITE_API_URL}/admin/filters`,
       );
-      console.log(data.filters);
 
       setFiltersOrCategories(data.filters);
     } catch (error) {
@@ -407,7 +408,7 @@ const Books = () => {
     setLoadingDeleteBook(true);
     try {
       await axiosRequest.delete(
-        `${import.meta.env.VITE_API_URL}/books/${selectedBookId}`,
+        `${import.meta.env.VITE_API_URL}/admin/books/${selectedBookId}`,
       );
 
       showSnackbar("Book deleted successfully", "success");

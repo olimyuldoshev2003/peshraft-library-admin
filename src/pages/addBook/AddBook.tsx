@@ -23,9 +23,7 @@ const AddBook = () => {
   const navigate = useNavigate();
 
   const [imgBook, setImgBook] = useState<any>(null);
-  const [imgBookFile, setImgBookFile] = useState<File | null>(null);
   const [imgBgBook, setImgBgBook] = useState<any>(null);
-  const [imgBgBookFile, setImgBgBookFile] = useState<File | null>(null);
   const [bookName, setBookName] = useState<string>("");
   const [categoryValue, setCategoryValue] = useState<string>("");
   const [publicationYear, setPublicationYear] = useState<string>("");
@@ -39,12 +37,141 @@ const AddBook = () => {
   const [loadingCategories, setLoadingCategories] = useState<boolean>(false);
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
 
+  // Validation error states
+  const [errors, setErrors] = useState({
+    bookName: "",
+    authorName: "",
+    categoryValue: "",
+    publicationYear: "",
+    pageSize: "",
+    availableCopies: "",
+    imgBook: "",
+    imgBgBook: "",
+    language: "",
+  });
+
   // Snackbar states
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "success" as "success" | "error" | "warning" | "info",
   });
+
+  // Validate single field
+  const validateField = (name: string, value: any) => {
+    let error = "";
+
+    switch (name) {
+      case "bookName":
+        if (!value || !value.trim()) {
+          error = "Book title is required";
+        } else if (value.trim().length < 2) {
+          error = "Book title must be at least 2 characters";
+        } else if (value.trim().length > 200) {
+          error = "Book title must be less than 200 characters";
+        }
+        break;
+
+      case "authorName":
+        if (!value || !value.trim()) {
+          error = "Author name is required";
+        } else if (value.trim().length < 2) {
+          error = "Author name must be at least 2 characters";
+        } else if (value.trim().length > 100) {
+          error = "Author name must be less than 100 characters";
+        }
+        break;
+
+      case "categoryValue":
+        if (!value) {
+          error = "Category is required";
+        }
+        break;
+
+      case "publicationYear":
+        if (!value) {
+          error = "Publication year is required";
+        } else {
+          const year = parseInt(value);
+          const currentYear = new Date().getFullYear();
+          if (isNaN(year) || year < 1000 || year > currentYear) {
+            error = `Publication year must be between 1000 and ${currentYear}`;
+          }
+        }
+        break;
+
+      case "pageSize":
+        if (!value) {
+          error = "Page count is required";
+        } else {
+          const pages = parseInt(value);
+          if (isNaN(pages) || pages < 1) {
+            error = "Page count must be at least 1";
+          } else if (pages > 10000) {
+            error = "Page count must be less than 10000";
+          }
+        }
+        break;
+
+      case "availableCopies":
+        if (!value && value !== 0) {
+          error = "Available copies is required";
+        } else {
+          const copies = parseInt(value);
+          if (isNaN(copies) || copies < 0) {
+            error = "Available copies must be 0 or greater";
+          } else if (copies > 1000) {
+            error = "Available copies must be less than 1000";
+          }
+        }
+        break;
+
+      case "imgBook":
+        if (!value) {
+          error = "Book cover image is required";
+        }
+        break;
+
+      case "imgBgBook":
+        if (!value) {
+          error = "Background image is required";
+        }
+        break;
+
+      case "language":
+        if (!value || !value.trim()) {
+          error = "Language is required";
+        } else if (value.trim().length < 2) {
+          error = "Language must be at least 2 characters";
+        } else if (value.trim().length > 50) {
+          error = "Language name must be less than 50 characters";
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: error }));
+    return error === "";
+  };
+
+  // Validate all fields
+  const validateAllFields = () => {
+    const validations = [
+      validateField("bookName", bookName),
+      validateField("authorName", authorName),
+      validateField("categoryValue", categoryValue),
+      validateField("publicationYear", publicationYear),
+      validateField("pageSize", pageSize),
+      validateField("availableCopies", availableCopies),
+      validateField("imgBook", imgBook),
+      validateField("imgBgBook", imgBgBook),
+      validateField("language", language),
+    ];
+
+    return validations.every((v) => v === true);
+  };
 
   // Handle Change of image
   const handleBookImageChange = (event: any) => {
@@ -54,16 +181,24 @@ const AddBook = () => {
       // Validate file type
       if (!file.type.startsWith("image/")) {
         showSnackbar("Please select an image file", "error");
+        setErrors((prev) => ({
+          ...prev,
+          imgBook: "Please select an image file",
+        }));
         return;
       }
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         showSnackbar("Image size should be less than 5MB", "error");
+        setErrors((prev) => ({
+          ...prev,
+          imgBook: "Image size should be less than 5MB",
+        }));
         return;
       }
 
-      setImgBookFile(file);
+      setErrors((prev) => ({ ...prev, imgBook: "" }));
       const reader = new FileReader();
 
       reader.onload = (event: any) => {
@@ -71,6 +206,11 @@ const AddBook = () => {
       };
 
       reader.readAsDataURL(file);
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        imgBook: "Book cover image is required",
+      }));
     }
   };
 
@@ -81,16 +221,24 @@ const AddBook = () => {
       // Validate file type
       if (!file.type.startsWith("image/")) {
         showSnackbar("Please select an image file", "error");
+        setErrors((prev) => ({
+          ...prev,
+          imgBgBook: "Please select an image file",
+        }));
         return;
       }
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         showSnackbar("Image size should be less than 5MB", "error");
+        setErrors((prev) => ({
+          ...prev,
+          imgBgBook: "Image size should be less than 5MB",
+        }));
         return;
       }
 
-      setImgBgBookFile(file);
+      setErrors((prev) => ({ ...prev, imgBgBook: "" }));
       const reader = new FileReader();
 
       reader.onload = (event: any) => {
@@ -98,6 +246,11 @@ const AddBook = () => {
       };
 
       reader.readAsDataURL(file);
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        imgBgBook: "Background image is required",
+      }));
     }
   };
 
@@ -121,37 +274,12 @@ const AddBook = () => {
     getCategories();
   }, []);
 
-  function handleSubmitAddBook(event: React.SubmitEvent<HTMLFormElement>) {
+  function handleSubmitAddBook(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    // Validate required fields
-    if (!bookName.trim()) {
-      showSnackbar("Please enter book title", "warning");
-      return;
-    }
-
-    if (!authorName.trim()) {
-      showSnackbar("Please enter author name", "warning");
-      return;
-    }
-
-    if (!categoryValue) {
-      showSnackbar("Please select a category", "warning");
-      return;
-    }
-
-    if (!publicationYear) {
-      showSnackbar("Please enter publication year", "warning");
-      return;
-    }
-
-    if (!pageSize) {
-      showSnackbar("Please enter page count", "warning");
-      return;
-    }
-
-    if (!availableCopies) {
-      showSnackbar("Please enter available copies", "warning");
+    // Validate all fields
+    if (!validateAllFields()) {
+      showSnackbar("Please fix all validation errors", "warning");
       return;
     }
 
@@ -163,39 +291,27 @@ const AddBook = () => {
     setShowConfirmDialog(false);
 
     try {
-      // Create FormData for file upload
-      const formData = new FormData();
-      formData.append("title", bookName);
-      formData.append("author", authorName);
-      formData.append("description", description || "");
-      formData.append("category", categoryValue);
-      formData.append("year", publicationYear);
-      formData.append("available_copies", availableCopies);
-      formData.append("page_count", pageSize);
-      formData.append("language", language || "");
-
-      if (imgBookFile) {
-        formData.append("image_url", imgBookFile);
-      }
-
-      if (imgBgBookFile) {
-        formData.append("background_image", imgBgBookFile);
-      }
+      const newBook = {
+        title: bookName,
+        author: authorName,
+        description: description,
+        category: categoryValue,
+        year: parseInt(publicationYear),
+        available_copies: parseInt(availableCopies),
+        // image_url: imgBook,
+        // background_image: imgBgBook,
+        page_count: parseInt(pageSize),
+        // language: language,
+      };
 
       const { data } = await axiosRequest.post(
         `${import.meta.env.VITE_API_URL}/admin/books`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        },
+        newBook,
       );
 
       console.log("Book added successfully:", data);
       showSnackbar("Book added successfully!", "success");
 
-      // Reset form after successful submission
       setTimeout(() => {
         navigate("/dashboard/books");
       }, 2000);
@@ -232,6 +348,55 @@ const AddBook = () => {
     navigate("/dashboard/books");
   };
 
+  // Handle field changes with validation
+  const handleBookNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setBookName(value);
+    validateField("bookName", value);
+  };
+
+  const handleAuthorNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value;
+    setAuthorName(value);
+    validateField("authorName", value);
+  };
+
+  const handleCategoryChange = (event: any) => {
+    const value = event.target.value;
+    setCategoryValue(value);
+    validateField("categoryValue", value);
+  };
+
+  const handlePublicationYearChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value;
+    setPublicationYear(value);
+    validateField("publicationYear", value);
+  };
+
+  const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setPageSize(value);
+    validateField("pageSize", value);
+  };
+
+  const handleAvailableCopiesChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = event.target.value;
+    setAvailableCopies(value);
+    validateField("availableCopies", value);
+  };
+
+  const handleLanguageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setLanguage(value);
+    validateField("language", value);
+  };
+
   return (
     <>
       <div className="add_book_component px-4 py-4">
@@ -245,7 +410,7 @@ const AddBook = () => {
                 {imgBook ? (
                   <img
                     className="w-38.25 h-53.75 shadow-2xl object-contain rounded-[10px]"
-                    src={imgBook} 
+                    src={imgBook}
                     alt="Book cover preview"
                   />
                 ) : (
@@ -268,8 +433,14 @@ const AddBook = () => {
                     accept="image/*"
                     id="book_img"
                     onChange={handleBookImageChange}
+                    // required
                   />
                   <span className="text-xs text-gray-400">Max size: 5MB</span>
+                  {errors.imgBook && (
+                    <span className="text-xs text-red-500">
+                      {errors.imgBook}
+                    </span>
+                  )}
                 </div>
               </div>
               <div className="img_bg_and_input_book flex flex-col gap-3">
@@ -291,7 +462,7 @@ const AddBook = () => {
                     htmlFor="book_bg_img"
                     className="text-[15px] text-[gray] cursor-pointer hover:text-[#20ACFF] transition-colors"
                   >
-                    Book Background Image
+                    Book Background Image *
                   </label>
                   <input
                     type="file"
@@ -299,10 +470,14 @@ const AddBook = () => {
                     accept="image/*"
                     id="book_bg_img"
                     onChange={handleBookBgImageChange}
+                    // required
                   />
-                  <span className="text-xs text-gray-400">
-                    Max size: 5MB (optional)
-                  </span>
+                  <span className="text-xs text-gray-400">Max size: 5MB</span>
+                  {errors.imgBgBook && (
+                    <span className="text-xs text-red-500">
+                      {errors.imgBgBook}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -321,9 +496,9 @@ const AddBook = () => {
                     label="Name of Book"
                     variant="outlined"
                     value={bookName}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      setBookName(event.target.value)
-                    }
+                    onChange={handleBookNameChange}
+                    error={!!errors.bookName}
+                    helperText={errors.bookName}
                     required
                     fullWidth
                   />
@@ -336,16 +511,18 @@ const AddBook = () => {
                   >
                     Category *
                   </label>
-                  <FormControl fullWidth required>
+                  <FormControl
+                    fullWidth
+                    required
+                    error={!!errors.categoryValue}
+                  >
                     <InputLabel id="category-label">Category</InputLabel>
                     <Select
                       labelId="category-label"
                       id="category"
                       label="Category"
                       value={categoryValue}
-                      onChange={(event: any) => {
-                        setCategoryValue(event.target.value);
-                      }}
+                      onChange={handleCategoryChange}
                       disabled={loadingCategories}
                     >
                       <MenuItem value="">
@@ -363,7 +540,13 @@ const AddBook = () => {
                           </MenuItem>
                         ))
                       )}
+                      <MenuItem value="Finance">Finance</MenuItem>
                     </Select>
+                    {errors.categoryValue && (
+                      <span className="text-xs text-red-500 mt-1">
+                        {errors.categoryValue}
+                      </span>
+                    )}
                   </FormControl>
                 </div>
 
@@ -379,9 +562,9 @@ const AddBook = () => {
                     label="Author Name"
                     variant="outlined"
                     value={authorName}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      setAuthorName(event.target.value)
-                    }
+                    onChange={handleAuthorNameChange}
+                    error={!!errors.authorName}
+                    helperText={errors.authorName}
                     required
                     fullWidth
                   />
@@ -400,9 +583,9 @@ const AddBook = () => {
                     variant="outlined"
                     type="number"
                     value={publicationYear}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      setPublicationYear(event.target.value)
-                    }
+                    onChange={handlePublicationYearChange}
+                    error={!!errors.publicationYear}
+                    helperText={errors.publicationYear}
                     inputProps={{ min: 1000, max: new Date().getFullYear() }}
                     required
                     fullWidth
@@ -422,9 +605,9 @@ const AddBook = () => {
                     variant="outlined"
                     type="number"
                     value={pageSize}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      setPageSize(event.target.value);
-                    }}
+                    onChange={handlePageSizeChange}
+                    error={!!errors.pageSize}
+                    helperText={errors.pageSize}
                     inputProps={{ min: 1 }}
                     required
                     fullWidth
@@ -436,16 +619,17 @@ const AddBook = () => {
                     htmlFor="language"
                     className="cursor-pointer text-[15px] font-500"
                   >
-                    Language
+                    Language *
                   </label>
                   <TextField
                     id="language"
                     label="Language"
                     variant="outlined"
                     value={language}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      setLanguage(event.target.value);
-                    }}
+                    onChange={handleLanguageChange}
+                    error={!!errors.language}
+                    helperText={errors.language}
+                    required
                     fullWidth
                     placeholder="e.g., English, Spanish, French"
                   />
@@ -464,9 +648,9 @@ const AddBook = () => {
                     variant="outlined"
                     type="number"
                     value={availableCopies}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      setAvailableCopies(event.target.value);
-                    }}
+                    onChange={handleAvailableCopiesChange}
+                    error={!!errors.availableCopies}
+                    helperText={errors.availableCopies}
                     inputProps={{ min: 0 }}
                     required
                     fullWidth
@@ -492,7 +676,7 @@ const AddBook = () => {
                 </span>
               </div>
 
-              <div className="block_btn_submit flex gap-4 mt-6">
+              <div className="block_btn_submit flex gap-4 mt-6 sm:flex-col md:flex-row">
                 <button
                   type="button"
                   className="btn_cancel bg-gray-500 px-6 py-2 rounded-[15px] cursor-pointer text-[#FFFFFF] text-[19px] font-500 hover:bg-gray-600 transition-colors sm:w-full"
@@ -545,6 +729,9 @@ const AddBook = () => {
             </p>
             <p>
               <strong>Available Copies:</strong> {availableCopies}
+            </p>
+            <p>
+              <strong>Language:</strong> {language}
             </p>
           </div>
         </DialogContent>
